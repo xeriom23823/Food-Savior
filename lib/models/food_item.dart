@@ -6,7 +6,7 @@ enum FoodItemType {
   vegetable,
   fruit,
   meat,
-  egg,
+  eggAndMilk,
   seafood,
   cannedFood,
   cookedFood,
@@ -25,8 +25,8 @@ extension FoodItemTypeExtension on FoodItemType {
         return MdiIcons.apple;
       case FoodItemType.meat:
         return MdiIcons.foodSteak;
-      case FoodItemType.egg:
-        return MdiIcons.egg;
+      case FoodItemType.eggAndMilk:
+        return MdiIcons.eggFried;
       case FoodItemType.seafood:
         return MdiIcons.fish;
       case FoodItemType.cannedFood:
@@ -46,6 +46,19 @@ extension FoodItemTypeExtension on FoodItemType {
 }
 
 enum FoodItemStatus { fresh, expired, nearExpired }
+
+extension FoodItemStatusExtension on FoodItemStatus {
+  Color get color {
+    switch (this) {
+      case FoodItemStatus.fresh:
+        return Colors.green;
+      case FoodItemStatus.expired:
+        return Colors.red;
+      case FoodItemStatus.nearExpired:
+        return Colors.orange;
+    }
+  }
+}
 
 class FoodItem {
   final String name;

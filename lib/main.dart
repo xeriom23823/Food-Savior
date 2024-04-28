@@ -19,7 +19,7 @@ class FoodSavior extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Food Savior',
+        title: '食物救世主',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
               seedColor: Colors.green,

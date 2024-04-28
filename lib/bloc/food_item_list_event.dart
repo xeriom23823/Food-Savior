@@ -9,3 +9,9 @@ class FoodItemListAdd extends FoodItemListEvent {
 
   FoodItemListAdd(this.foodItem);
 }
+
+class FoodItemListRemove extends FoodItemListEvent {
+  final FoodItem foodItem;
+
+  FoodItemListRemove(this.foodItem);
+}
