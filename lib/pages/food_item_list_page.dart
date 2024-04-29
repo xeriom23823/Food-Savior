@@ -69,21 +69,149 @@ class FoodItemListPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          context.read<FoodItemListBloc>().add(
-                FoodItemListAdd(
-                  FoodItem(
-                    name: '草莓',
-                    type: FoodItemType.fruit,
-                    status: FoodItemStatus.fresh,
-                    description: '一顆紅色草莓',
-                    storageDate: DateTime.now(),
-                    expirationDate: DateTime.now().add(const Duration(days: 3)),
-                  ),
-                ),
-              );
+          _showAddFoodItemDialog(context);
         },
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void _showAddFoodItemDialog(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController descriptionController = TextEditingController();
+    final TextEditingController storageDateController = TextEditingController();
+    final TextEditingController expirationDateController =
+        TextEditingController();
+    FoodItemType selectedType = FoodItemType.others;
+
+    // Set default storage date as DateTime.now()
+    storageDateController.text =
+        DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    // Set default expiration date as 7 days from now
+    final DateTime expirationDate = DateTime.now().add(const Duration(days: 7));
+    expirationDateController.text =
+        DateFormat('yyyy-MM-dd').format(expirationDate);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('新增食物'),
+          content: SizedBox(
+            height: 300, // Set the maximum height here
+            child: Column(
+              children: [
+                DropdownButtonFormField<FoodItemType>(
+                  value: selectedType,
+                  onChanged: (value) {
+                    selectedType = value!;
+                  },
+                  items: FoodItemType.values.map((type) {
+                    return DropdownMenuItem<FoodItemType>(
+                      value: type,
+                      child: Row(
+                        children: [
+                          Icon(type.icon),
+                          const SizedBox(width: 10),
+                          Text(type.name),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                ),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText: '名稱'),
+                ),
+                TextField(
+                  controller: descriptionController,
+                  decoration: const InputDecoration(labelText: '描述'),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _selectStorageDate(context, storageDateController);
+                  },
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: storageDateController,
+                      decoration: const InputDecoration(labelText: '存放日期'),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _selectExpirationDate(
+                        context,
+                        DateTime.parse(storageDateController.text),
+                        expirationDateController);
+                  },
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: expirationDateController,
+                      decoration: const InputDecoration(labelText: '過期日期'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () {
+                final FoodItem foodItem = FoodItem(
+                  name: nameController.text,
+                  type: selectedType,
+                  status: FoodItemStatus.fresh,
+                  description: descriptionController.text,
+                  storageDate: DateTime.parse(storageDateController.text),
+                  expirationDate: DateTime.parse(expirationDateController.text),
+                );
+                context.read<FoodItemListBloc>().add(FoodItemListAdd(foodItem));
+                Navigator.of(context).pop();
+              },
+              child: const Text('新增'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _selectStorageDate(
+      BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: controller.text.isEmpty
+          ? DateTime.now()
+          : DateTime.parse(controller.text),
+      firstDate: DateTime(2024, 1),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+    }
+  }
+
+  void _selectExpirationDate(BuildContext context, DateTime storageDate,
+      TextEditingController expirationDateTextController) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: expirationDateTextController.text.isEmpty
+          ? DateTime.now()
+          : DateTime.parse(expirationDateTextController.text),
+      firstDate: DateTime(2024, 1),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      expirationDateTextController.text =
+          DateFormat('yyyy-MM-dd').format(picked);
+    }
   }
 }

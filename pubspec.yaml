@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.5
   equatable: ^2.0.5
   material_design_icons_flutter: ^7.0.7296
+  flutter_date_range_picker: ^0.0.14
 
 dev_dependencies:
   flutter_test:

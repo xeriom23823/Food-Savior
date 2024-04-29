@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 
@@ -7,8 +8,22 @@ void main() {
   runApp(const FoodSavior());
 }
 
-class FoodSavior extends StatelessWidget {
+class FoodSavior extends StatefulWidget {
   const FoodSavior({super.key});
+
+  @override
+  State<FoodSavior> createState() => _FoodSaviorState();
+}
+
+class _FoodSaviorState extends State<FoodSavior> {
+  int _pageIndex = 0;
+
+  final List<Widget> _pages = const [
+    FoodItemListPage(),
+    FoodItemListPage(),
+    FoodItemListPage(),
+    FoodItemListPage()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +34,18 @@ class FoodSavior extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale:
+            const Locale('zh', 'TW'), // Set the locale to Traditional Chinese
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('zh', 'TW'), // Traditional Chinese
+          Locale('en', 'US'), // English
+        ],
         title: '食物救世主',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
@@ -27,8 +54,40 @@ class FoodSavior extends StatelessWidget {
               primary: Colors.green),
           useMaterial3: true,
         ),
-        home: const FoodItemListPage(),
+        home: Scaffold(
+          body: _pages[_pageIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedItemColor: Colors.grey,
+            selectedItemColor: Colors.green,
+            currentIndex: _pageIndex,
+            onTap: _onTabTapped,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: '用戶',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.food_bank),
+                label: '食物',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                label: '紀錄',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: '設定',
+              ),
+            ],
+          ),
+        ),
       ),
     );
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
   }
 }

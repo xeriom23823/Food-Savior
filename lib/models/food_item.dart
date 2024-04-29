@@ -43,6 +43,33 @@ extension FoodItemTypeExtension on FoodItemType {
         return MdiIcons.foodForkDrink;
     }
   }
+
+  String get name {
+    switch (this) {
+      case FoodItemType.vegetable:
+        return '蔬菜';
+      case FoodItemType.fruit:
+        return '水果';
+      case FoodItemType.meat:
+        return '肉類';
+      case FoodItemType.eggAndMilk:
+        return '蛋奶';
+      case FoodItemType.seafood:
+        return '海鮮';
+      case FoodItemType.cannedFood:
+        return '罐頭食品';
+      case FoodItemType.cookedFood:
+        return '熟食';
+      case FoodItemType.drink:
+        return '飲料';
+      case FoodItemType.snack:
+        return '零食';
+      case FoodItemType.bread:
+        return '麵包';
+      case FoodItemType.others:
+        return '其他';
+    }
+  }
 }
 
 enum FoodItemStatus { fresh, expired, nearExpired }
