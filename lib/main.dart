@@ -1,85 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:food_savior/bloc/food_item_list_bloc.dart';
+import 'package:food_savior/pages/food_item_list_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const FoodSavior());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class FoodSavior extends StatefulWidget {
+  const FoodSavior({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<FoodSavior> createState() => _FoodSaviorState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _FoodSaviorState extends State<FoodSavior> {
+  int _pageIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final List<Widget> _pages = const [
+    FoodItemListPage(),
+    FoodItemListPage(),
+    FoodItemListPage(),
+    FoodItemListPage()
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FoodItemListBloc>(
+          create: (BuildContext context) => FoodItemListBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        locale:
+            const Locale('zh', 'TW'), // Set the locale to Traditional Chinese
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('zh', 'TW'), // Traditional Chinese
+          Locale('en', 'US'), // English
+        ],
+        title: '食物救世主',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.green,
+              secondary: Colors.orange,
+              primary: Colors.green),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          body: _pages[_pageIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            unselectedItemColor: Colors.grey,
+            selectedItemColor: Colors.green,
+            currentIndex: _pageIndex,
+            onTap: _onTabTapped,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: '用戶',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.food_bank),
+                label: '食物',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history),
+                label: '紀錄',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.settings),
+                label: '設定',
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _onTabTapped(int index) {
+    setState(() {
+      _pageIndex = index;
+    });
   }
 }
