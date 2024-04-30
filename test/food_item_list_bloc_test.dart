@@ -15,15 +15,15 @@ void main() {
     });
 
     test('initial state is FoodItemListInitial', () {
-      expect(foodItemListBloc.state, const FoodItemListInitial([]));
+      expect(foodItemListBloc.state, const FoodItemListInitial());
     });
 
     test(
         'emits FoodItemListLoading and FoodItemListLoaded when FoodItemListLoad event is added',
         () {
       final expectedStates = [
-        const FoodItemListLoading([]),
-        FoodItemListLoaded([
+        const FoodItemListLoading(),
+        FoodItemListLoaded(foodItems: [
           FoodItem(
             name: 'Apple',
             type: FoodItemType.fruit,
@@ -71,8 +71,8 @@ void main() {
       ];
 
       final expectedStates = [
-        FoodItemListLoaded(initialFoodItems),
-        FoodItemListLoaded([
+        FoodItemListLoaded(foodItems: initialFoodItems),
+        FoodItemListLoaded(foodItems: [
           ...initialFoodItems,
           FoodItem(
             name: 'Banana',
@@ -88,7 +88,7 @@ void main() {
       expectLater(foodItemListBloc.stream, emitsInOrder(expectedStates));
 
       foodItemListBloc.add(FoodItemListAdd(
-        FoodItem(
+        foodItem: FoodItem(
           name: 'Banana',
           type: FoodItemType.fruit,
           status: FoodItemStatus.fresh,
