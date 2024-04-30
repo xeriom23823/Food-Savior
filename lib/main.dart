@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const FoodSavior());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(const FoodSavior());
+  });
 }
 
 class FoodSavior extends StatefulWidget {
@@ -16,7 +22,7 @@ class FoodSavior extends StatefulWidget {
 }
 
 class _FoodSaviorState extends State<FoodSavior> {
-  int _pageIndex = 0;
+  int _pageIndex = 1;
 
   final List<Widget> _pages = const [
     FoodItemListPage(),

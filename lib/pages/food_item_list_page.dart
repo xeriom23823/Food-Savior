@@ -49,11 +49,11 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                     children: [
                       SizedBox(
                         width: expandedIndex == index
-                            ? MediaQuery.of(context).size.width - 80
+                            ? MediaQuery.of(context).size.width - 120
                             : MediaQuery.of(context).size.width,
                         height: 60,
                         child: GestureDetector(
-                          onDoubleTap: () {
+                          onLongPress: () {
                             setState(() {
                               expandedIndex = -1;
                             });
@@ -87,27 +87,43 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                         ),
                       ),
                       if (expandedIndex == index) ...[
-                        IconButton(
-                          onPressed: () {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
-                            setState(() {
-                              expandedIndex = -1;
-                            });
-                          },
-                          icon: const Icon(Icons.restaurant),
+                        Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.green,
+                          child: IconButton(
+                            onPressed: () {
+                              context
+                                  .read<FoodItemListBloc>()
+                                  .add(FoodItemListRemove(foodItem: foodItem));
+                              setState(() {
+                                expandedIndex = -1;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.restaurant,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
-                            setState(() {
-                              expandedIndex = -1;
-                            });
-                          },
-                          icon: Icon(MdiIcons.deleteEmpty),
+                        Container(
+                          width: 60,
+                          height: 60,
+                          color: Colors.red,
+                          child: IconButton(
+                            onPressed: () {
+                              context
+                                  .read<FoodItemListBloc>()
+                                  .add(FoodItemListRemove(foodItem: foodItem));
+                              setState(() {
+                                expandedIndex = -1;
+                              });
+                            },
+                            icon: Icon(
+                              MdiIcons.deleteEmpty,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ],
@@ -149,6 +165,8 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
         TextEditingController();
     FoodItemType selectedType = FoodItemType.others;
 
+    final formKey = GlobalKey<FormState>();
+
     // Set default storage date as DateTime.now()
     storageDateController.text =
         DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -163,62 +181,74 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('新增食物'),
-          content: SizedBox(
-            height: 300, // Set the maximum height here
-            child: Column(
-              children: [
-                DropdownButtonFormField<FoodItemType>(
-                  value: selectedType,
-                  onChanged: (value) {
-                    selectedType = value!;
-                  },
-                  items: FoodItemType.values.map((type) {
-                    return DropdownMenuItem<FoodItemType>(
-                      value: type,
-                      child: Row(
-                        children: [
-                          Icon(type.icon),
-                          const SizedBox(width: 10),
-                          Text(type.name),
-                        ],
+          content: SingleChildScrollView(
+            child: Form(
+              key: formKey, // Set the maximum height here
+              child: Column(
+                children: [
+                  DropdownButtonFormField<FoodItemType>(
+                    value: selectedType,
+                    onChanged: (value) {
+                      selectedType = value!;
+                    },
+                    items: FoodItemType.values.map((type) {
+                      return DropdownMenuItem<FoodItemType>(
+                        value: type,
+                        child: Row(
+                          children: [
+                            Icon(type.icon),
+                            const SizedBox(width: 10),
+                            Text(type.name),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: '名稱'),
+                    onChanged: (value) {
+                      nameController.text = value;
+                      formKey.currentState!.validate();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '文字不能為空';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(labelText: '描述'),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _selectStorageDate(context, storageDateController);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: storageDateController,
+                        decoration: const InputDecoration(labelText: '存放日期'),
                       ),
-                    );
-                  }).toList(),
-                ),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: '名稱'),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: const InputDecoration(labelText: '描述'),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _selectStorageDate(context, storageDateController);
-                  },
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: storageDateController,
-                      decoration: const InputDecoration(labelText: '存放日期'),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _selectExpirationDate(
-                        context,
-                        DateTime.parse(storageDateController.text),
-                        expirationDateController);
-                  },
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: expirationDateController,
-                      decoration: const InputDecoration(labelText: '過期日期'),
+                  GestureDetector(
+                    onTap: () {
+                      _selectExpirationDate(
+                          context,
+                          DateTime.parse(storageDateController.text),
+                          expirationDateController);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: expirationDateController,
+                        decoration: const InputDecoration(labelText: '過期日期'),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           actions: [
@@ -230,7 +260,10 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
             ),
             TextButton(
               onPressed: () {
-                final FoodItem foodItem = FoodItem(
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+                final FoodItem newFoodItem = FoodItem(
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
@@ -240,8 +273,16 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                 );
                 context
                     .read<FoodItemListBloc>()
-                    .add(FoodItemListAdd(foodItem: foodItem));
+                    .add(FoodItemListAdd(foodItem: newFoodItem));
                 Navigator.of(context).pop();
+
+                // 提示使用者已更新
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${newFoodItem.name} 已新增'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
               },
               child: const Text('新增'),
             ),
@@ -291,8 +332,7 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
               )
             ],
           ),
-          content: SizedBox(
-            height: 300, // Set the maximum height here
+          content: SingleChildScrollView(
             child: Form(
               key: formKey,
               child: Column(
