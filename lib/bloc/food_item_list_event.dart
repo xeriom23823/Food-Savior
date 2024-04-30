@@ -7,11 +7,19 @@ class FoodItemListLoad extends FoodItemListEvent {}
 class FoodItemListAdd extends FoodItemListEvent {
   final FoodItem foodItem;
 
-  FoodItemListAdd(this.foodItem);
+  FoodItemListAdd({required this.foodItem});
 }
 
 class FoodItemListRemove extends FoodItemListEvent {
   final FoodItem foodItem;
 
-  FoodItemListRemove(this.foodItem);
+  FoodItemListRemove({required this.foodItem});
+}
+
+class FoodItemListUpdate extends FoodItemListEvent {
+  final FoodItem originalFoodItem;
+  final FoodItem updatedFoodItem;
+
+  FoodItemListUpdate(
+      {required this.originalFoodItem, required this.updatedFoodItem});
 }

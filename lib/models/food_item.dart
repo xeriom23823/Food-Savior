@@ -72,17 +72,17 @@ extension FoodItemTypeExtension on FoodItemType {
   }
 }
 
-enum FoodItemStatus { fresh, expired, nearExpired }
+enum FoodItemStatus { fresh, nearExpired, consumed, wasted }
 
 extension FoodItemStatusExtension on FoodItemStatus {
   Color get color {
     switch (this) {
       case FoodItemStatus.fresh:
         return Colors.green;
-      case FoodItemStatus.expired:
-        return Colors.red;
       case FoodItemStatus.nearExpired:
         return Colors.orange;
+      default:
+        return Colors.red;
     }
   }
 }
@@ -119,4 +119,17 @@ class FoodItem {
         storageDate: storageDate ?? this.storageDate,
         expirationDate: expirationDate ?? this.expirationDate);
   }
+}
+
+class UsedFoodItem extends FoodItem {
+  final DateTime usedDate;
+
+  UsedFoodItem(
+      {required super.name,
+      required super.type,
+      required super.status,
+      required super.description,
+      required super.storageDate,
+      required super.expirationDate,
+      required this.usedDate});
 }

@@ -6,7 +6,7 @@ part 'food_item_list_event.dart';
 part 'food_item_list_state.dart';
 
 class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
-  FoodItemListBloc() : super(const FoodItemListInitial([])) {
+  FoodItemListBloc() : super(const FoodItemListInitial()) {
     on<FoodItemListLoad>(
       (event, emit) {
         List<FoodItem> loadedFoodItems = [
@@ -113,7 +113,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         // 依照 expiration date 排序
         emit(
           FoodItemListLoaded(
-            loadedFoodItems
+            foodItems: loadedFoodItems
               ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate)),
           ),
         );
@@ -121,24 +121,54 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
     );
 
     on<FoodItemListAdd>((event, emit) {
-      // event.foodItem.expirationDate 小於 3 天的食物標記為即將過期
-      final FoodItem newFoodItem = event.foodItem.expirationDate.isBefore(
-        DateTime.now().add(const Duration(days: 3)),
-      )
-          ? event.foodItem.copyWith(status: FoodItemStatus.nearExpired)
-          : event.foodItem;
+      if (state is FoodItemListLoaded) {
+        final List<FoodItem> currentfoodItems =
+            (state as FoodItemListLoaded).foodItems;
+        emit(const FoodItemListLoading());
 
-      // 新增食物後重新排序
-      final List<FoodItem> updatedFoodItems = List.from(state.foodItems)
-        ..add(newFoodItem)
-        ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
-      emit(FoodItemListLoaded(updatedFoodItems));
+        // event.foodItem.expirationDate 小於 3 天的食物標記為即將過期
+        final FoodItem newFoodItem = event.foodItem.expirationDate.isBefore(
+          DateTime.now().add(const Duration(days: 3)),
+        )
+            ? event.foodItem.copyWith(status: FoodItemStatus.nearExpired)
+            : event.foodItem;
+
+        // 新增食物後重新排序
+        final List<FoodItem> updatedFoodItems = List.from(currentfoodItems)
+          ..add(newFoodItem)
+          ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
+      }
     });
 
     on<FoodItemListRemove>((event, emit) {
-      final List<FoodItem> updatedFoodItems = List.from(state.foodItems)
-        ..remove(event.foodItem);
-      emit(FoodItemListLoaded(updatedFoodItems));
+      if (state is FoodItemListLoaded) {
+        final List<FoodItem> currentfoodItems =
+            (state as FoodItemListLoaded).foodItems;
+        emit(const FoodItemListLoading());
+
+        List<FoodItem> updatedFoodItems = currentfoodItems
+            .where((foodItem) => foodItem != event.foodItem)
+            .toList();
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
+      }
+    });
+
+    on<FoodItemListUpdate>((event, emit) {
+      if (state is FoodItemListLoaded) {
+        final List<FoodItem> currentfoodItems =
+            (state as FoodItemListLoaded).foodItems;
+        emit(const FoodItemListLoading());
+
+        List<FoodItem> updatedFoodItems = currentfoodItems
+            .map((foodItem) => foodItem == event.originalFoodItem
+                ? event.updatedFoodItem
+                : foodItem)
+            .toList()
+          ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
+      }
     });
   }
 }
