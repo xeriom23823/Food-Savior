@@ -3,7 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
+import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
+import 'package:food_savior/pages/used_food_item_list_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +30,7 @@ class _FoodSaviorState extends State<FoodSavior> {
   final List<Widget> _pages = const [
     FoodItemListPage(),
     FoodItemListPage(),
-    FoodItemListPage(),
+    UsedFoodItemListPage(),
     FoodItemListPage()
   ];
 
@@ -37,6 +40,9 @@ class _FoodSaviorState extends State<FoodSavior> {
       providers: [
         BlocProvider<FoodItemListBloc>(
           create: (BuildContext context) => FoodItemListBloc(),
+        ),
+        BlocProvider<UsedFoodItemListBloc>(
+          create: (BuildContext context) => UsedFoodItemListBloc(),
         ),
       ],
       child: MaterialApp(

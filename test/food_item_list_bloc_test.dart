@@ -120,7 +120,7 @@ void main() {
       }).toList()
         ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
-      foodItemListBloc.add(FoodItemListLoad());
+      foodItemListBloc.add(FoodItemListLoadFromDevice());
       expectLater(
         foodItemListBloc.stream,
         emitsInOrder([

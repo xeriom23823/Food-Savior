@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -16,18 +17,21 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
   int expandedIndex = -1;
 
   @override
-  void initState() {
-    super.initState();
-    context.read<FoodItemListBloc>().add(FoodItemListLoad());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('食物清單'),
       ),
-      body: BlocBuilder<FoodItemListBloc, FoodItemListState>(
+      body: BlocConsumer<FoodItemListBloc, FoodItemListState>(
+        listener: (BuildContext context, FoodItemListState state) {
+          if (state is FoodItemListError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        },
         builder: (BuildContext context, FoodItemListState state) {
           if (state is FoodItemListInitial) {
             return const Center(
@@ -96,6 +100,18 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                               context
                                   .read<FoodItemListBloc>()
                                   .add(FoodItemListRemove(foodItem: foodItem));
+
+                              // 建立新的用過的 FoodItem
+                              UsedFoodItem newUsedFoodItem =
+                                  foodItem.toUsedFoodItem(
+                                      usedStatus: FoodItemStatus.consumed,
+                                      usedDate: DateTime.now());
+
+                              // 加入用過的 FoodItem 清單
+                              context.read<UsedFoodItemListBloc>().add(
+                                  UsedFoodItemListAdd(
+                                      usedFoodItem: newUsedFoodItem));
+
                               setState(() {
                                 expandedIndex = -1;
                               });
@@ -115,6 +131,18 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                               context
                                   .read<FoodItemListBloc>()
                                   .add(FoodItemListRemove(foodItem: foodItem));
+
+                              // 建立新的用過的 FoodItem
+                              UsedFoodItem newUsedFoodItem =
+                                  foodItem.toUsedFoodItem(
+                                      usedStatus: FoodItemStatus.wasted,
+                                      usedDate: DateTime.now());
+
+                              // 加入用過的 FoodItem 清單
+                              context.read<UsedFoodItemListBloc>().add(
+                                  UsedFoodItemListAdd(
+                                      usedFoodItem: newUsedFoodItem));
+
                               setState(() {
                                 expandedIndex = -1;
                               });
@@ -138,7 +166,9 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                   const Text('讀取錯誤，請重新整理。'),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<FoodItemListBloc>().add(FoodItemListLoad());
+                      context
+                          .read<FoodItemListBloc>()
+                          .add(FoodItemListLoadFromDevice());
                     },
                     child: const Text('重新整理'),
                   ),

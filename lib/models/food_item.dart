@@ -1,6 +1,7 @@
 // 目的：食物項目的資料模型
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'dart:convert';
 
 enum FoodItemType {
   vegetable,
@@ -138,6 +139,45 @@ class FoodItem {
         status.hashCode ^
         description.hashCode;
   }
+
+  UsedFoodItem toUsedFoodItem(
+      {required FoodItemStatus usedStatus, required DateTime usedDate}) {
+    return UsedFoodItem(
+        name: name,
+        type: type,
+        status: usedStatus,
+        description: description,
+        storageDate: storageDate,
+        expirationDate: expirationDate,
+        usedDate: usedDate);
+  }
+
+  // 將 FoodItem 物件轉換為 JSON 字符串
+  String toJson() => json.encode({
+        'name': name,
+        'type': type.toString(),
+        'status': status.toString(),
+        'description': description,
+        'storageDate': storageDate.toIso8601String(),
+        'expirationDate': expirationDate.toIso8601String(),
+      });
+
+  // 從 JSON 字符串創建一個 FoodItem 物件
+  static FoodItem fromJson(String jsonString) {
+    final data = json.decode(jsonString);
+    return FoodItem(
+      name: data['name'],
+      type: FoodItemType.values.firstWhere(
+        (e) => e.toString() == data['type'],
+      ),
+      status: FoodItemStatus.values.firstWhere(
+        (e) => e.toString() == data['status'],
+      ),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+    );
+  }
 }
 
 class UsedFoodItem extends FoodItem {
@@ -151,4 +191,34 @@ class UsedFoodItem extends FoodItem {
       required super.storageDate,
       required super.expirationDate,
       required this.usedDate});
+
+  // 將 UsedFoodItem 物件轉換為 JSON 字符串
+  @override
+  String toJson() => json.encode({
+        'name': name,
+        'type': type.toString(),
+        'status': status.toString(),
+        'description': description,
+        'storageDate': storageDate.toIso8601String(),
+        'expirationDate': expirationDate.toIso8601String(),
+        'usedDate': usedDate.toIso8601String(),
+      });
+
+  // 從 JSON 字符串創建一個 UsedFoodItem 物件
+  static UsedFoodItem fromJson(String jsonString) {
+    final data = json.decode(jsonString);
+    return UsedFoodItem(
+      name: data['name'],
+      type: FoodItemType.values.firstWhere(
+        (e) => e.toString() == data['type'],
+      ),
+      status: FoodItemStatus.values.firstWhere(
+        (e) => e.toString() == data['status'],
+      ),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+      usedDate: DateTime.parse(data['usedDate']),
+    );
+  }
 }
