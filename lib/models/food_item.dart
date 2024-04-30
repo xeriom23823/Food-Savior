@@ -119,6 +119,25 @@ class FoodItem {
         storageDate: storageDate ?? this.storageDate,
         expirationDate: expirationDate ?? this.expirationDate);
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is FoodItem &&
+        other.name == name &&
+        other.type == type &&
+        other.status == status &&
+        other.description == description;
+  }
+
+  @override
+  int get hashCode {
+    return name.hashCode ^
+        type.hashCode ^
+        status.hashCode ^
+        description.hashCode;
+  }
 }
 
 class UsedFoodItem extends FoodItem {

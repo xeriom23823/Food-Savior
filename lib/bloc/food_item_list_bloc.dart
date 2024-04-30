@@ -9,6 +9,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
   FoodItemListBloc() : super(const FoodItemListInitial()) {
     on<FoodItemListLoad>(
       (event, emit) {
+        emit(const FoodItemListLoading());
         List<FoodItem> loadedFoodItems = [
           FoodItem(
             name: '胡蘿蔔',
