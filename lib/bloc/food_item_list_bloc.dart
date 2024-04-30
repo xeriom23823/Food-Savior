@@ -35,6 +35,14 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         }).toList()
           ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
+        // 標記過期的食物為已過期
+        loadedFoodItems = loadedFoodItems.map((foodItem) {
+          if (foodItem.expirationDate.isBefore(DateTime.now())) {
+            return foodItem.copyWith(status: FoodItemStatus.expired);
+          }
+          return foodItem;
+        }).toList();
+
         emit(
           FoodItemListLoaded(
             foodItems: loadedFoodItems,

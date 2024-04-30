@@ -73,7 +73,7 @@ extension FoodItemTypeExtension on FoodItemType {
   }
 }
 
-enum FoodItemStatus { fresh, nearExpired, consumed, wasted }
+enum FoodItemStatus { fresh, nearExpired, expired, consumed, wasted }
 
 extension FoodItemStatusExtension on FoodItemStatus {
   Color get color {
@@ -82,8 +82,33 @@ extension FoodItemStatusExtension on FoodItemStatus {
         return Colors.green;
       case FoodItemStatus.nearExpired:
         return Colors.orange;
+      case FoodItemStatus.expired:
+        return Colors.red;
+      case FoodItemStatus.consumed:
+        return Colors.blue;
+      case FoodItemStatus.wasted:
+        return Colors.grey;
       default:
         return Colors.red;
+    }
+  }
+}
+
+enum Unit { gram, kilogram, milliliter, liter, piece }
+
+extension UnitExtension on Unit {
+  String get name {
+    switch (this) {
+      case Unit.gram:
+        return '公克';
+      case Unit.kilogram:
+        return '公斤';
+      case Unit.milliliter:
+        return '毫升';
+      case Unit.liter:
+        return '公升';
+      case Unit.piece:
+        return '個';
     }
   }
 }
@@ -92,6 +117,8 @@ class FoodItem {
   final String name;
   final FoodItemType type;
   final FoodItemStatus status;
+  final double quantity;
+  final Unit unit;
   final String description;
   final DateTime storageDate;
   final DateTime expirationDate;
@@ -100,6 +127,8 @@ class FoodItem {
       {required this.name,
       required this.type,
       required this.status,
+      required this.quantity,
+      required this.unit,
       required this.description,
       required this.storageDate,
       required this.expirationDate});
@@ -108,17 +137,38 @@ class FoodItem {
     String? name,
     FoodItemType? type,
     FoodItemStatus? status,
+    double? quantity,
+    Unit? unit,
     String? description,
     DateTime? storageDate,
     DateTime? expirationDate,
   }) {
     return FoodItem(
-        name: name ?? this.name,
-        type: type ?? this.type,
-        status: status ?? this.status,
-        description: description ?? this.description,
-        storageDate: storageDate ?? this.storageDate,
-        expirationDate: expirationDate ?? this.expirationDate);
+      name: name ?? this.name,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      quantity: quantity ?? this.quantity,
+      unit: unit ?? this.unit,
+      description: description ?? this.description,
+      storageDate: storageDate ?? this.storageDate,
+      expirationDate: expirationDate ?? this.expirationDate,
+    );
+  }
+
+  // 顯示食物的數量與單位
+  String get quantityWithUnit {
+    switch (unit) {
+      case Unit.gram:
+        return '${quantity.toStringAsFixed(0)} ${unit.name}';
+      case Unit.kilogram:
+        return '${quantity.toStringAsFixed(1)} ${unit.name}';
+      case Unit.milliliter:
+        return '${quantity.toStringAsFixed(0)} ${unit.name}';
+      case Unit.liter:
+        return '${quantity.toStringAsFixed(1)} ${unit.name}';
+      case Unit.piece:
+        return '${quantity.toInt()} ${unit.name}';
+    }
   }
 
   @override
@@ -141,11 +191,15 @@ class FoodItem {
   }
 
   UsedFoodItem toUsedFoodItem(
-      {required FoodItemStatus usedStatus, required DateTime usedDate}) {
+      {required FoodItemStatus usedStatus,
+      required DateTime usedDate,
+      required double usedQuantity}) {
     return UsedFoodItem(
         name: name,
         type: type,
         status: usedStatus,
+        quantity: usedQuantity,
+        unit: unit,
         description: description,
         storageDate: storageDate,
         expirationDate: expirationDate,
@@ -157,6 +211,8 @@ class FoodItem {
         'name': name,
         'type': type.toString(),
         'status': status.toString(),
+        'quantity': quantity,
+        'unit': unit.toString(),
         'description': description,
         'storageDate': storageDate.toIso8601String(),
         'expirationDate': expirationDate.toIso8601String(),
@@ -173,6 +229,10 @@ class FoodItem {
       status: FoodItemStatus.values.firstWhere(
         (e) => e.toString() == data['status'],
       ),
+      quantity: data['quantity'],
+      unit: Unit.values.firstWhere(
+        (e) => e.toString() == data['unit'],
+      ),
       description: data['description'],
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
@@ -187,6 +247,8 @@ class UsedFoodItem extends FoodItem {
       {required super.name,
       required super.type,
       required super.status,
+      required super.quantity,
+      required super.unit,
       required super.description,
       required super.storageDate,
       required super.expirationDate,
@@ -198,6 +260,8 @@ class UsedFoodItem extends FoodItem {
         'name': name,
         'type': type.toString(),
         'status': status.toString(),
+        'quantity': quantity,
+        'unit': unit.toString(),
         'description': description,
         'storageDate': storageDate.toIso8601String(),
         'expirationDate': expirationDate.toIso8601String(),
@@ -214,6 +278,10 @@ class UsedFoodItem extends FoodItem {
       ),
       status: FoodItemStatus.values.firstWhere(
         (e) => e.toString() == data['status'],
+      ),
+      quantity: data['quantity'],
+      unit: Unit.values.firstWhere(
+        (e) => e.toString() == data['unit'],
       ),
       description: data['description'],
       storageDate: DateTime.parse(data['storageDate']),
