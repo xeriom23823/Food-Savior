@@ -116,6 +116,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
     on<FoodItemListUpdate>((event, emit) {
       if (state is FoodItemListLoaded) {
+        emit(const FoodItemListLoading());
         final List<FoodItem> currentfoodItems =
             (state as FoodItemListLoaded).foodItems;
         emit(const FoodItemListLoading());

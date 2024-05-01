@@ -41,6 +41,8 @@ dependencies:
   shared_preferences: ^2.2.3
   curved_labeled_navigation_bar: ^2.0.2
   flutter_slidable: ^3.1.0
+  bloc_test: ^9.1.7
+  test: ^1.24.9
 
 dev_dependencies:
   flutter_test:
