@@ -25,8 +25,18 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
             SizedBox(
               width: MediaQuery.of(context).size.width * 0.3,
               child: Center(
-                child: Text(
-                  DateFormat('yyyy-MM-dd').format(selectedDate),
+                child: Row(
+                  children: [
+                    Text(
+                      DateFormat('yyyy-MM-dd').format(selectedDate),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.calendar_today),
+                      onPressed: () {
+                        _showSelectDateDialog(context);
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -144,5 +154,20 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
         },
       ),
     );
+  }
+
+  void _showSelectDateDialog(BuildContext context) {
+    showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2101),
+    ).then((value) {
+      if (value != null) {
+        setState(() {
+          selectedDate = value;
+        });
+      }
+    });
   }
 }
