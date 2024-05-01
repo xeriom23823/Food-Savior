@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -12,14 +14,10 @@ class FoodItemListPage extends StatefulWidget {
   State<FoodItemListPage> createState() => _FoodItemListPageState();
 }
 
-class _FoodItemListPageState extends State<FoodItemListPage> {
+class _FoodItemListPageState extends State<FoodItemListPage>
+    with SingleTickerProviderStateMixin {
+  late final controller = SlidableController(this);
   int expandedIndex = -1;
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<FoodItemListBloc>().add(FoodItemListLoad());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +25,16 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
       appBar: AppBar(
         title: const Text('食物清單'),
       ),
-      body: BlocBuilder<FoodItemListBloc, FoodItemListState>(
+      body: BlocConsumer<FoodItemListBloc, FoodItemListState>(
+        listener: (BuildContext context, FoodItemListState state) {
+          if (state is FoodItemListError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        },
         builder: (BuildContext context, FoodItemListState state) {
           if (state is FoodItemListInitial) {
             return const Center(
@@ -45,88 +52,116 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 60,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: expandedIndex == index
-                            ? MediaQuery.of(context).size.width - 120
-                            : MediaQuery.of(context).size.width,
-                        height: 60,
-                        child: GestureDetector(
-                          onLongPress: () {
-                            setState(() {
-                              expandedIndex = -1;
-                            });
+                  child: Slidable(
+                    key: ValueKey(index),
+
+                    // 左邊的動作面板
+                    startActionPane: ActionPane(
+                      extentRatio: 0.15,
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (_) {
                             _showEditFoodItemDialog(context, foodItem);
+
+                            controller.close();
                           },
-                          onTap: () {
-                            setState(() {
-                              expandedIndex = -1;
-                            });
-                          },
-                          onHorizontalDragUpdate: (details) {
-                            if (details.delta.dx < 0) {
-                              setState(() {
-                                expandedIndex = index;
-                              });
-                            } else if (details.delta.dx > 0) {
-                              setState(() {
-                                expandedIndex = -1;
-                              });
-                            }
-                          },
-                          child: ListTile(
-                            title: Text(foodItem.name),
-                            leading: Icon(foodItem.type.icon,
-                                color: foodItem.status.color),
-                            subtitle: Text(foodItem.description),
-                            trailing: Text(
-                              '過期：${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (expandedIndex == index) ...[
-                        Container(
-                          width: 60,
-                          height: 60,
-                          color: Colors.green,
-                          child: IconButton(
-                            onPressed: () {
-                              context
-                                  .read<FoodItemListBloc>()
-                                  .add(FoodItemListRemove(foodItem: foodItem));
-                              setState(() {
-                                expandedIndex = -1;
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.restaurant,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 60,
-                          height: 60,
-                          color: Colors.red,
-                          child: IconButton(
-                            onPressed: () {
-                              context
-                                  .read<FoodItemListBloc>()
-                                  .add(FoodItemListRemove(foodItem: foodItem));
-                              setState(() {
-                                expandedIndex = -1;
-                              });
-                            },
-                            icon: Icon(
-                              MdiIcons.deleteEmpty,
-                              color: Colors.white,
-                            ),
-                          ),
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          icon: Icons.edit,
+                          label: '編輯',
                         ),
                       ],
-                    ],
+                    ),
+
+                    // 右邊的動作面板
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (_) {
+                            context
+                                .read<FoodItemListBloc>()
+                                .add(FoodItemListRemove(foodItem: foodItem));
+
+                            // 建立新的用過的 FoodItem
+                            UsedFoodItem newUsedFoodItem =
+                                foodItem.toUsedFoodItem(
+                                    usedStatus: FoodItemStatus.wasted,
+                                    usedDate: DateTime.now(),
+                                    usedQuantity: foodItem.quantity);
+
+                            // 加入用過的 FoodItem 清單
+                            context.read<UsedFoodItemListBloc>().add(
+                                UsedFoodItemListAdd(
+                                    usedFoodItem: newUsedFoodItem));
+
+                            controller.close();
+                          },
+                          backgroundColor: FoodItemStatus.wasted.color,
+                          foregroundColor: Colors.white,
+                          icon: MdiIcons.deleteEmpty,
+                          label: '過期',
+                        ),
+                        SlidableAction(
+                          onPressed: (_) {
+                            _showUseFoodItemDialog(context, foodItem);
+                            controller.close();
+                          },
+                          backgroundColor: FoodItemStatus.consumed.color,
+                          foregroundColor: Colors.white,
+                          icon: Icons.restaurant,
+                          label: '批量使用',
+                        ),
+                        SlidableAction(
+                          onPressed: (_) {
+                            context
+                                .read<FoodItemListBloc>()
+                                .add(FoodItemListRemove(foodItem: foodItem));
+
+                            // 建立新的用過的 FoodItem
+                            UsedFoodItem newUsedFoodItem =
+                                foodItem.toUsedFoodItem(
+                                    usedStatus: FoodItemStatus.consumed,
+                                    usedDate: DateTime.now(),
+                                    usedQuantity: foodItem.quantity);
+
+                            // 加入用過的 FoodItem 清單
+                            context.read<UsedFoodItemListBloc>().add(
+                                UsedFoodItemListAdd(
+                                    usedFoodItem: newUsedFoodItem));
+
+                            controller.close();
+                          },
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          icon: Icons.restaurant,
+                          label: '全部使用',
+                        ),
+                      ],
+                    ),
+
+                    child: ListTile(
+                      onLongPress: () {
+                        setState(() {
+                          expandedIndex = -1;
+                        });
+                        _showEditFoodItemDialog(context, foodItem);
+                      },
+                      onTap: () {
+                        setState(() {
+                          expandedIndex = -1;
+                        });
+                      },
+                      title: Text(
+                          '${foodItem.name} (${foodItem.quantityWithUnit})'),
+                      leading: Icon(foodItem.type.icon,
+                          color: foodItem.status.color),
+                      subtitle: Text(foodItem.description),
+                      trailing: Text(
+                        '過期：${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
+                      ),
+                    ),
                   ),
                 );
               },
@@ -138,7 +173,9 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                   const Text('讀取錯誤，請重新整理。'),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<FoodItemListBloc>().add(FoodItemListLoad());
+                      context
+                          .read<FoodItemListBloc>()
+                          .add(FoodItemListLoadFromDevice());
                     },
                     child: const Text('重新整理'),
                   ),
@@ -159,6 +196,8 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
 
   void _showAddFoodItemDialog(BuildContext context) {
     final TextEditingController nameController = TextEditingController();
+    final TextEditingController quantityController = TextEditingController();
+    Unit selectedUnit = Unit.piece;
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController storageDateController = TextEditingController();
     final TextEditingController expirationDateController =
@@ -166,6 +205,9 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
     FoodItemType selectedType = FoodItemType.others;
 
     final formKey = GlobalKey<FormState>();
+
+    // Set default quantity as 1
+    quantityController.text = '1';
 
     // Set default storage date as DateTime.now()
     storageDateController.text =
@@ -218,13 +260,50 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                       return null;
                     },
                   ),
+                  TextFormField(
+                    controller: quantityController,
+                    decoration: const InputDecoration(labelText: '數量'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      quantityController.text = value;
+                      formKey.currentState!.validate();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '數字不能為空';
+                      }
+                      if (int.tryParse(value) == null) {
+                        return '請輸入有效的數字';
+                      }
+                      return null;
+                    },
+                  ),
+                  DropdownButtonFormField<Unit>(
+                    value: selectedUnit,
+                    onChanged: (value) {
+                      selectedUnit = value!;
+                    },
+                    items: Unit.values.map((unit) {
+                      return DropdownMenuItem<Unit>(
+                        value: unit,
+                        child: Text(unit.name),
+                      );
+                    }).toList(),
+                    decoration: const InputDecoration(labelText: '單位'),
+                    validator: (value) {
+                      if (value == null) {
+                        return '請選擇單位';
+                      }
+                      return null;
+                    },
+                  ),
                   TextField(
                     controller: descriptionController,
                     decoration: const InputDecoration(labelText: '描述'),
                   ),
                   GestureDetector(
                     onTap: () {
-                      _selectStorageDate(context, storageDateController);
+                      _selectDate(context, storageDateController);
                     },
                     child: AbsorbPointer(
                       child: TextField(
@@ -267,6 +346,8 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
+                  quantity: int.parse(quantityController.text),
+                  unit: selectedUnit,
                   description: descriptionController.text,
                   storageDate: DateTime.parse(storageDateController.text),
                   expirationDate: DateTime.parse(expirationDateController.text),
@@ -295,6 +376,8 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
   void _showEditFoodItemDialog(
       BuildContext context, FoodItem originalFoodItem) {
     final TextEditingController nameController = TextEditingController();
+    final TextEditingController quantityController = TextEditingController();
+    Unit selectedUnit = originalFoodItem.unit;
     final TextEditingController descriptionController = TextEditingController();
     final TextEditingController storageDateController = TextEditingController();
     final TextEditingController expirationDateController =
@@ -306,6 +389,7 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
     // Set default date as originalFoodItem
     nameController.text = originalFoodItem.name;
     selectedType = originalFoodItem.type;
+    quantityController.text = originalFoodItem.quantity.toString();
     descriptionController.text = originalFoodItem.description;
     storageDateController.text =
         DateFormat('yyyy-MM-dd').format(originalFoodItem.storageDate);
@@ -369,13 +453,50 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                       return null;
                     },
                   ),
+                  TextFormField(
+                    controller: quantityController,
+                    decoration: const InputDecoration(labelText: '數量'),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      quantityController.text = value;
+                      formKey.currentState!.validate();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '數字不能為空';
+                      }
+                      if (int.tryParse(value) == null) {
+                        return '請輸入有效的數字';
+                      }
+                      return null;
+                    },
+                  ),
+                  DropdownButtonFormField<Unit>(
+                    value: selectedUnit,
+                    onChanged: (value) {
+                      selectedUnit = value!;
+                    },
+                    items: Unit.values.map((unit) {
+                      return DropdownMenuItem<Unit>(
+                        value: unit,
+                        child: Text(unit.name),
+                      );
+                    }).toList(),
+                    decoration: const InputDecoration(labelText: '單位'),
+                    validator: (value) {
+                      if (value == null) {
+                        return '請選擇單位';
+                      }
+                      return null;
+                    },
+                  ),
                   TextField(
                     controller: descriptionController,
                     decoration: const InputDecoration(labelText: '描述'),
                   ),
                   GestureDetector(
                     onTap: () {
-                      _selectStorageDate(context, storageDateController);
+                      _selectDate(context, storageDateController);
                     },
                     child: AbsorbPointer(
                       child: TextField(
@@ -418,10 +539,13 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
+                  quantity: int.parse(quantityController.text),
+                  unit: selectedUnit,
                   description: descriptionController.text,
                   storageDate: DateTime.parse(storageDateController.text),
                   expirationDate: DateTime.parse(expirationDateController.text),
                 );
+
                 context.read<FoodItemListBloc>().add(FoodItemListUpdate(
                     originalFoodItem: originalFoodItem,
                     updatedFoodItem: updatedFoodItem));
@@ -443,7 +567,96 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
     );
   }
 
-  void _selectStorageDate(
+  void _showUseFoodItemDialog(BuildContext context, FoodItem usingFoodItem) {
+    final TextEditingController quantityController = TextEditingController();
+    final TextEditingController usedDateController = TextEditingController();
+
+    // set default quantity as 1
+    quantityController.text = '1';
+
+    // set default used date as DateTime.now()
+    usedDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('使用食物'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text('使用 ${usingFoodItem.name}'),
+                TextField(
+                  controller: quantityController,
+                  decoration: const InputDecoration(labelText: '數量'),
+                  keyboardType: TextInputType.number,
+                ),
+                // Add a date picker for the used date
+                GestureDetector(
+                  onTap: () {
+                    _selectDate(context, usedDateController);
+                  },
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: usedDateController,
+                      decoration: const InputDecoration(labelText: '使用日期'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () {
+                final int usedQuantity = int.parse(quantityController.text);
+
+                final FoodItem remainFoodItem = usingFoodItem.copyWith(
+                  quantity: usingFoodItem.quantity - usedQuantity,
+                );
+
+                if (remainFoodItem.quantity > 0) {
+                  context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                      originalFoodItem: usingFoodItem,
+                      updatedFoodItem: remainFoodItem));
+                }
+
+                final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
+                    usedStatus: FoodItemStatus.consumed,
+                    usedDate: DateTime.parse(usedDateController.text),
+                    usedQuantity: usedQuantity);
+
+                if (usedQuantity > 0) {
+                  context
+                      .read<UsedFoodItemListBloc>()
+                      .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
+                }
+
+                Navigator.of(context).pop();
+
+                // 提示使用者已更新
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${remainFoodItem.name} 已更新'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: const Text('使用'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _selectDate(
       BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,

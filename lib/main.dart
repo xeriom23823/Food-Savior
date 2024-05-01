@@ -1,12 +1,24 @@
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
+import 'package:food_savior/pages/used_food_item_list_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  // if (kDebugMode) {
+  //   SharedPreferences.getInstance().then((prefs) {
+  //     prefs.clear();
+  //   });
+  // }
+
   runApp(const FoodSavior());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -22,12 +34,13 @@ class FoodSavior extends StatefulWidget {
 }
 
 class _FoodSaviorState extends State<FoodSavior> {
-  int _pageIndex = 1;
+  final _pageController = PageController();
+  final int _pageIndex = 1;
 
   final List<Widget> _pages = const [
     FoodItemListPage(),
     FoodItemListPage(),
-    FoodItemListPage(),
+    UsedFoodItemListPage(),
     FoodItemListPage()
   ];
 
@@ -37,6 +50,9 @@ class _FoodSaviorState extends State<FoodSavior> {
       providers: [
         BlocProvider<FoodItemListBloc>(
           create: (BuildContext context) => FoodItemListBloc(),
+        ),
+        BlocProvider<UsedFoodItemListBloc>(
+          create: (BuildContext context) => UsedFoodItemListBloc(),
         ),
       ],
       child: MaterialApp(
@@ -55,33 +71,39 @@ class _FoodSaviorState extends State<FoodSavior> {
         title: '食物救世主',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.green,
-              secondary: Colors.orange,
-              primary: Colors.green),
+              seedColor: Colors.greenAccent,
+              secondary: Colors.lightGreen,
+              primary: Colors.green,
+              background: Colors.white),
           useMaterial3: true,
         ),
         home: Scaffold(
-          body: _pages[_pageIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: Colors.green,
-            currentIndex: _pageIndex,
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: null,
+            physics: const NeverScrollableScrollPhysics(),
+            children: _pages,
+          ),
+          bottomNavigationBar: CurvedNavigationBar(
+            backgroundColor: Colors.lightGreen,
+            index: _pageIndex,
+            animationDuration: const Duration(milliseconds: 500),
             onTap: _onTabTapped,
             items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
+              CurvedNavigationBarItem(
+                child: Icon(Icons.person),
                 label: '用戶',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.food_bank),
+              CurvedNavigationBarItem(
+                child: Icon(Icons.food_bank),
                 label: '食物',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history),
+              CurvedNavigationBarItem(
+                child: Icon(Icons.history),
                 label: '紀錄',
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.settings),
+              CurvedNavigationBarItem(
+                child: Icon(Icons.settings),
                 label: '設定',
               ),
             ],
@@ -92,8 +114,10 @@ class _FoodSaviorState extends State<FoodSavior> {
   }
 
   void _onTabTapped(int index) {
-    setState(() {
-      _pageIndex = index;
-    });
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
   }
 }
