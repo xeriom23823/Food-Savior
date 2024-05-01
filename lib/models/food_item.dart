@@ -92,21 +92,34 @@ extension FoodItemStatusExtension on FoodItemStatus {
         return Colors.red;
     }
   }
+
+  String get name {
+    switch (this) {
+      case FoodItemStatus.fresh:
+        return '新鮮';
+      case FoodItemStatus.nearExpired:
+        return '即將過期';
+      case FoodItemStatus.expired:
+        return '已過期';
+      case FoodItemStatus.consumed:
+        return '已使用';
+      case FoodItemStatus.wasted:
+        return '已浪費';
+      default:
+        return '未知';
+    }
+  }
 }
 
-enum Unit { gram, kilogram, milliliter, liter, piece }
+enum Unit { gram, milliliter, piece }
 
 extension UnitExtension on Unit {
   String get name {
     switch (this) {
       case Unit.gram:
         return '公克';
-      case Unit.kilogram:
-        return '公斤';
       case Unit.milliliter:
         return '毫升';
-      case Unit.liter:
-        return '公升';
       case Unit.piece:
         return '個';
     }
@@ -117,7 +130,7 @@ class FoodItem {
   final String name;
   final FoodItemType type;
   final FoodItemStatus status;
-  final double quantity;
+  final int quantity;
   final Unit unit;
   final String description;
   final DateTime storageDate;
@@ -137,7 +150,7 @@ class FoodItem {
     String? name,
     FoodItemType? type,
     FoodItemStatus? status,
-    double? quantity,
+    int? quantity,
     Unit? unit,
     String? description,
     DateTime? storageDate,
@@ -159,15 +172,11 @@ class FoodItem {
   String get quantityWithUnit {
     switch (unit) {
       case Unit.gram:
-        return '${quantity.toStringAsFixed(0)} ${unit.name}';
-      case Unit.kilogram:
-        return '${quantity.toStringAsFixed(1)} ${unit.name}';
+        return '$quantity ${unit.name}';
       case Unit.milliliter:
-        return '${quantity.toStringAsFixed(0)} ${unit.name}';
-      case Unit.liter:
-        return '${quantity.toStringAsFixed(1)} ${unit.name}';
+        return '$quantity ${unit.name}';
       case Unit.piece:
-        return '${quantity.toInt()} ${unit.name}';
+        return '$quantity ${unit.name}';
     }
   }
 
@@ -193,7 +202,7 @@ class FoodItem {
   UsedFoodItem toUsedFoodItem(
       {required FoodItemStatus usedStatus,
       required DateTime usedDate,
-      required double usedQuantity}) {
+      required int usedQuantity}) {
     return UsedFoodItem(
         name: name,
         type: type,

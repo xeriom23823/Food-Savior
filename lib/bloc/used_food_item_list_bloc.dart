@@ -25,6 +25,11 @@ class UsedFoodItemListBloc
         },
       );
 
+      if (loadedUsedFoodItems.isEmpty) {
+        emit(const UsedFoodItemListLoaded(usedFoodItems: []));
+        return;
+      }
+
       emit(UsedFoodItemListLoaded(usedFoodItems: loadedUsedFoodItems));
     });
 

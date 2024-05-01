@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
+import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 
 class UsedFoodItemListPage extends StatefulWidget {
@@ -11,11 +12,43 @@ class UsedFoodItemListPage extends StatefulWidget {
 }
 
 class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
+  FoodItemStatus dropdownValue = FoodItemStatus.consumed;
+  DateTime selectedDate = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('消耗食物歷史紀錄'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.3,
+              child: Center(
+                child: Text(
+                  DateFormat('yyyy-MM-dd').format(selectedDate),
+                ),
+              ),
+            ),
+            DropdownButton<FoodItemStatus>(
+              value: dropdownValue,
+              onChanged: (FoodItemStatus? newValue) {
+                setState(() {
+                  dropdownValue = newValue!;
+                });
+              },
+              items: <FoodItemStatus>[
+                FoodItemStatus.consumed,
+                FoodItemStatus.wasted
+              ].map<DropdownMenuItem<FoodItemStatus>>((FoodItemStatus value) {
+                return DropdownMenuItem<FoodItemStatus>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
       body: BlocConsumer<UsedFoodItemListBloc, UsedFoodItemListState>(
         listener: (context, state) {
@@ -33,18 +66,75 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is UsedFoodItemListLoaded) {
-            return ListView.builder(
-              itemCount: state.usedFoodItems.length,
-              itemBuilder: (context, index) {
-                final usedFoodItem = state.usedFoodItems[index];
-                return ListTile(
-                  title: Text(usedFoodItem.name),
-                  subtitle: Text(usedFoodItem.description),
-                  trailing: Text(
-                    '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}',
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 24.0, vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedDate =
+                                selectedDate.subtract(const Duration(days: 1));
+                          });
+                        },
+                        child: const Icon(Icons.arrow_back),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedDate = DateTime.now();
+                          });
+                        },
+                        child: const Text('返回今天'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedDate =
+                                selectedDate.add(const Duration(days: 1));
+                          });
+                        },
+                        child: const Icon(Icons.arrow_forward),
+                      ),
+                    ],
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.usedFoodItems.length,
+                    itemBuilder: (context, index) {
+                      final usedFoodItem = state.usedFoodItems[index];
+                      if (usedFoodItem.status != dropdownValue ||
+                          usedFoodItem.usedDate.year != selectedDate.year ||
+                          usedFoodItem.usedDate.month != selectedDate.month ||
+                          usedFoodItem.usedDate.day != selectedDate.day) {
+                        return const SizedBox.shrink();
+                      }
+                      return ListTile(
+                        title: Text(
+                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name})'),
+                        leading: Icon(usedFoodItem.type.icon,
+                            color: usedFoodItem.status.color),
+                        subtitle: usedFoodItem.description.isNotEmpty
+                            ? Text(usedFoodItem.description)
+                            : Text(
+                                usedFoodItem.status == FoodItemStatus.consumed
+                                    ? '+ 1 食物點數'
+                                    : '- 1 食物點數',
+                                style: TextStyle(
+                                    color: usedFoodItem.status.color)),
+                        trailing: Text(
+                          '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}',
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           } else {
             return const Center(

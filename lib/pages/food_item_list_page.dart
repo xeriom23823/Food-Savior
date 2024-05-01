@@ -57,7 +57,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
                     // 左邊的動作面板
                     startActionPane: ActionPane(
-                      extentRatio: 0.2,
+                      extentRatio: 0.15,
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
@@ -105,28 +105,13 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         ),
                         SlidableAction(
                           onPressed: (_) {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
-
-                            // 建立新的用過的 FoodItem
-                            UsedFoodItem newUsedFoodItem =
-                                foodItem.toUsedFoodItem(
-                                    usedStatus: FoodItemStatus.consumed,
-                                    usedDate: DateTime.now(),
-                                    usedQuantity: foodItem.quantity);
-
-                            // 加入用過的 FoodItem 清單
-                            context.read<UsedFoodItemListBloc>().add(
-                                UsedFoodItemListAdd(
-                                    usedFoodItem: newUsedFoodItem));
-
+                            _showUseFoodItemDialog(context, foodItem);
                             controller.close();
                           },
                           backgroundColor: FoodItemStatus.consumed.color,
                           foregroundColor: Colors.white,
                           icon: Icons.restaurant,
-                          label: '使用',
+                          label: '批量使用',
                         ),
                         SlidableAction(
                           onPressed: (_) {
@@ -287,7 +272,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       if (value == null || value.isEmpty) {
                         return '數字不能為空';
                       }
-                      if (double.tryParse(value) == null) {
+                      if (int.tryParse(value) == null) {
                         return '請輸入有效的數字';
                       }
                       return null;
@@ -318,7 +303,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   GestureDetector(
                     onTap: () {
-                      _selectStorageDate(context, storageDateController);
+                      _selectDate(context, storageDateController);
                     },
                     child: AbsorbPointer(
                       child: TextField(
@@ -361,7 +346,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
-                  quantity: double.parse(quantityController.text),
+                  quantity: int.parse(quantityController.text),
                   unit: selectedUnit,
                   description: descriptionController.text,
                   storageDate: DateTime.parse(storageDateController.text),
@@ -480,7 +465,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       if (value == null || value.isEmpty) {
                         return '數字不能為空';
                       }
-                      if (double.tryParse(value) == null) {
+                      if (int.tryParse(value) == null) {
                         return '請輸入有效的數字';
                       }
                       return null;
@@ -511,7 +496,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   GestureDetector(
                     onTap: () {
-                      _selectStorageDate(context, storageDateController);
+                      _selectDate(context, storageDateController);
                     },
                     child: AbsorbPointer(
                       child: TextField(
@@ -554,7 +539,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
-                  quantity: double.parse(quantityController.text),
+                  quantity: int.parse(quantityController.text),
                   unit: selectedUnit,
                   description: descriptionController.text,
                   storageDate: DateTime.parse(storageDateController.text),
@@ -582,7 +567,96 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     );
   }
 
-  void _selectStorageDate(
+  void _showUseFoodItemDialog(BuildContext context, FoodItem usingFoodItem) {
+    final TextEditingController quantityController = TextEditingController();
+    final TextEditingController usedDateController = TextEditingController();
+
+    // set default quantity as 1
+    quantityController.text = '1';
+
+    // set default used date as DateTime.now()
+    usedDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('使用食物'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text('使用 ${usingFoodItem.name}'),
+                TextField(
+                  controller: quantityController,
+                  decoration: const InputDecoration(labelText: '數量'),
+                  keyboardType: TextInputType.number,
+                ),
+                // Add a date picker for the used date
+                GestureDetector(
+                  onTap: () {
+                    _selectDate(context, usedDateController);
+                  },
+                  child: AbsorbPointer(
+                    child: TextField(
+                      controller: usedDateController,
+                      decoration: const InputDecoration(labelText: '使用日期'),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () {
+                final int usedQuantity = int.parse(quantityController.text);
+
+                final FoodItem remainFoodItem = usingFoodItem.copyWith(
+                  quantity: usingFoodItem.quantity - usedQuantity,
+                );
+
+                if (remainFoodItem.quantity > 0) {
+                  context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                      originalFoodItem: usingFoodItem,
+                      updatedFoodItem: remainFoodItem));
+                }
+
+                final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
+                    usedStatus: FoodItemStatus.consumed,
+                    usedDate: DateTime.parse(usedDateController.text),
+                    usedQuantity: usedQuantity);
+
+                if (usedQuantity > 0) {
+                  context
+                      .read<UsedFoodItemListBloc>()
+                      .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
+                }
+
+                Navigator.of(context).pop();
+
+                // 提示使用者已更新
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${remainFoodItem.name} 已更新'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: const Text('使用'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _selectDate(
       BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,

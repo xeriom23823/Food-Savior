@@ -24,6 +24,11 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
           },
         );
 
+        if (loadedFoodItems.isEmpty) {
+          emit(const FoodItemListLoaded(foodItems: []));
+          return;
+        }
+
         // expiration date 小於 3 天的食物標記為即將過期並排序
         loadedFoodItems = loadedFoodItems.map((foodItem) {
           if (foodItem.expirationDate.isBefore(

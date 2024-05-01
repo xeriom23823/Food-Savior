@@ -1,5 +1,6 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +35,7 @@ class FoodSavior extends StatefulWidget {
 
 class _FoodSaviorState extends State<FoodSavior> {
   final _pageController = PageController();
-  int _pageIndex = 1;
+  final int _pageIndex = 1;
 
   final List<Widget> _pages = const [
     FoodItemListPage(),
@@ -69,9 +71,10 @@ class _FoodSaviorState extends State<FoodSavior> {
         title: '食物救世主',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.green,
-              secondary: Colors.orange,
-              primary: Colors.green),
+              seedColor: Colors.greenAccent,
+              secondary: Colors.lightGreen,
+              primary: Colors.green,
+              background: Colors.white),
           useMaterial3: true,
         ),
         home: Scaffold(
