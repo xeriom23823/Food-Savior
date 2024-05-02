@@ -27,11 +27,14 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               child: Center(
                 child: Row(
                   children: [
-                    Text(
-                      DateFormat('yyyy-MM-dd').format(selectedDate),
-                    ),
+                    Text(DateFormat('yyyy-MM-dd').format(selectedDate),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
                     IconButton(
-                      icon: const Icon(Icons.calendar_today),
+                      icon:
+                          const Icon(Icons.calendar_today, color: Colors.white),
                       onPressed: () {
                         _showSelectDateDialog(context);
                       },
@@ -53,7 +56,8 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               ].map<DropdownMenuItem<FoodItemStatus>>((FoodItemStatus value) {
                 return DropdownMenuItem<FoodItemStatus>(
                   value: value,
-                  child: Text(value.name),
+                  child: Text(value.name,
+                      style: const TextStyle(color: Colors.white)),
                 );
               }).toList(),
             ),
