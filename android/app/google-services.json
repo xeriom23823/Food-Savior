@@ -12,7 +12,12 @@
           "package_name": "com.example.food_savior"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "376153272412-meb796d00mlh8qndirkdnm7ndfr2o276.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBgReOquMZdeKaHvpxlyki2JfUmvm4sjbg"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376153272412-meb796d00mlh8qndirkdnm7ndfr2o276.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "376153272412-m4n3gg1uinh6j2qidrgds5ugt83uqkrl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foodSavior"
+              }
+            }
+          ]
         }
       }
     }

@@ -60,11 +60,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyC1NTf2IQhUKJHxxNT85uCuj_HQS83uyEE',
-    appId: '1:376153272412:ios:543478546365b406043699',
+    appId: '1:376153272412:ios:13d7725ba732040f043699',
     messagingSenderId: '376153272412',
     projectId: 'foodsavior-792ee',
     storageBucket: 'foodsavior-792ee.appspot.com',
-    iosBundleId: 'com.example.foodSavior',
+    iosClientId: '376153272412-sf2597v7c6ntg5785lcfa8jv6sb8o53f.apps.googleusercontent.com',
+    iosBundleId: 'com.RateyHJ.foodSavior',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -73,6 +74,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '376153272412',
     projectId: 'foodsavior-792ee',
     storageBucket: 'foodsavior-792ee.appspot.com',
+    iosClientId: '376153272412-m4n3gg1uinh6j2qidrgds5ugt83uqkrl.apps.googleusercontent.com',
     iosBundleId: 'com.example.foodSavior',
   );
 
@@ -85,4 +87,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'foodsavior-792ee.appspot.com',
     measurementId: 'G-4XS8FL8T0W',
   );
+
 }
