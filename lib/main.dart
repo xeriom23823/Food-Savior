@@ -64,14 +64,12 @@ class _FoodSaviorState extends State<FoodSavior> {
         ),
       ],
       child: Scaffold(
-        body: const UserPage(),
-        // body: PageView(
-        //   controller: _pageController,
-        //   onPageChanged: null,
-        //   physics: const NeverScrollableScrollPhysics(),
-        //   children: _pages,
-        // ),
-
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: null,
+          physics: const NeverScrollableScrollPhysics(),
+          children: _pages,
+        ),
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: Theme.of(context).primaryColor,
           index: _pageIndex,
