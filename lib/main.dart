@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
@@ -65,12 +64,14 @@ class _FoodSaviorState extends State<FoodSavior> {
         ),
       ],
       child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: null,
-          physics: const NeverScrollableScrollPhysics(),
-          children: _pages,
-        ),
+        body: const UserPage(),
+        // body: PageView(
+        //   controller: _pageController,
+        //   onPageChanged: null,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   children: _pages,
+        // ),
+
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: Theme.of(context).primaryColor,
           index: _pageIndex,

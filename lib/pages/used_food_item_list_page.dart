@@ -23,7 +23,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.3,
+              width: MediaQuery.of(context).size.width * 0.4,
               child: Center(
                 child: Row(
                   children: [
@@ -44,6 +44,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               ),
             ),
             DropdownButton<FoodItemStatus>(
+              dropdownColor: Theme.of(context).primaryColor,
               value: dropdownValue,
               onChanged: (FoodItemStatus? newValue) {
                 setState(() {
@@ -56,8 +57,10 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               ].map<DropdownMenuItem<FoodItemStatus>>((FoodItemStatus value) {
                 return DropdownMenuItem<FoodItemStatus>(
                   value: value,
-                  child: Text(value.name,
-                      style: const TextStyle(color: Colors.white)),
+                  child: Text(
+                    value.name,
+                    style: const TextStyle(color: Colors.white),
+                  ),
                 );
               }).toList(),
             ),

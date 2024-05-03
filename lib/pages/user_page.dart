@@ -19,7 +19,7 @@ class UserPage extends StatelessWidget {
                 fontWeight: FontWeight.bold)),
         actions: <Widget>[
           IconButton(
-            key: const Key('homePage_logout_iconButton'),
+            key: const Key('UserPage_logout_iconButton'),
             icon: const Icon(Icons.exit_to_app, color: Colors.white),
             onPressed: () {
               context.read<AppBloc>().add(const AppLogoutRequested());

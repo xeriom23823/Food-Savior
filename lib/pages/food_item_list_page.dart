@@ -254,7 +254,6 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     controller: nameController,
                     decoration: const InputDecoration(labelText: '名稱'),
                     onChanged: (value) {
-                      nameController.text = value;
                       formKey.currentState!.validate();
                     },
                     validator: (value) {

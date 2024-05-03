@@ -12,9 +12,4 @@ final theme = ThemeData(
     secondary: Color(0xFF009688),
     background: Color(0xFFE0F2F1),
   ),
-  inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-    ),
-  ),
 );
