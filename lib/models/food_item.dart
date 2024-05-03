@@ -188,7 +188,9 @@ class FoodItem {
         other.name == name &&
         other.type == type &&
         other.status == status &&
-        other.description == description;
+        other.description == description &&
+        other.quantity == quantity &&
+        other.unit == unit;
   }
 
   @override
@@ -196,7 +198,9 @@ class FoodItem {
     return name.hashCode ^
         type.hashCode ^
         status.hashCode ^
-        description.hashCode;
+        description.hashCode ^
+        quantity.hashCode ^
+        unit.hashCode;
   }
 
   UsedFoodItem toUsedFoodItem(

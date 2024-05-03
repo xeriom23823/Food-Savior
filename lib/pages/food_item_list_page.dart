@@ -222,6 +222,10 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     expirationDateController.text =
         DateFormat('yyyy-MM-dd').format(expirationDate);
 
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -355,9 +359,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   storageDate: DateTime.parse(storageDateController.text),
                   expirationDate: DateTime.parse(expirationDateController.text),
                 );
-                context
-                    .read<FoodItemListBloc>()
-                    .add(FoodItemListAdd(foodItem: newFoodItem));
+                foodItemListBloc.add(FoodItemListAdd(foodItem: newFoodItem));
                 Navigator.of(context).pop();
 
                 // 提示使用者已更新
@@ -400,6 +402,10 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     expirationDateController.text =
         DateFormat('yyyy-MM-dd').format(originalFoodItem.expirationDate);
 
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -411,8 +417,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  context
-                      .read<FoodItemListBloc>()
+                  foodItemListBloc
                       .add(FoodItemListRemove(foodItem: originalFoodItem));
                   Navigator.of(context).pop();
                 },
@@ -549,7 +554,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   expirationDate: DateTime.parse(expirationDateController.text),
                 );
 
-                context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                foodItemListBloc.add(FoodItemListUpdate(
                     originalFoodItem: originalFoodItem,
                     updatedFoodItem: updatedFoodItem));
                 Navigator.of(context).pop();
@@ -579,6 +584,12 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
     // set default used date as DateTime.now()
     usedDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+    final UsedFoodItemListBloc usedFoodItemListBloc =
+        BlocProvider.of<UsedFoodItemListBloc>(context);
 
     showDialog(
       context: context,
@@ -625,7 +636,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 );
 
                 if (remainFoodItem.quantity > 0) {
-                  context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                  foodItemListBloc.add(FoodItemListUpdate(
                       originalFoodItem: usingFoodItem,
                       updatedFoodItem: remainFoodItem));
                 }
@@ -636,8 +647,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     usedQuantity: usedQuantity);
 
                 if (usedQuantity > 0) {
-                  context
-                      .read<UsedFoodItemListBloc>()
+                  usedFoodItemListBloc
                       .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
                 }
 

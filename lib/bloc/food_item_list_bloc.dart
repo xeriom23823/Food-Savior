@@ -64,7 +64,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       },
     );
 
-    on<FoodItemListAdd>((event, emit) {
+    on<FoodItemListAdd>((event, emit) async {
       if (state is FoodItemListLoaded) {
         final List<FoodItem> currentfoodItems =
             (state as FoodItemListLoaded).foodItems;
@@ -81,19 +81,20 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         final List<FoodItem> updatedFoodItems = List.from(currentfoodItems)
           ..add(newFoodItem)
           ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
-        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
 
         // 將所有食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
             updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
           );
         });
+
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }
     });
 
-    on<FoodItemListRemove>((event, emit) {
+    on<FoodItemListRemove>((event, emit) async {
       if (state is FoodItemListLoaded) {
         final List<FoodItem> currentfoodItems =
             (state as FoodItemListLoaded).foodItems;
@@ -102,21 +103,21 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         List<FoodItem> updatedFoodItems = currentfoodItems
             .where((foodItem) => foodItem != event.foodItem)
             .toList();
-        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
 
         // 將所有食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
             updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
           );
         });
+
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }
     });
 
-    on<FoodItemListUpdate>((event, emit) {
+    on<FoodItemListUpdate>((event, emit) async {
       if (state is FoodItemListLoaded) {
-        emit(const FoodItemListLoading());
         final List<FoodItem> currentfoodItems =
             (state as FoodItemListLoaded).foodItems;
         emit(const FoodItemListLoading());
@@ -128,15 +129,15 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
             .toList()
           ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
-        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
-
         // 將所有食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
             updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
           );
         });
+
+        emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }
     });
 
