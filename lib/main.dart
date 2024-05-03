@@ -1,17 +1,21 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
+import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
+import 'package:food_savior/pages/user_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // if (kDebugMode) {
   //   SharedPreferences.getInstance().then((prefs) {
@@ -19,26 +23,30 @@ void main() {
   //   });
   // }
 
-  runApp(const FoodSavior());
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final authenticationRepository = AuthenticationRepository();
+  await authenticationRepository.user.first;
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const FoodSavior());
+    runApp(App(authenticationRepository: authenticationRepository));
   });
 }
 
 class FoodSavior extends StatefulWidget {
   const FoodSavior({super.key});
+  static Page<void> page() => const MaterialPage<void>(child: FoodSavior());
 
   @override
   State<FoodSavior> createState() => _FoodSaviorState();
 }
 
 class _FoodSaviorState extends State<FoodSavior> {
-  final _pageController = PageController();
+  final _pageController = PageController(initialPage: 1);
   final int _pageIndex = 1;
 
   final List<Widget> _pages = const [
-    FoodItemListPage(),
+    UserPage(),
     FoodItemListPage(),
     UsedFoodItemListPage(),
     FoodItemListPage()
@@ -55,59 +63,38 @@ class _FoodSaviorState extends State<FoodSavior> {
           create: (BuildContext context) => UsedFoodItemListBloc(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale:
-            const Locale('zh', 'TW'), // Set the locale to Traditional Chinese
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('zh', 'TW'), // Traditional Chinese
-          Locale('en', 'US'), // English
-        ],
-        title: '食物救世主',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.greenAccent,
-              secondary: Colors.lightGreen,
-              primary: Colors.green,
-              background: Colors.white),
-          useMaterial3: true,
-        ),
-        home: Scaffold(
-          body: PageView(
-            controller: _pageController,
-            onPageChanged: null,
-            physics: const NeverScrollableScrollPhysics(),
-            children: _pages,
-          ),
-          bottomNavigationBar: CurvedNavigationBar(
-            backgroundColor: Colors.lightGreen,
-            index: _pageIndex,
-            animationDuration: const Duration(milliseconds: 500),
-            onTap: _onTabTapped,
-            items: const [
-              CurvedNavigationBarItem(
-                child: Icon(Icons.person),
-                label: '用戶',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.food_bank),
-                label: '食物',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.history),
-                label: '紀錄',
-              ),
-              CurvedNavigationBarItem(
-                child: Icon(Icons.settings),
-                label: '設定',
-              ),
-            ],
-          ),
+      child: Scaffold(
+        body: const UserPage(),
+        // body: PageView(
+        //   controller: _pageController,
+        //   onPageChanged: null,
+        //   physics: const NeverScrollableScrollPhysics(),
+        //   children: _pages,
+        // ),
+
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          index: _pageIndex,
+          animationDuration: const Duration(milliseconds: 500),
+          onTap: _onTabTapped,
+          items: const [
+            CurvedNavigationBarItem(
+              child: Icon(Icons.person),
+              label: '用戶',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.food_bank),
+              label: '食物',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.history),
+              label: '紀錄',
+            ),
+            CurvedNavigationBarItem(
+              child: Icon(Icons.settings),
+              label: '設定',
+            ),
+          ],
         ),
       ),
     );

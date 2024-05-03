@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "376153272412",
+    "project_id": "foodsavior-792ee",
+    "storage_bucket": "foodsavior-792ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376153272412:android:f98c38314b3282de043699",
+        "android_client_info": {
+          "package_name": "com.example.food_savior"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376153272412-meb796d00mlh8qndirkdnm7ndfr2o276.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgReOquMZdeKaHvpxlyki2JfUmvm4sjbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376153272412-meb796d00mlh8qndirkdnm7ndfr2o276.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "376153272412-m4n3gg1uinh6j2qidrgds5ugt83uqkrl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.foodSavior"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
