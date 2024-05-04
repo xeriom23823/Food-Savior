@@ -11,6 +11,7 @@ import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
+import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,7 +30,9 @@ void main() async {
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(App(authenticationRepository: authenticationRepository));
+    runApp(App(
+      authenticationRepository: authenticationRepository,
+    ));
   });
 }
 
@@ -49,7 +52,7 @@ class _FoodSaviorState extends State<FoodSavior> {
     UserPage(),
     FoodItemListPage(),
     UsedFoodItemListPage(),
-    FoodItemListPage()
+    SettingsPage()
   ];
 
   @override
@@ -72,6 +75,8 @@ class _FoodSaviorState extends State<FoodSavior> {
         ),
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.onPrimary,
+          buttonBackgroundColor: Theme.of(context).colorScheme.onPrimary,
           index: _pageIndex,
           animationDuration: const Duration(milliseconds: 500),
           onTap: _onTabTapped,

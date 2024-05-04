@@ -12,15 +12,21 @@ class UserPage extends StatelessWidget {
     final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('使用者頁面',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        title: Text(
+          '使用者頁面',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         actions: <Widget>[
           IconButton(
             key: const Key('UserPage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app, color: Colors.white),
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             onPressed: () {
               context.read<AppBloc>().add(const AppLogoutRequested());
             },

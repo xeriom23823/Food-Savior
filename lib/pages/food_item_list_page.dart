@@ -23,11 +23,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('食物清單',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        title: Text(
+          '食物清單',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: BlocConsumer<FoodItemListBloc, FoodItemListState>(
         listener: (BuildContext context, FoodItemListState state) {
@@ -190,6 +193,8 @@ class _FoodItemListPageState extends State<FoodItemListPage>
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () {
           _showAddFoodItemDialog(context);
         },

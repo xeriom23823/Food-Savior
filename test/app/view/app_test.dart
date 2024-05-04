@@ -7,6 +7,7 @@ import 'package:food_savior/main.dart';
 import 'package:food_savior/login/login.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MockUser extends Mock implements User {}
 
@@ -16,6 +17,8 @@ class MockAuthenticationRepository extends Mock
 class MockAppBloc extends MockBloc<AppEvent, AppState> implements AppBloc {}
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.setMockInitialValues({});
   group('App', () {
     late AuthenticationRepository authenticationRepository;
     late User user;

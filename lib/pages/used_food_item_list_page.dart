@@ -27,14 +27,19 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
               child: Center(
                 child: Row(
                   children: [
-                    Text(DateFormat('yyyy-MM-dd').format(selectedDate),
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
+                    Text(
+                      DateFormat('yyyy-MM-dd').format(selectedDate),
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     IconButton(
-                      icon:
-                          const Icon(Icons.calendar_today, color: Colors.white),
+                      icon: Icon(
+                        Icons.calendar_today,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                       onPressed: () {
                         _showSelectDateDialog(context);
                       },
