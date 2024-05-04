@@ -1,5 +1,5 @@
-// 目的：食物項目的資料模型
 import 'package:flutter/material.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:convert';
 
@@ -45,30 +45,30 @@ extension FoodItemTypeExtension on FoodItemType {
     }
   }
 
-  String get name {
+  String name(BuildContext context) {
     switch (this) {
       case FoodItemType.vegetable:
-        return '蔬菜';
+        return AppLocalizations.of(context).foodItemTypeVegetable;
       case FoodItemType.fruit:
-        return '水果';
+        return AppLocalizations.of(context).foodItemTypeFruit;
       case FoodItemType.meat:
-        return '肉類';
+        return AppLocalizations.of(context).foodItemTypeMeat;
       case FoodItemType.eggAndMilk:
-        return '蛋奶';
+        return AppLocalizations.of(context).foodItemTypeEggAndMilk;
       case FoodItemType.seafood:
-        return '海鮮';
+        return AppLocalizations.of(context).foodItemTypeSeafood;
       case FoodItemType.cannedFood:
-        return '罐頭食品';
+        return AppLocalizations.of(context).foodItemTypeCannedFood;
       case FoodItemType.cookedFood:
-        return '熟食';
+        return AppLocalizations.of(context).foodItemTypeCookedFood;
       case FoodItemType.drink:
-        return '飲料';
+        return AppLocalizations.of(context).foodItemTypeDrink;
       case FoodItemType.snack:
-        return '零食';
+        return AppLocalizations.of(context).foodItemTypeSnack;
       case FoodItemType.bread:
-        return '麵包';
+        return AppLocalizations.of(context).foodItemTypeBread;
       case FoodItemType.others:
-        return '其他';
+        return AppLocalizations.of(context).foodItemTypeOthers;
     }
   }
 }
@@ -93,20 +93,20 @@ extension FoodItemStatusExtension on FoodItemStatus {
     }
   }
 
-  String get name {
+  String name(BuildContext context) {
     switch (this) {
       case FoodItemStatus.fresh:
-        return '新鮮';
+        return AppLocalizations.of(context).foodItemStatusFresh;
       case FoodItemStatus.nearExpired:
-        return '即將過期';
+        return AppLocalizations.of(context).foodItemStatusNearExpired;
       case FoodItemStatus.expired:
-        return '已過期';
+        return AppLocalizations.of(context).foodItemStatusExpired;
       case FoodItemStatus.consumed:
-        return '已使用';
+        return AppLocalizations.of(context).foodItemStatusConsumed;
       case FoodItemStatus.wasted:
-        return '已浪費';
+        return AppLocalizations.of(context).foodItemStatusWasted;
       default:
-        return '未知';
+        return AppLocalizations.of(context).foodItemStatusUnknown;
     }
   }
 }
@@ -114,14 +114,14 @@ extension FoodItemStatusExtension on FoodItemStatus {
 enum Unit { gram, milliliter, piece }
 
 extension UnitExtension on Unit {
-  String get name {
+  String name(BuildContext context) {
     switch (this) {
       case Unit.gram:
-        return '公克';
+        return AppLocalizations.of(context).unitGram;
       case Unit.milliliter:
-        return '毫升';
+        return AppLocalizations.of(context).unitMilliliter;
       case Unit.piece:
-        return '個';
+        return AppLocalizations.of(context).unitPiece;
     }
   }
 }
@@ -169,14 +169,14 @@ class FoodItem {
   }
 
   // 顯示食物的數量與單位
-  String get quantityWithUnit {
+  String quantityWithUnit(context) {
     switch (unit) {
       case Unit.gram:
-        return '$quantity ${unit.name}';
+        return '$quantity ${unit.name(context)}';
       case Unit.milliliter:
-        return '$quantity ${unit.name}';
+        return '$quantity ${unit.name(context)}';
       case Unit.piece:
-        return '$quantity ${unit.name}';
+        return '$quantity ${unit.name(context)}';
     }
   }
 

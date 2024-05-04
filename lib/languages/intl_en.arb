@@ -1,0 +1,324 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2024-05-04T21:58:42.321971",
+  "title": "Food Savior",
+  "@title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeVegetable": "Vegetable",
+  "@foodItemTypeVegetable": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeFruit": "Fruit",
+  "@foodItemTypeFruit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeMeat": "Meat",
+  "@foodItemTypeMeat": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeEggAndMilk": "Egg and Milk",
+  "@foodItemTypeEggAndMilk": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeSeafood": "Seafood",
+  "@foodItemTypeSeafood": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeCannedFood": "Canned Food",
+  "@foodItemTypeCannedFood": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeCookedFood": "Cooked Food",
+  "@foodItemTypeCookedFood": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeDrink": "Drink",
+  "@foodItemTypeDrink": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeSnack": "Snack",
+  "@foodItemTypeSnack": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeBread": "Bread",
+  "@foodItemTypeBread": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemTypeOthers": "Others",
+  "@foodItemTypeOthers": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusFresh": "Fresh",
+  "@foodItemStatusFresh": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusNearExpired": "Near Expiry",
+  "@foodItemStatusNearExpired": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusExpired": "Expired",
+  "@foodItemStatusExpired": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusConsumed": "Consumed",
+  "@foodItemStatusConsumed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusWasted": "Wasted",
+  "@foodItemStatusWasted": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemStatusUnknown": "Unknown",
+  "@foodItemStatusUnknown": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unitGram": "gram",
+  "@unitGram": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unitMilliliter": "milliliter",
+  "@unitMilliliter": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unitPiece": "piece",
+  "@unitPiece": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemListViewTitle": "Food List",
+  "@foodItemListViewTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "edit": "Edit",
+  "@edit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "batchUse": "Batch Use",
+  "@batchUse": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "useAll": "Use All",
+  "@useAll": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemListError": "Failed to load, please try again",
+  "@foodItemListError": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "addFoodItem": "Add Food",
+  "@addFoodItem": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "nameCannotBeEmpty": "Name cannot be empty",
+  "@nameCannotBeEmpty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "quantity": "Quantity",
+  "@quantity": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "quantityCannotBeEmpty": "Quantity cannot be empty",
+  "@quantityCannotBeEmpty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "quantityMustBePositive": "Quantity must be positive",
+  "@quantityMustBePositive": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "quanityMustBeANumber": "Quantity must be a number",
+  "@quanityMustBeANumber": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unit": "Unit",
+  "@unit": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "unitCannotBeEmpty": "Please select a unit",
+  "@unitCannotBeEmpty": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "description": "Description",
+  "@description": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "storageDate": "Storage Date",
+  "@storageDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "expirationDate": "Expiration Date",
+  "@expirationDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "added": "Added",
+  "@added": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "add": "Add",
+  "@add": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "editFoodItem": "Edit Food",
+  "@editFoodItem": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "updated": "Updated",
+  "@updated": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "save": "Save",
+  "@save": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "useFoodItem": "Use Food",
+  "@useFoodItem": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "use": "Use",
+  "@use": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "usedDate": "Used Date",
+  "@usedDate": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userPageTitle": "User Page",
+  "@userPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsPageTitle": "Settings Page",
+  "@settingsPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "language": "Language",
+  "@language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "showNotification": "Show Notification",
+  "@showNotification": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUpFailure": "Sign Up Failed",
+  "@signUpFailure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidEmail": "Invalid Email",
+  "@invalidEmail": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPassword": "Invalid Password",
+  "@invalidPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "confirmPassword": "Confirm Password",
+  "@confirmPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUp": "Sign Up",
+  "@signUp": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUpPageTitle": "Sign Up Page",
+  "@signUpPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logInFailure": "Log In Failed",
+  "@logInFailure": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "logIn": "Log In",
+  "@logIn": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInWithGoogle": "Sign In with Google",
+  "@signInWithGoogle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "loginPageTitle": "Login Page",
+  "@loginPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

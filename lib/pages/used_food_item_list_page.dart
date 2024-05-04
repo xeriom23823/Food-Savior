@@ -63,7 +63,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                 return DropdownMenuItem<FoodItemStatus>(
                   value: value,
                   child: Text(
-                    value.name,
+                    value.name(context),
                     style: const TextStyle(color: Colors.white),
                   ),
                 );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/app/bloc/app_bloc.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/widgets/avatar.dart';
 
 class UserPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class UserPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '使用者頁面',
+          AppLocalizations.of(context).userPageTitle,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,

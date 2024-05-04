@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/theme_cubit.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -10,7 +11,7 @@ class SettingsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '設定',
+          AppLocalizations.of(context).settingsPageTitle,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,
@@ -21,21 +22,28 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: const Text('語言'),
+            title: Text(AppLocalizations.of(context).language),
             trailing: DropdownButton<String>(
-              items: ['中文', 'English'].map((String value) {
+              items: [
+                const Locale('zh', 'TW'),
+                const Locale('en', 'US'),
+                // Add other locales here...
+              ].map((Locale locale) {
                 return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
+                  value: locale.languageCode,
+                  child: Text(locale.languageCode),
                 );
               }).toList(),
-              onChanged: (_) {},
+              value: Localizations.localeOf(context).languageCode,
+              onChanged: (String? languageCode) {
+                AppLocalizations.load(Locale(languageCode!));
+              },
             ),
           ),
           BlocBuilder<ThemeCubit, ThemeData>(
             builder: (context, state) {
               return ListTile(
-                title: const Text('暗黑模式'),
+                title: Text(AppLocalizations.of(context).darkMode),
                 trailing: Switch(
                   value: state.brightness == Brightness.dark,
                   onChanged: (bool value) {
@@ -46,7 +54,7 @@ class SettingsPage extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('顯示通知'),
+            title: Text(AppLocalizations.of(context).showNotification),
             trailing: Switch(
               value: false,
               onChanged: (bool value) {},

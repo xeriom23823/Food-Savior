@@ -10,6 +10,7 @@ import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
@@ -80,22 +81,24 @@ class _FoodSaviorState extends State<FoodSavior> {
           index: _pageIndex,
           animationDuration: const Duration(milliseconds: 500),
           onTap: _onTabTapped,
-          items: const [
+          items: [
             CurvedNavigationBarItem(
-              child: Icon(Icons.person),
-              label: '用戶',
+              child: const Icon(Icons.person),
+              label: AppLocalizations.of(context).userNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
-              child: Icon(Icons.food_bank),
-              label: '食物',
+              child: const Icon(Icons.food_bank),
+              label:
+                  AppLocalizations.of(context).foodItemListNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
-              child: Icon(Icons.history),
-              label: '紀錄',
+              child: const Icon(Icons.history),
+              label: AppLocalizations.of(context)
+                  .usedFoodItemListNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
-              child: Icon(Icons.settings),
-              label: '設定',
+              child: const Icon(Icons.settings),
+              label: AppLocalizations.of(context).settingsNavigationBarTitle,
             ),
           ],
         ),

@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/login/login.dart';
 
 class LoginPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Login',
+          AppLocalizations.of(context).loginPageTitle,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,
