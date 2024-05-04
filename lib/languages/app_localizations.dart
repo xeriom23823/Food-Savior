@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 
 import 'messages_all.dart';
@@ -53,28 +52,28 @@ class AppLocalizations {
   String get userNavigationBarTitle {
     return Intl.message(
       '用戶',
-      name: 'user',
+      name: 'userNavigationBarTitle',
     );
   }
 
   String get foodItemListNavigationBarTitle {
     return Intl.message(
       '食物',
-      name: 'foodItemList',
+      name: 'foodItemListNavigationBarTitle',
     );
   }
 
   String get usedFoodItemListNavigationBarTitle {
     return Intl.message(
       '紀錄',
-      name: 'usedFoodItemList',
+      name: 'usedFoodItemListNavigationBarTitle',
     );
   }
 
   String get settingsNavigationBarTitle {
     return Intl.message(
       '設定',
-      name: 'settings',
+      name: 'settingsNavigationBarTitle',
     );
   }
 
@@ -237,7 +236,7 @@ class AppLocalizations {
   String get expire {
     return Intl.message(
       '過期',
-      name: 'expired',
+      name: 'expire',
     );
   }
 
@@ -279,7 +278,7 @@ class AppLocalizations {
   String get name {
     return Intl.message(
       '名稱',
-      name: 'foodItemName',
+      name: 'name',
     );
   }
 

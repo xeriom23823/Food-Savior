@@ -37,7 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
     'edit': MessageLookupByLibrary.simpleMessage('Edit'),
     'editFoodItem': MessageLookupByLibrary.simpleMessage('Edit Food'),
     'expirationDate': MessageLookupByLibrary.simpleMessage('Expiration Date'),
+    'expire': MessageLookupByLibrary.simpleMessage('Expire'),
     'foodItemListError': MessageLookupByLibrary.simpleMessage('Failed to load, please try again'),
+    'foodItemListNavigationBarTitle': MessageLookupByLibrary.simpleMessage('Food'),
     'foodItemListViewTitle': MessageLookupByLibrary.simpleMessage('Food List'),
     'foodItemStatusConsumed': MessageLookupByLibrary.simpleMessage('Consumed'),
     'foodItemStatusExpired': MessageLookupByLibrary.simpleMessage('Expired'),
@@ -61,7 +63,8 @@ class MessageLookup extends MessageLookupByLibrary {
     'language': MessageLookupByLibrary.simpleMessage('Language'),
     'logIn': MessageLookupByLibrary.simpleMessage('Log In'),
     'logInFailure': MessageLookupByLibrary.simpleMessage('Log In Failed'),
-    'loginPageTitle': MessageLookupByLibrary.simpleMessage('Login Page'),
+    'loginPageTitle': MessageLookupByLibrary.simpleMessage('Log In Page'),
+    'name': MessageLookupByLibrary.simpleMessage('Name'),
     'nameCannotBeEmpty': MessageLookupByLibrary.simpleMessage('Name cannot be empty'),
     'passwordsDoNotMatch': MessageLookupByLibrary.simpleMessage('Passwords do not match'),
     'quanityMustBeANumber': MessageLookupByLibrary.simpleMessage('Quantity must be a number'),
@@ -70,6 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'quantityMustBePositive': MessageLookupByLibrary.simpleMessage('Quantity must be positive'),
     'refresh': MessageLookupByLibrary.simpleMessage('Refresh'),
     'save': MessageLookupByLibrary.simpleMessage('Save'),
+    'settingsNavigationBarTitle': MessageLookupByLibrary.simpleMessage('Settings'),
     'settingsPageTitle': MessageLookupByLibrary.simpleMessage('Settings Page'),
     'showNotification': MessageLookupByLibrary.simpleMessage('Show Notification'),
     'signInWithGoogle': MessageLookupByLibrary.simpleMessage('Sign In with Google'),
@@ -88,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
     'useAll': MessageLookupByLibrary.simpleMessage('Use All'),
     'useFoodItem': MessageLookupByLibrary.simpleMessage('Use Food'),
     'usedDate': MessageLookupByLibrary.simpleMessage('Used Date'),
+    'usedFoodItemListNavigationBarTitle': MessageLookupByLibrary.simpleMessage('Records'),
+    'userNavigationBarTitle': MessageLookupByLibrary.simpleMessage('User'),
     'userPageTitle': MessageLookupByLibrary.simpleMessage('User Page')
   };
 }

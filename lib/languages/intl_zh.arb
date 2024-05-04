@@ -1,8 +1,28 @@
 {
   "@@locale": "zh",
-  "@@last_modified": "2024-05-04T21:58:42.321971",
+  "@@last_modified": "2024-05-05T00:13:17.877682",
   "title": "食物救世主",
   "@title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userNavigationBarTitle": "用戶",
+  "@userNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemListNavigationBarTitle": "食物",
+  "@foodItemListNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "usedFoodItemListNavigationBarTitle": "紀錄",
+  "@usedFoodItemListNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsNavigationBarTitle": "設定",
+  "@settingsNavigationBarTitle": {
     "type": "text",
     "placeholders": {}
   },
@@ -116,6 +136,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "expire": "過期",
+  "@expire": {
+    "type": "text",
+    "placeholders": {}
+  },
   "batchUse": "批量使用",
   "@batchUse": {
     "type": "text",
@@ -138,6 +163,11 @@
   },
   "addFoodItem": "新增食物",
   "@addFoodItem": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "名稱",
+  "@name": {
     "type": "text",
     "placeholders": {}
   },
