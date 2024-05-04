@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -23,11 +25,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('食物清單',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        title: Text(
+          AppLocalizations.of(context).foodItemListNavigationBarTitle,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: BlocConsumer<FoodItemListBloc, FoodItemListState>(
         listener: (BuildContext context, FoodItemListState state) {
@@ -73,7 +78,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                           icon: Icons.edit,
-                          label: '編輯',
+                          label: AppLocalizations.of(context).edit,
                         ),
                       ],
                     ),
@@ -105,7 +110,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           backgroundColor: FoodItemStatus.wasted.color,
                           foregroundColor: Colors.white,
                           icon: MdiIcons.deleteEmpty,
-                          label: '過期',
+                          label: AppLocalizations.of(context).expire,
                         ),
                         SlidableAction(
                           onPressed: (_) {
@@ -115,7 +120,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           backgroundColor: FoodItemStatus.consumed.color,
                           foregroundColor: Colors.white,
                           icon: Icons.restaurant,
-                          label: '批量使用',
+                          label: AppLocalizations.of(context).batchUse,
                         ),
                         SlidableAction(
                           onPressed: (_) {
@@ -140,7 +145,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                           icon: Icons.restaurant,
-                          label: '全部使用',
+                          label: AppLocalizations.of(context).useAll,
                         ),
                       ],
                     ),
@@ -158,12 +163,12 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         });
                       },
                       title: Text(
-                          '${foodItem.name} (${foodItem.quantityWithUnit})'),
+                          '${foodItem.name} (${foodItem.quantityWithUnit(context)})'),
                       leading: Icon(foodItem.type.icon,
                           color: foodItem.status.color),
                       subtitle: Text(foodItem.description),
                       trailing: Text(
-                        '過期：${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
+                        '${AppLocalizations.of(context).expire} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
                       ),
                     ),
                   ),
@@ -174,14 +179,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
             return Center(
               child: Column(
                 children: [
-                  const Text('讀取錯誤，請重新整理。'),
+                  Text(AppLocalizations.of(context).foodItemListError),
                   ElevatedButton(
                     onPressed: () {
                       context
                           .read<FoodItemListBloc>()
                           .add(FoodItemListLoadFromDevice());
                     },
-                    child: const Text('重新整理'),
+                    child: Text(AppLocalizations.of(context).refresh),
                   ),
                 ],
               ),
@@ -190,6 +195,8 @@ class _FoodItemListPageState extends State<FoodItemListPage>
         },
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
         onPressed: () {
           _showAddFoodItemDialog(context);
         },
@@ -222,11 +229,15 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     expirationDateController.text =
         DateFormat('yyyy-MM-dd').format(expirationDate);
 
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('新增食物'),
+          title: Text(AppLocalizations.of(context).addFoodItem),
           content: SingleChildScrollView(
             child: Form(
               key: formKey, // Set the maximum height here
@@ -244,7 +255,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           children: [
                             Icon(type.icon),
                             const SizedBox(width: 10),
-                            Text(type.name),
+                            Text(type.name(context)),
                           ],
                         ),
                       );
@@ -252,20 +263,22 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: '名稱'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).name),
                     onChanged: (value) {
                       formKey.currentState!.validate();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '文字不能為空';
+                        return AppLocalizations.of(context).nameCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: quantityController,
-                    decoration: const InputDecoration(labelText: '數量'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).quantity),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       quantityController.text = value;
@@ -273,11 +286,20 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '數字不能為空';
+                        return AppLocalizations.of(context)
+                            .quantityCannotBeEmpty;
                       }
+
                       if (int.tryParse(value) == null) {
-                        return '請輸入有效的數字';
+                        return AppLocalizations.of(context)
+                            .quanityMustBeANumber;
                       }
+
+                      if (int.parse(value) <= 0) {
+                        return AppLocalizations.of(context)
+                            .quantityMustBePositive;
+                      }
+
                       return null;
                     },
                   ),
@@ -289,20 +311,22 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     items: Unit.values.map((unit) {
                       return DropdownMenuItem<Unit>(
                         value: unit,
-                        child: Text(unit.name),
+                        child: Text(unit.name(context)),
                       );
                     }).toList(),
-                    decoration: const InputDecoration(labelText: '單位'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).unit),
                     validator: (value) {
                       if (value == null) {
-                        return '請選擇單位';
+                        return AppLocalizations.of(context).unitCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextField(
                     controller: descriptionController,
-                    decoration: const InputDecoration(labelText: '描述'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).description),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -311,7 +335,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     child: AbsorbPointer(
                       child: TextField(
                         controller: storageDateController,
-                        decoration: const InputDecoration(labelText: '存放日期'),
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context).storageDate),
                       ),
                     ),
                   ),
@@ -325,7 +351,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     child: AbsorbPointer(
                       child: TextField(
                         controller: expirationDateController,
-                        decoration: const InputDecoration(labelText: '過期日期'),
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context).expirationDate),
                       ),
                     ),
                   ),
@@ -338,7 +366,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('取消'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -355,20 +383,19 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   storageDate: DateTime.parse(storageDateController.text),
                   expirationDate: DateTime.parse(expirationDateController.text),
                 );
-                context
-                    .read<FoodItemListBloc>()
-                    .add(FoodItemListAdd(foodItem: newFoodItem));
+                foodItemListBloc.add(FoodItemListAdd(foodItem: newFoodItem));
                 Navigator.of(context).pop();
 
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${newFoodItem.name} 已新增'),
+                    content: Text(
+                        '${newFoodItem.name} ${AppLocalizations.of(context).added}'),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              child: const Text('新增'),
+              child: Text(AppLocalizations.of(context).add),
             ),
           ],
         );
@@ -400,6 +427,10 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     expirationDateController.text =
         DateFormat('yyyy-MM-dd').format(originalFoodItem.expirationDate);
 
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -407,12 +438,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('編輯食物'),
+              Text(AppLocalizations.of(context).editFoodItem),
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
-                  context
-                      .read<FoodItemListBloc>()
+                  foodItemListBloc
                       .add(FoodItemListRemove(foodItem: originalFoodItem));
                   Navigator.of(context).pop();
                 },
@@ -436,7 +466,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           children: [
                             Icon(type.icon),
                             const SizedBox(width: 10),
-                            Text(type.name),
+                            Text(type.name(context)),
                           ],
                         ),
                       );
@@ -444,21 +474,23 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: '名稱'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).name),
                     onChanged: (value) {
                       nameController.text = value;
                       formKey.currentState!.validate();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '文字不能為空';
+                        return AppLocalizations.of(context).nameCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: quantityController,
-                    decoration: const InputDecoration(labelText: '數量'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).quantity),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       quantityController.text = value;
@@ -466,11 +498,20 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '數字不能為空';
+                        return AppLocalizations.of(context)
+                            .quantityCannotBeEmpty;
                       }
+
                       if (int.tryParse(value) == null) {
-                        return '請輸入有效的數字';
+                        return AppLocalizations.of(context)
+                            .quanityMustBeANumber;
                       }
+
+                      if (int.parse(value) <= 0) {
+                        return AppLocalizations.of(context)
+                            .quantityMustBePositive;
+                      }
+
                       return null;
                     },
                   ),
@@ -482,20 +523,22 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     items: Unit.values.map((unit) {
                       return DropdownMenuItem<Unit>(
                         value: unit,
-                        child: Text(unit.name),
+                        child: Text(unit.name(context)),
                       );
                     }).toList(),
-                    decoration: const InputDecoration(labelText: '單位'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).unit),
                     validator: (value) {
                       if (value == null) {
-                        return '請選擇單位';
+                        return AppLocalizations.of(context).unitCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextField(
                     controller: descriptionController,
-                    decoration: const InputDecoration(labelText: '描述'),
+                    decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context).description),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -504,7 +547,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     child: AbsorbPointer(
                       child: TextField(
                         controller: storageDateController,
-                        decoration: const InputDecoration(labelText: '存放日期'),
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context).storageDate),
                       ),
                     ),
                   ),
@@ -518,7 +563,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     child: AbsorbPointer(
                       child: TextField(
                         controller: expirationDateController,
-                        decoration: const InputDecoration(labelText: '過期日期'),
+                        decoration: InputDecoration(
+                            labelText:
+                                AppLocalizations.of(context).expirationDate),
                       ),
                     ),
                   ),
@@ -531,7 +578,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('取消'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -549,7 +596,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   expirationDate: DateTime.parse(expirationDateController.text),
                 );
 
-                context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                foodItemListBloc.add(FoodItemListUpdate(
                     originalFoodItem: originalFoodItem,
                     updatedFoodItem: updatedFoodItem));
                 Navigator.of(context).pop();
@@ -557,12 +604,13 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${updatedFoodItem.name} 已更新'),
+                    content: Text(
+                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}'),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              child: const Text('儲存'),
+              child: Text(AppLocalizations.of(context).save),
             ),
           ],
         );
@@ -580,18 +628,26 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     // set default used date as DateTime.now()
     usedDateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
+    // get blocs
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+    final UsedFoodItemListBloc usedFoodItemListBloc =
+        BlocProvider.of<UsedFoodItemListBloc>(context);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('使用食物'),
+          title: Text(AppLocalizations.of(context).useFoodItem),
           content: SingleChildScrollView(
             child: Column(
               children: [
-                Text('使用 ${usingFoodItem.name}'),
+                Text(
+                    '${AppLocalizations.of(context).use} ${usingFoodItem.name}'),
                 TextField(
                   controller: quantityController,
-                  decoration: const InputDecoration(labelText: '數量'),
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity),
                   keyboardType: TextInputType.number,
                 ),
                 // Add a date picker for the used date
@@ -602,7 +658,8 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   child: AbsorbPointer(
                     child: TextField(
                       controller: usedDateController,
-                      decoration: const InputDecoration(labelText: '使用日期'),
+                      decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context).usedDate),
                     ),
                   ),
                 ),
@@ -614,7 +671,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('取消'),
+              child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -625,7 +682,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 );
 
                 if (remainFoodItem.quantity > 0) {
-                  context.read<FoodItemListBloc>().add(FoodItemListUpdate(
+                  foodItemListBloc.add(FoodItemListUpdate(
                       originalFoodItem: usingFoodItem,
                       updatedFoodItem: remainFoodItem));
                 }
@@ -636,8 +693,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     usedQuantity: usedQuantity);
 
                 if (usedQuantity > 0) {
-                  context
-                      .read<UsedFoodItemListBloc>()
+                  usedFoodItemListBloc
                       .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
                 }
 
@@ -646,12 +702,13 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('${remainFoodItem.name} 已更新'),
+                    content: Text(
+                        '${remainFoodItem.name} ${AppLocalizations.of(context).updated}'),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              child: const Text('使用'),
+              child: Text(AppLocalizations.of(context).use),
             ),
           ],
         );

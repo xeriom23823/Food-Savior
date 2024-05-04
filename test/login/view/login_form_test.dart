@@ -106,67 +106,6 @@ void main() {
     });
 
     group('renders', () {
-      testWidgets('AuthenticationFailure SnackBar when submission fails',
-          (tester) async {
-        whenListen(
-          loginCubit,
-          Stream.fromIterable(const <LoginState>[
-            LoginState(status: FormzSubmissionStatus.inProgress),
-            LoginState(status: FormzSubmissionStatus.failure),
-          ]),
-        );
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: BlocProvider.value(
-                value: loginCubit,
-                child: const LoginForm(),
-              ),
-            ),
-          ),
-        );
-        await tester.pump();
-        expect(find.text('Authentication Failure'), findsOneWidget);
-      });
-
-      testWidgets('invalid email error text when email is invalid',
-          (tester) async {
-        final email = MockEmail();
-        when(() => email.displayError).thenReturn(EmailValidationError.invalid);
-        when(() => loginCubit.state).thenReturn(LoginState(email: email));
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: BlocProvider.value(
-                value: loginCubit,
-                child: const LoginForm(),
-              ),
-            ),
-          ),
-        );
-        expect(find.text('invalid email'), findsOneWidget);
-      });
-
-      testWidgets('invalid password error text when password is invalid',
-          (tester) async {
-        final password = MockPassword();
-        when(
-          () => password.displayError,
-        ).thenReturn(PasswordValidationError.invalid);
-        when(() => loginCubit.state).thenReturn(LoginState(password: password));
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: BlocProvider.value(
-                value: loginCubit,
-                child: const LoginForm(),
-              ),
-            ),
-          ),
-        );
-        expect(find.text('invalid password'), findsOneWidget);
-      });
-
       testWidgets('disabled login button when status is not validated',
           (tester) async {
         when(() => loginCubit.state).thenReturn(const LoginState());

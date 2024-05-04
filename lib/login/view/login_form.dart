@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/login/login.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,7 +18,8 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage ?? 'Authentication Failure'),
+                content: Text(state.errorMessage ??
+                    AppLocalizations.of(context).logInFailure),
               ),
             );
         }
@@ -63,8 +65,9 @@ class _EmailInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'email',
             helperText: '',
-            errorText:
-                state.email.displayError != null ? 'invalid email' : null,
+            errorText: state.email.displayError != null
+                ? AppLocalizations.of(context).invalidEmail
+                : null,
           ),
         );
       },
@@ -86,8 +89,9 @@ class _PasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             labelText: 'password',
             helperText: '',
-            errorText:
-                state.password.displayError != null ? 'invalid password' : null,
+            errorText: state.password.displayError != null
+                ? AppLocalizations.of(context).invalidPassword
+                : null,
           ),
         );
       },
@@ -113,7 +117,7 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.isValid
                     ? () => context.read<LoginCubit>().logInWithCredentials()
                     : null,
-                child: const Text('LOGIN'),
+                child: Text(AppLocalizations.of(context).logIn),
               );
       },
     );
@@ -126,9 +130,9 @@ class _GoogleLoginButton extends StatelessWidget {
     final theme = Theme.of(context);
     return ElevatedButton.icon(
       key: const Key('loginForm_googleLogin_raisedButton'),
-      label: const Text(
-        'SIGN IN WITH GOOGLE',
-        style: TextStyle(color: Colors.white),
+      label: Text(
+        AppLocalizations.of(context).signInWithGoogle,
+        style: const TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -150,7 +154,7 @@ class _SignUpButton extends StatelessWidget {
       key: const Key('loginForm_createAccount_flatButton'),
       onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
       child: Text(
-        'CREATE ACCOUNT',
+        AppLocalizations.of(context).createAccount,
         style: TextStyle(color: theme.primaryColor),
       ),
     );
