@@ -138,7 +138,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                       }
                       return ListTile(
                         title: Text(
-                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name})'),
+                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)})'),
                         leading: Icon(usedFoodItem.type.icon,
                             color: usedFoodItem.status.color),
                         subtitle: usedFoodItem.description.isNotEmpty
