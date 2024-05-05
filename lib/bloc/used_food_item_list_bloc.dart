@@ -17,7 +17,7 @@ class UsedFoodItemListBloc
           await SharedPreferences.getInstance().then(
         (prefs) {
           final List<String> usedFoodItemsJson =
-              prefs.getStringList('usedFoodItems') ?? <String>[];
+              prefs.getStringList('usedFoodItems') ?? [];
           return usedFoodItemsJson
               .map((usedFoodItemsJson) =>
                   UsedFoodItem.fromJson(usedFoodItemsJson))

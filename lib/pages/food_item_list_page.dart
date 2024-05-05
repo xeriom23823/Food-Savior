@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FoodItemListPage extends StatefulWidget {
   const FoodItemListPage({super.key});
@@ -39,7 +40,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           if (state is FoodItemListError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                backgroundColor: Colors.white,
+                content: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
             );
           }
@@ -60,7 +65,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 final FoodItem foodItem = state.foodItems[index];
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 60,
+                  height: 70,
                   child: Slidable(
                     key: ValueKey(index),
 
@@ -88,24 +93,63 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: (_) {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
+                          onPressed: (_) async {
+                            // 取得會使用的 bloc
+                            final FoodItemListBloc foodItemListBloc =
+                                context.read<FoodItemListBloc>();
+                            final UsedFoodItemListBloc usedFoodItemListBloc =
+                                context.read<UsedFoodItemListBloc>();
+
+                            // 確認今日的食物點數是否已經達到上限
+                            DateTime now = DateTime.now();
+                            int todayFoodPoint = await SharedPreferences
+                                    .getInstance()
+                                .then((prefs) =>
+                                    prefs.getInt(
+                                        'FoodPoint/${now.year}/${now.month}/${now.day}') ??
+                                    0);
 
                             // 建立新的用過的 FoodItem
+                            foodItemListBloc
+                                .add(FoodItemListRemove(foodItem: foodItem));
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
                                     usedStatus: FoodItemStatus.wasted,
-                                    usedDate: DateTime.now(),
-                                    usedQuantity: foodItem.quantity);
+                                    usedDate: now,
+                                    usedQuantity: foodItem.quantity,
+                                    affectFoodPoint:
+                                        todayFoodPoint <= -10 ? 0 : -1);
 
                             // 加入用過的 FoodItem 清單
-                            context.read<UsedFoodItemListBloc>().add(
-                                UsedFoodItemListAdd(
-                                    usedFoodItem: newUsedFoodItem));
+                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                                usedFoodItem: newUsedFoodItem));
 
                             controller.close();
+
+                            // 提示使用者已刪除
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          '${newUsedFoodItem.name} ${AppLocalizations.of(context).wasted}',
+                                          style: const TextStyle(
+                                              color: Colors.black)),
+                                      Lottie.asset(
+                                        'assets/animations/dumping.json',
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            });
                           },
                           backgroundColor: FoodItemStatus.wasted.color,
                           foregroundColor: Colors.white,
@@ -123,24 +167,64 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           label: AppLocalizations.of(context).batchUse,
                         ),
                         SlidableAction(
-                          onPressed: (_) {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
+                          onPressed: (_) async {
+                            // 取得會使用的 bloc
+                            final FoodItemListBloc foodItemListBloc =
+                                context.read<FoodItemListBloc>();
+                            final UsedFoodItemListBloc usedFoodItemListBloc =
+                                context.read<UsedFoodItemListBloc>();
+
+                            // 確認今日的食物點數是否已經達到上限
+                            DateTime now = DateTime.now();
+                            int todayFoodPoint = await SharedPreferences
+                                    .getInstance()
+                                .then((prefs) =>
+                                    prefs.getInt(
+                                        'FoodPoint/${now.year}/${now.month}/${now.day}') ??
+                                    0);
 
                             // 建立新的用過的 FoodItem
+                            foodItemListBloc
+                                .add(FoodItemListRemove(foodItem: foodItem));
+
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
                                     usedStatus: FoodItemStatus.consumed,
-                                    usedDate: DateTime.now(),
-                                    usedQuantity: foodItem.quantity);
+                                    usedDate: now,
+                                    usedQuantity: foodItem.quantity,
+                                    affectFoodPoint:
+                                        todayFoodPoint >= 10 ? 0 : 1);
 
                             // 加入用過的 FoodItem 清單
-                            context.read<UsedFoodItemListBloc>().add(
-                                UsedFoodItemListAdd(
-                                    usedFoodItem: newUsedFoodItem));
+                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                                usedFoodItem: newUsedFoodItem));
 
                             controller.close();
+
+                            // 提示使用者已食用
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                                          style: const TextStyle(
+                                              color: Colors.black)),
+                                      Lottie.asset(
+                                        'assets/animations/eating.json',
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            });
                           },
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
@@ -389,8 +473,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.white,
                     content: Text(
-                        '${newFoodItem.name} ${AppLocalizations.of(context).added}'),
+                      '${newFoodItem.name} ${AppLocalizations.of(context).added}',
+                      style: const TextStyle(color: Colors.black),
+                    ),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -604,8 +691,10 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.white,
                     content: Text(
-                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}'),
+                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}',
+                        style: const TextStyle(color: Colors.black)),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -674,9 +763,8 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 final int usedQuantity = int.parse(quantityController.text);
-
                 final FoodItem remainFoodItem = usingFoodItem.copyWith(
                   quantity: usingFoodItem.quantity - usedQuantity,
                 );
@@ -687,26 +775,46 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       updatedFoodItem: remainFoodItem));
                 }
 
+                // 確認當日的食物點數是否已經達到上限
+                DateTime consumedDate = DateTime.parse(usedDateController.text);
+                int consumedDateFoodPoint =
+                    await SharedPreferences.getInstance().then((prefs) =>
+                        prefs.getInt(
+                            'FoodPoint/${consumedDate.year}/${consumedDate.month}/${consumedDate.day}') ??
+                        0);
+
                 final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
                     usedStatus: FoodItemStatus.consumed,
                     usedDate: DateTime.parse(usedDateController.text),
-                    usedQuantity: usedQuantity);
+                    usedQuantity: usedQuantity,
+                    affectFoodPoint: consumedDateFoodPoint >= 10 ? 0 : 1);
 
                 if (usedQuantity > 0) {
                   usedFoodItemListBloc
                       .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
                 }
 
-                Navigator.of(context).pop();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.of(context).pop();
 
-                // 提示使用者已更新
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        '${remainFoodItem.name} ${AppLocalizations.of(context).updated}'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
+                  // 提示使用者已食用
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.white,
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              '${usedFoodItem.name} ${usedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                              style: const TextStyle(color: Colors.black)),
+                          Lottie.asset('assets/animations/eating.json',
+                              width: 50, height: 50),
+                        ],
+                      ),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                });
               },
               child: Text(AppLocalizations.of(context).use),
             ),

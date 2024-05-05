@@ -18,8 +18,12 @@ class LoginForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage ??
-                    AppLocalizations.of(context).logInFailure),
+                backgroundColor: Colors.white,
+                content: Text(
+                  state.errorMessage ??
+                      AppLocalizations.of(context).logInFailure,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
             );
         }

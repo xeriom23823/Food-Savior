@@ -206,7 +206,8 @@ class FoodItem {
   UsedFoodItem toUsedFoodItem(
       {required FoodItemStatus usedStatus,
       required DateTime usedDate,
-      required int usedQuantity}) {
+      required int usedQuantity,
+      required int affectFoodPoint}) {
     return UsedFoodItem(
         name: name,
         type: type,
@@ -216,7 +217,8 @@ class FoodItem {
         description: description,
         storageDate: storageDate,
         expirationDate: expirationDate,
-        usedDate: usedDate);
+        usedDate: usedDate,
+        affectFoodPoint: affectFoodPoint);
   }
 
   // 將 FoodItem 物件轉換為 JSON 字符串
@@ -255,6 +257,7 @@ class FoodItem {
 
 class UsedFoodItem extends FoodItem {
   final DateTime usedDate;
+  final int affectFoodPoint;
 
   UsedFoodItem(
       {required super.name,
@@ -265,7 +268,8 @@ class UsedFoodItem extends FoodItem {
       required super.description,
       required super.storageDate,
       required super.expirationDate,
-      required this.usedDate});
+      required this.usedDate,
+      required this.affectFoodPoint});
 
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override
@@ -279,6 +283,7 @@ class UsedFoodItem extends FoodItem {
         'storageDate': storageDate.toIso8601String(),
         'expirationDate': expirationDate.toIso8601String(),
         'usedDate': usedDate.toIso8601String(),
+        'affectFoodPoint': affectFoodPoint,
       });
 
   // 從 JSON 字符串創建一個 UsedFoodItem 物件
@@ -300,6 +305,7 @@ class UsedFoodItem extends FoodItem {
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
       usedDate: DateTime.parse(data['usedDate']),
+      affectFoodPoint: data['affectFoodPoint'] ?? 0,
     );
   }
 }

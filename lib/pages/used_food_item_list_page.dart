@@ -77,7 +77,11 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           if (state is UsedFoodItemListError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                backgroundColor: Colors.white,
+                content: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
             );
           }
@@ -144,9 +148,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                         subtitle: usedFoodItem.description.isNotEmpty
                             ? Text(usedFoodItem.description)
                             : Text(
-                                usedFoodItem.status == FoodItemStatus.consumed
-                                    ? '+ 1 食物點數'
-                                    : '- 1 食物點數',
+                                '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
                                 style: TextStyle(
                                     color: usedFoodItem.status.color)),
                         trailing: Text(

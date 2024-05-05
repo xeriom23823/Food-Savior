@@ -387,6 +387,20 @@ class AppLocalizations {
     );
   }
 
+  String get wasted {
+    return Intl.message(
+      '已浪費',
+      name: 'wasted',
+    );
+  }
+
+  String get consumed {
+    return Intl.message(
+      '已食用',
+      name: 'consumed',
+    );
+  }
+
   String get save {
     return Intl.message(
       '儲存',

@@ -18,8 +18,13 @@ class SignUpForm extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                  content: Text(state.errorMessage ??
-                      AppLocalizations.of(context).signUpFailure)),
+                backgroundColor: Colors.white,
+                content: Text(
+                  state.errorMessage ??
+                      AppLocalizations.of(context).signUpFailure,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              ),
             );
         }
       },
