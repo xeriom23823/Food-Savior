@@ -127,6 +127,7 @@ extension UnitExtension on Unit {
 }
 
 class FoodItem {
+  // todo: add id
   final String name;
   final FoodItemType type;
   final FoodItemStatus status;
@@ -206,8 +207,7 @@ class FoodItem {
   UsedFoodItem toUsedFoodItem(
       {required FoodItemStatus usedStatus,
       required DateTime usedDate,
-      required int usedQuantity,
-      required int affectFoodPoint}) {
+      required int usedQuantity}) {
     return UsedFoodItem(
         name: name,
         type: type,
@@ -218,7 +218,7 @@ class FoodItem {
         storageDate: storageDate,
         expirationDate: expirationDate,
         usedDate: usedDate,
-        affectFoodPoint: affectFoodPoint);
+        affectFoodPoint: 0);
   }
 
   // 將 FoodItem 物件轉換為 JSON 字符串
@@ -270,6 +270,34 @@ class UsedFoodItem extends FoodItem {
       required super.expirationDate,
       required this.usedDate,
       required this.affectFoodPoint});
+
+  // 複寫 copyWith 方法，以便在更新 UsedFoodItem 物件時使用
+  @override
+  UsedFoodItem copyWith({
+    String? name,
+    FoodItemType? type,
+    FoodItemStatus? status,
+    int? quantity,
+    Unit? unit,
+    String? description,
+    DateTime? storageDate,
+    DateTime? expirationDate,
+    DateTime? usedDate,
+    int? affectFoodPoint,
+  }) {
+    return UsedFoodItem(
+      name: name ?? this.name,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      quantity: quantity ?? this.quantity,
+      unit: unit ?? this.unit,
+      description: description ?? this.description,
+      storageDate: storageDate ?? this.storageDate,
+      expirationDate: expirationDate ?? this.expirationDate,
+      usedDate: usedDate ?? this.usedDate,
+      affectFoodPoint: affectFoodPoint ?? this.affectFoodPoint,
+    );
+  }
 
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override

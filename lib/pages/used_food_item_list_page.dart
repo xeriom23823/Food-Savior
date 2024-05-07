@@ -141,6 +141,10 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                         return const SizedBox.shrink();
                       }
                       return ListTile(
+                        onTap: () {
+                          _showUsedFoodItemInformationDialog(
+                              context, usedFoodItem);
+                        },
                         title: Text(
                             '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)})'),
                         leading: Icon(usedFoodItem.type.icon,
@@ -167,6 +171,57 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           }
         },
       ),
+    );
+  }
+
+  void _showUsedFoodItemInformationDialog(
+      BuildContext pageContext, UsedFoodItem usedFoodItem) {
+    showDialog(
+      context: pageContext,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(usedFoodItem.name),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete_outline),
+                onPressed: () {
+                  BlocProvider.of<UsedFoodItemListBloc>(pageContext).add(
+                    UsedFoodItemListRemove(usedFoodItem: usedFoodItem),
+                  );
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Icon(usedFoodItem.type.icon,
+                    color: usedFoodItem.status.color, size: 50),
+                Text(usedFoodItem.description),
+                Text(
+                  usedFoodItem.type.name(pageContext),
+                  style: TextStyle(color: usedFoodItem.status.color),
+                ),
+                Text(
+                    '數量：${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)}'),
+                Text('食物點數：${usedFoodItem.affectFoodPoint}'),
+                Text(
+                    '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

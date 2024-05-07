@@ -317,6 +317,13 @@ class AppLocalizations {
     );
   }
 
+  String get quantityExceedsAvailable {
+    return Intl.message(
+      '數量超過可用數量',
+      name: 'quantityExceedsAvailable',
+    );
+  }
+
   String get unit {
     return Intl.message(
       '單位',
