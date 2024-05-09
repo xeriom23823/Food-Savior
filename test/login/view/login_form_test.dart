@@ -6,7 +6,6 @@ import 'package:food_savior/login/login.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:form_inputs/form_inputs.dart';
-import 'package:formz/formz.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockAuthenticationRepository extends Mock

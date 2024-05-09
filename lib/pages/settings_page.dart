@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_savior/bloc/locale_cubit.dart';
 import 'package:food_savior/bloc/theme_cubit.dart';
 import 'package:food_savior/languages/app_localizations.dart';
 
@@ -20,23 +21,23 @@ class SettingsPage extends StatelessWidget {
         ),
       ),
       body: ListView(
-        children: <Widget>[
+        children: [
           ListTile(
             title: Text(AppLocalizations.of(context).language),
-            trailing: DropdownButton<String>(
-              items: [
-                const Locale('zh', 'TW'),
-                const Locale('en', 'US'),
-                // Add other locales here...
-              ].map((Locale locale) {
-                return DropdownMenuItem<String>(
-                  value: locale.languageCode,
-                  child: Text(locale.languageCode),
-                );
-              }).toList(),
-              value: Localizations.localeOf(context).languageCode,
-              onChanged: (String? languageCode) {
-                AppLocalizations.load(Locale(languageCode!));
+            trailing: DropdownButton<Locale>(
+              value: context.watch<LocaleCubit>().state,
+              items: const [
+                DropdownMenuItem(
+                  value: Locale('en', 'US'),
+                  child: Text('English'),
+                ),
+                DropdownMenuItem(
+                  value: Locale('zh', 'TW'),
+                  child: Text('中文'),
+                ),
+              ],
+              onChanged: (locale) {
+                context.read<LocaleCubit>().setLocale(locale!);
               },
             ),
           ),
