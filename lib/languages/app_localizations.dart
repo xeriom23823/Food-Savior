@@ -461,7 +461,7 @@ class AppLocalizations {
 
   String get darkMode {
     return Intl.message(
-      '暗黑模式',
+      '黑夜模式',
       name: 'darkMode',
     );
   }

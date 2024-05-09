@@ -281,7 +281,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "darkMode": "暗黑模式",
+  "darkMode": "黑夜模式",
   "@darkMode": {
     "type": "text",
     "placeholders": {}
