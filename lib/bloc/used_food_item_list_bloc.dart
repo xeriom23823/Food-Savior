@@ -50,6 +50,7 @@ class UsedFoodItemListBloc
         final List<UsedFoodItem> updatedUsedFoodItems =
             List.from(currentfoodItems)
               ..add(event.usedFoodItem.copyWith(
+                  id: event.usedFoodItem.id,
                   affectFoodPoint: consumedDateFoodPoint >= 10 ? 0 : 1))
               ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
         emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));

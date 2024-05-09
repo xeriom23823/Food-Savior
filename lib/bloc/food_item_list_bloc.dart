@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_savior/models/food_item.dart';
@@ -34,7 +36,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
           if (foodItem.expirationDate.isBefore(
             DateTime.now().add(const Duration(days: 3)),
           )) {
-            return foodItem.copyWith(status: FoodItemStatus.nearExpired);
+            return foodItem.copyWith(
+                id: foodItem.id, status: FoodItemStatus.nearExpired);
           }
           return foodItem;
         }).toList()
@@ -43,7 +46,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         // 標記過期的食物為已過期
         loadedFoodItems = loadedFoodItems.map((foodItem) {
           if (foodItem.expirationDate.isBefore(DateTime.now())) {
-            return foodItem.copyWith(status: FoodItemStatus.expired);
+            return foodItem.copyWith(
+                id: foodItem.id, status: FoodItemStatus.expired);
           }
           return foodItem;
         }).toList();
@@ -74,7 +78,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         final FoodItem newFoodItem = event.foodItem.expirationDate.isBefore(
           DateTime.now().add(const Duration(days: 3)),
         )
-            ? event.foodItem.copyWith(status: FoodItemStatus.nearExpired)
+            ? event.foodItem.copyWith(
+                id: event.foodItem.id, status: FoodItemStatus.nearExpired)
             : event.foodItem;
 
         // 新增食物後重新排序

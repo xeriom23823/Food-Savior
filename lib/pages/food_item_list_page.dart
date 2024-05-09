@@ -8,6 +8,7 @@ import 'package:food_savior/models/food_item.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class FoodItemListPage extends StatefulWidget {
   const FoodItemListPage({super.key});
@@ -20,6 +21,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
     with SingleTickerProviderStateMixin {
   late final SlidableController _slidableController;
   int expandedIndex = -1;
+
+  // 隨機不重複 ID 生成器
+  final Uuid _uuid = const Uuid();
 
   @override
   void initState() {
@@ -82,7 +86,6 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         SlidableAction(
                           onPressed: (_) {
                             _showEditFoodItemDialog(context, foodItem);
-
                             _slidableController.close();
                           },
                           backgroundColor: Colors.green,
@@ -110,6 +113,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                 .add(FoodItemListRemove(foodItem: foodItem));
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
+                                    id: Uuid().v4(),
                                     usedStatus: FoodItemStatus.wasted,
                                     usedDate: DateTime.now(),
                                     usedQuantity: foodItem.quantity);
@@ -174,6 +178,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
+                                    id: _uuid.v4(),
                                     usedStatus: FoodItemStatus.consumed,
                                     usedDate: DateTime.now(),
                                     usedQuantity: foodItem.quantity);
@@ -516,6 +521,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   return;
                 }
                 final FoodItem newFoodItem = FoodItem(
+                  id: _uuid.v4(),
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
@@ -731,6 +737,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   return;
                 }
                 final FoodItem updatedFoodItem = FoodItem(
+                  id: originalFoodItem.id,
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
@@ -861,6 +868,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
                 final int usedQuantity = int.parse(quantityController.text);
                 final FoodItem remainFoodItem = usingFoodItem.copyWith(
+                  id: usingFoodItem.id,
                   quantity: usingFoodItem.quantity - usedQuantity,
                 );
 
@@ -871,6 +879,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 }
 
                 final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
+                    id: _uuid.v4(),
                     usedStatus: FoodItemStatus.consumed,
                     usedDate: DateTime.parse(usedDateController.text),
                     usedQuantity: usedQuantity);

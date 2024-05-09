@@ -127,7 +127,7 @@ extension UnitExtension on Unit {
 }
 
 class FoodItem {
-  // todo: add id
+  final String id;
   final String name;
   final FoodItemType type;
   final FoodItemStatus status;
@@ -138,7 +138,8 @@ class FoodItem {
   final DateTime expirationDate;
 
   FoodItem(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.type,
       required this.status,
       required this.quantity,
@@ -148,6 +149,7 @@ class FoodItem {
       required this.expirationDate});
 
   FoodItem copyWith({
+    String? id = '',
     String? name,
     FoodItemType? type,
     FoodItemStatus? status,
@@ -158,6 +160,7 @@ class FoodItem {
     DateTime? expirationDate,
   }) {
     return FoodItem(
+      id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
       status: status ?? this.status,
@@ -181,34 +184,13 @@ class FoodItem {
     }
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is FoodItem &&
-        other.name == name &&
-        other.type == type &&
-        other.status == status &&
-        other.description == description &&
-        other.quantity == quantity &&
-        other.unit == unit;
-  }
-
-  @override
-  int get hashCode {
-    return name.hashCode ^
-        type.hashCode ^
-        status.hashCode ^
-        description.hashCode ^
-        quantity.hashCode ^
-        unit.hashCode;
-  }
-
   UsedFoodItem toUsedFoodItem(
-      {required FoodItemStatus usedStatus,
+      {required String id,
+      required FoodItemStatus usedStatus,
       required DateTime usedDate,
       required int usedQuantity}) {
     return UsedFoodItem(
+        id: id,
         name: name,
         type: type,
         status: usedStatus,
@@ -223,6 +205,7 @@ class FoodItem {
 
   // 將 FoodItem 物件轉換為 JSON 字符串
   String toJson() => json.encode({
+        'id': id,
         'name': name,
         'type': type.toString(),
         'status': status.toString(),
@@ -237,6 +220,7 @@ class FoodItem {
   static FoodItem fromJson(String jsonString) {
     final data = json.decode(jsonString);
     return FoodItem(
+      id: data['id'],
       name: data['name'],
       type: FoodItemType.values.firstWhere(
         (e) => e.toString() == data['type'],
@@ -253,6 +237,27 @@ class FoodItem {
       expirationDate: DateTime.parse(data['expirationDate']),
     );
   }
+
+  // 複寫 == 運算符，以便在比較 FoodItem 物件時使用
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is FoodItem && other.id == id;
+  }
+
+  @override
+  int get hashCode =>
+      super.hashCode ^
+      id.hashCode ^
+      name.hashCode ^
+      type.hashCode ^
+      status.hashCode ^
+      quantity.hashCode ^
+      unit.hashCode ^
+      description.hashCode ^
+      storageDate.hashCode ^
+      expirationDate.hashCode;
 }
 
 class UsedFoodItem extends FoodItem {
@@ -260,7 +265,8 @@ class UsedFoodItem extends FoodItem {
   final int affectFoodPoint;
 
   UsedFoodItem(
-      {required super.name,
+      {required super.id,
+      required super.name,
       required super.type,
       required super.status,
       required super.quantity,
@@ -274,6 +280,7 @@ class UsedFoodItem extends FoodItem {
   // 複寫 copyWith 方法，以便在更新 UsedFoodItem 物件時使用
   @override
   UsedFoodItem copyWith({
+    String? id,
     String? name,
     FoodItemType? type,
     FoodItemStatus? status,
@@ -286,6 +293,7 @@ class UsedFoodItem extends FoodItem {
     int? affectFoodPoint,
   }) {
     return UsedFoodItem(
+      id: id ?? this.id,
       name: name ?? this.name,
       type: type ?? this.type,
       status: status ?? this.status,
@@ -302,6 +310,7 @@ class UsedFoodItem extends FoodItem {
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override
   String toJson() => json.encode({
+        'id': id,
         'name': name,
         'type': type.toString(),
         'status': status.toString(),
@@ -318,6 +327,7 @@ class UsedFoodItem extends FoodItem {
   static UsedFoodItem fromJson(String jsonString) {
     final data = json.decode(jsonString);
     return UsedFoodItem(
+      id: data['id'],
       name: data['name'],
       type: FoodItemType.values.firstWhere(
         (e) => e.toString() == data['type'],
@@ -336,4 +346,27 @@ class UsedFoodItem extends FoodItem {
       affectFoodPoint: data['affectFoodPoint'] ?? 0,
     );
   }
+
+  // 複寫 == 運算符，以便在比較 UsedFoodItem 物件時使用
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is UsedFoodItem && other.id == id;
+  }
+
+  @override
+  int get hashCode =>
+      super.hashCode ^
+      id.hashCode ^
+      name.hashCode ^
+      type.hashCode ^
+      status.hashCode ^
+      quantity.hashCode ^
+      unit.hashCode ^
+      description.hashCode ^
+      storageDate.hashCode ^
+      expirationDate.hashCode ^
+      usedDate.hashCode ^
+      affectFoodPoint.hashCode;
 }
