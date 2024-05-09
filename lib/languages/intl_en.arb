@@ -1,8 +1,28 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2024-05-04T21:58:42.321971",
+  "@@last_modified": "2024-05-05T00:13:17.877682",
   "title": "Food Savior",
   "@title": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userNavigationBarTitle": "User",
+  "@userNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "foodItemListNavigationBarTitle": "Food",
+  "@foodItemListNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "usedFoodItemListNavigationBarTitle": "Records",
+  "@usedFoodItemListNavigationBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settingsNavigationBarTitle": "Settings",
+  "@settingsNavigationBarTitle": {
     "type": "text",
     "placeholders": {}
   },
@@ -116,6 +136,11 @@
     "type": "text",
     "placeholders": {}
   },
+  "expire": "Expire",
+  "@expire": {
+    "type": "text",
+    "placeholders": {}
+  },
   "batchUse": "Batch Use",
   "@batchUse": {
     "type": "text",
@@ -138,6 +163,11 @@
   },
   "addFoodItem": "Add Food",
   "@addFoodItem": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "name": "Name",
+  "@name": {
     "type": "text",
     "placeholders": {}
   },
@@ -316,7 +346,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "loginPageTitle": "Login Page",
+  "loginPageTitle": "Log In Page",
   "@loginPageTitle": {
     "type": "text",
     "placeholders": {}

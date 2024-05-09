@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:food_savior/models/food_item.dart';
 import 'package:intl/intl.dart';
 
 import 'messages_all.dart';
@@ -53,28 +52,28 @@ class AppLocalizations {
   String get userNavigationBarTitle {
     return Intl.message(
       '用戶',
-      name: 'user',
+      name: 'userNavigationBarTitle',
     );
   }
 
   String get foodItemListNavigationBarTitle {
     return Intl.message(
       '食物',
-      name: 'foodItemList',
+      name: 'foodItemListNavigationBarTitle',
     );
   }
 
   String get usedFoodItemListNavigationBarTitle {
     return Intl.message(
       '紀錄',
-      name: 'usedFoodItemList',
+      name: 'usedFoodItemListNavigationBarTitle',
     );
   }
 
   String get settingsNavigationBarTitle {
     return Intl.message(
       '設定',
-      name: 'settings',
+      name: 'settingsNavigationBarTitle',
     );
   }
 
@@ -237,7 +236,7 @@ class AppLocalizations {
   String get expire {
     return Intl.message(
       '過期',
-      name: 'expired',
+      name: 'expire',
     );
   }
 
@@ -279,7 +278,7 @@ class AppLocalizations {
   String get name {
     return Intl.message(
       '名稱',
-      name: 'foodItemName',
+      name: 'name',
     );
   }
 
@@ -315,6 +314,13 @@ class AppLocalizations {
     return Intl.message(
       '數量必須為數字',
       name: 'quanityMustBeANumber',
+    );
+  }
+
+  String get quantityExceedsAvailable {
+    return Intl.message(
+      '數量超過可用數量',
+      name: 'quantityExceedsAvailable',
     );
   }
 
@@ -388,6 +394,20 @@ class AppLocalizations {
     );
   }
 
+  String get wasted {
+    return Intl.message(
+      '已浪費',
+      name: 'wasted',
+    );
+  }
+
+  String get consumed {
+    return Intl.message(
+      '已食用',
+      name: 'consumed',
+    );
+  }
+
   String get save {
     return Intl.message(
       '儲存',
@@ -441,7 +461,7 @@ class AppLocalizations {
 
   String get darkMode {
     return Intl.message(
-      '暗黑模式',
+      '黑夜模式',
       name: 'darkMode',
     );
   }

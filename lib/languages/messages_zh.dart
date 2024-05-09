@@ -37,7 +37,9 @@ class MessageLookup extends MessageLookupByLibrary {
     'edit': MessageLookupByLibrary.simpleMessage('編輯'),
     'editFoodItem': MessageLookupByLibrary.simpleMessage('編輯食物'),
     'expirationDate': MessageLookupByLibrary.simpleMessage('過期日期'),
+    'expire': MessageLookupByLibrary.simpleMessage('過期'),
     'foodItemListError': MessageLookupByLibrary.simpleMessage('載入失敗，請重試'),
+    'foodItemListNavigationBarTitle': MessageLookupByLibrary.simpleMessage('食物'),
     'foodItemListViewTitle': MessageLookupByLibrary.simpleMessage('食物清單'),
     'foodItemStatusConsumed': MessageLookupByLibrary.simpleMessage('已使用'),
     'foodItemStatusExpired': MessageLookupByLibrary.simpleMessage('已過期'),
@@ -62,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'logIn': MessageLookupByLibrary.simpleMessage('登入'),
     'logInFailure': MessageLookupByLibrary.simpleMessage('登入失敗'),
     'loginPageTitle': MessageLookupByLibrary.simpleMessage('登入頁面'),
+    'name': MessageLookupByLibrary.simpleMessage('名稱'),
     'nameCannotBeEmpty': MessageLookupByLibrary.simpleMessage('名稱不能為空'),
     'passwordsDoNotMatch': MessageLookupByLibrary.simpleMessage('密碼不相符'),
     'quanityMustBeANumber': MessageLookupByLibrary.simpleMessage('數量必須為數字'),
@@ -70,6 +73,7 @@ class MessageLookup extends MessageLookupByLibrary {
     'quantityMustBePositive': MessageLookupByLibrary.simpleMessage('數量必須為正數'),
     'refresh': MessageLookupByLibrary.simpleMessage('重新整理'),
     'save': MessageLookupByLibrary.simpleMessage('儲存'),
+    'settingsNavigationBarTitle': MessageLookupByLibrary.simpleMessage('設定'),
     'settingsPageTitle': MessageLookupByLibrary.simpleMessage('設定頁面'),
     'showNotification': MessageLookupByLibrary.simpleMessage('顯示通知'),
     'signInWithGoogle': MessageLookupByLibrary.simpleMessage('使用 Google 登入'),
@@ -88,6 +92,8 @@ class MessageLookup extends MessageLookupByLibrary {
     'useAll': MessageLookupByLibrary.simpleMessage('全部使用'),
     'useFoodItem': MessageLookupByLibrary.simpleMessage('使用食物'),
     'usedDate': MessageLookupByLibrary.simpleMessage('使用日期'),
+    'usedFoodItemListNavigationBarTitle': MessageLookupByLibrary.simpleMessage('紀錄'),
+    'userNavigationBarTitle': MessageLookupByLibrary.simpleMessage('用戶'),
     'userPageTitle': MessageLookupByLibrary.simpleMessage('使用者頁面')
   };
 }

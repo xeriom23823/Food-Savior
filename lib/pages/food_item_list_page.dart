@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:food_savior/app/view/app.dart';
 import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/languages/app_localizations.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:uuid/uuid.dart';
 
 class FoodItemListPage extends StatefulWidget {
   const FoodItemListPage({super.key});
@@ -18,8 +19,17 @@ class FoodItemListPage extends StatefulWidget {
 
 class _FoodItemListPageState extends State<FoodItemListPage>
     with SingleTickerProviderStateMixin {
-  late final controller = SlidableController(this);
+  late final SlidableController _slidableController;
   int expandedIndex = -1;
+
+  // 隨機不重複 ID 生成器
+  final Uuid _uuid = const Uuid();
+
+  @override
+  void initState() {
+    super.initState();
+    _slidableController = SlidableController(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +49,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           if (state is FoodItemListError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.message),
+                backgroundColor: Colors.white,
+                content: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.black),
+                ),
               ),
             );
           }
@@ -60,7 +74,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 final FoodItem foodItem = state.foodItems[index];
                 return SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 60,
+                  height: 70,
                   child: Slidable(
                     key: ValueKey(index),
 
@@ -72,8 +86,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         SlidableAction(
                           onPressed: (_) {
                             _showEditFoodItemDialog(context, foodItem);
-
-                            controller.close();
+                            _slidableController.close();
                           },
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
@@ -88,24 +101,53 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       motion: const ScrollMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: (_) {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
+                          onPressed: (_) async {
+                            // 取得會使用的 bloc
+                            final FoodItemListBloc foodItemListBloc =
+                                context.read<FoodItemListBloc>();
+                            final UsedFoodItemListBloc usedFoodItemListBloc =
+                                context.read<UsedFoodItemListBloc>();
 
                             // 建立新的用過的 FoodItem
+                            foodItemListBloc
+                                .add(FoodItemListRemove(foodItem: foodItem));
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
+                                    id: Uuid().v4(),
                                     usedStatus: FoodItemStatus.wasted,
                                     usedDate: DateTime.now(),
                                     usedQuantity: foodItem.quantity);
 
                             // 加入用過的 FoodItem 清單
-                            context.read<UsedFoodItemListBloc>().add(
-                                UsedFoodItemListAdd(
-                                    usedFoodItem: newUsedFoodItem));
+                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                                usedFoodItem: newUsedFoodItem));
 
-                            controller.close();
+                            _slidableController.close();
+
+                            // 提示使用者已刪除
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          '${newUsedFoodItem.name} ${AppLocalizations.of(context).wasted}',
+                                          style: const TextStyle(
+                                              color: Colors.black)),
+                                      Lottie.asset(
+                                        'assets/animations/dumping.json',
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            });
                           },
                           backgroundColor: FoodItemStatus.wasted.color,
                           foregroundColor: Colors.white,
@@ -115,7 +157,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         SlidableAction(
                           onPressed: (_) {
                             _showUseFoodItemDialog(context, foodItem);
-                            controller.close();
+                            _slidableController.close();
                           },
                           backgroundColor: FoodItemStatus.consumed.color,
                           foregroundColor: Colors.white,
@@ -123,24 +165,54 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           label: AppLocalizations.of(context).batchUse,
                         ),
                         SlidableAction(
-                          onPressed: (_) {
-                            context
-                                .read<FoodItemListBloc>()
-                                .add(FoodItemListRemove(foodItem: foodItem));
+                          onPressed: (_) async {
+                            // 取得會使用的 bloc
+                            final FoodItemListBloc foodItemListBloc =
+                                context.read<FoodItemListBloc>();
+                            final UsedFoodItemListBloc usedFoodItemListBloc =
+                                context.read<UsedFoodItemListBloc>();
 
                             // 建立新的用過的 FoodItem
+                            foodItemListBloc
+                                .add(FoodItemListRemove(foodItem: foodItem));
+
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
+                                    id: _uuid.v4(),
                                     usedStatus: FoodItemStatus.consumed,
                                     usedDate: DateTime.now(),
                                     usedQuantity: foodItem.quantity);
 
                             // 加入用過的 FoodItem 清單
-                            context.read<UsedFoodItemListBloc>().add(
-                                UsedFoodItemListAdd(
-                                    usedFoodItem: newUsedFoodItem));
+                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                                usedFoodItem: newUsedFoodItem));
 
-                            controller.close();
+                            _slidableController.close();
+
+                            // 提示使用者已食用
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                          '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                                          style: const TextStyle(
+                                              color: Colors.black)),
+                                      Lottie.asset(
+                                        'assets/animations/eating.json',
+                                        width: 50,
+                                        height: 50,
+                                      ),
+                                    ],
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+                            });
                           },
                           backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
@@ -161,6 +233,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         setState(() {
                           expandedIndex = -1;
                         });
+                        _showFoodItemInformationDialog(context, foodItem);
                       },
                       title: Text(
                           '${foodItem.name} (${foodItem.quantityWithUnit(context)})'),
@@ -202,6 +275,80 @@ class _FoodItemListPageState extends State<FoodItemListPage>
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void _showFoodItemInformationDialog(
+      BuildContext pageContext, FoodItem foodItem) {
+    final FoodItemListBloc foodItemListBloc =
+        BlocProvider.of<FoodItemListBloc>(context);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Expanded(child: Text(foodItem.name)),
+              IconButton(
+                onPressed: () {
+                  foodItemListBloc.add(FoodItemListRemove(foodItem: foodItem));
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.delete_outline),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _showEditFoodItemDialog(pageContext, foodItem);
+                },
+                icon: const Icon(Icons.edit_outlined),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.close),
+              ),
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Icon(foodItem.type.icon,
+                    color: foodItem.status.color, size: 50),
+                Text(
+                  foodItem.type.name(pageContext),
+                  style: TextStyle(color: foodItem.status.color),
+                ),
+                Text(foodItem.description),
+                Text(
+                    '${AppLocalizations.of(context).quantity} : ${foodItem.quantity} ${foodItem.unit.name(context)}'),
+                Text(
+                    '${AppLocalizations.of(context).storageDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.storageDate)}'),
+                Text(
+                    '${AppLocalizations.of(context).expirationDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}'),
+              ],
+            ),
+          ),
+          actions: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: foodItem.status.color,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _showUseFoodItemDialog(pageContext, foodItem);
+                },
+                icon:
+                    const Icon(Icons.restaurant_outlined, color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -374,6 +521,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   return;
                 }
                 final FoodItem newFoodItem = FoodItem(
+                  id: _uuid.v4(),
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
@@ -389,8 +537,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.white,
                     content: Text(
-                        '${newFoodItem.name} ${AppLocalizations.of(context).added}'),
+                      '${newFoodItem.name} ${AppLocalizations.of(context).added}',
+                      style: const TextStyle(color: Colors.black),
+                    ),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -586,6 +737,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   return;
                 }
                 final FoodItem updatedFoodItem = FoodItem(
+                  id: originalFoodItem.id,
                   name: nameController.text,
                   type: selectedType,
                   status: FoodItemStatus.fresh,
@@ -604,8 +756,10 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 // 提示使用者已更新
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
+                    backgroundColor: Colors.white,
                     content: Text(
-                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}'),
+                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}',
+                        style: const TextStyle(color: Colors.black)),
                     duration: const Duration(seconds: 1),
                   ),
                 );
@@ -621,6 +775,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
   void _showUseFoodItemDialog(BuildContext context, FoodItem usingFoodItem) {
     final TextEditingController quantityController = TextEditingController();
     final TextEditingController usedDateController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     // set default quantity as 1
     quantityController.text = '1';
@@ -640,30 +795,62 @@ class _FoodItemListPageState extends State<FoodItemListPage>
         return AlertDialog(
           title: Text(AppLocalizations.of(context).useFoodItem),
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text(
-                    '${AppLocalizations.of(context).use} ${usingFoodItem.name}'),
-                TextField(
-                  controller: quantityController,
-                  decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).quantity),
-                  keyboardType: TextInputType.number,
-                ),
-                // Add a date picker for the used date
-                GestureDetector(
-                  onTap: () {
-                    _selectDate(context, usedDateController);
-                  },
-                  child: AbsorbPointer(
-                    child: TextField(
-                      controller: usedDateController,
-                      decoration: InputDecoration(
-                          labelText: AppLocalizations.of(context).usedDate),
+            child: Form(
+              key: formKey, // Set the maximum height here
+              child: Column(
+                children: [
+                  Text(
+                      '${AppLocalizations.of(context).use} ${usingFoodItem.name}'),
+                  TextFormField(
+                    controller: quantityController,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).quantity,
+                      suffixText: usingFoodItem.unit.name(context),
+                    ),
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      int enteredQuantity = int.tryParse(value) ?? 0;
+                      if (enteredQuantity > usingFoodItem.quantity) {
+                        quantityController.text =
+                            usingFoodItem.quantity.toString();
+                      }
+                      formKey.currentState!.validate();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return AppLocalizations.of(context)
+                            .quantityCannotBeEmpty;
+                      }
+
+                      int enteredQuantity = int.tryParse(value) ?? 0;
+                      if (enteredQuantity <= 0) {
+                        return AppLocalizations.of(context)
+                            .quantityMustBePositive;
+                      }
+
+                      if (enteredQuantity > usingFoodItem.quantity) {
+                        return AppLocalizations.of(context)
+                            .quantityExceedsAvailable;
+                      }
+
+                      return null;
+                    },
+                  ),
+                  // Add a date picker for the used date
+                  GestureDetector(
+                    onTap: () {
+                      _selectDate(context, usedDateController);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: usedDateController,
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context).usedDate),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           actions: [
@@ -674,10 +861,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               child: Text(AppLocalizations.of(context).cancel),
             ),
             TextButton(
-              onPressed: () {
-                final int usedQuantity = int.parse(quantityController.text);
+              onPressed: () async {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
 
+                final int usedQuantity = int.parse(quantityController.text);
                 final FoodItem remainFoodItem = usingFoodItem.copyWith(
+                  id: usingFoodItem.id,
                   quantity: usingFoodItem.quantity - usedQuantity,
                 );
 
@@ -688,6 +879,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 }
 
                 final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
+                    id: _uuid.v4(),
                     usedStatus: FoodItemStatus.consumed,
                     usedDate: DateTime.parse(usedDateController.text),
                     usedQuantity: usedQuantity);
@@ -697,16 +889,30 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       .add(UsedFoodItemListAdd(usedFoodItem: usedFoodItem));
                 }
 
-                Navigator.of(context).pop();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.of(context).pop();
 
-                // 提示使用者已更新
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        '${remainFoodItem.name} ${AppLocalizations.of(context).updated}'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
+                  // 提示使用者已食用
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.white,
+                      content: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                              '${usedFoodItem.name} ${usedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                              style: const TextStyle(color: Colors.black)),
+                          Lottie.asset(
+                            'assets/animations/eating.json',
+                            width: 50,
+                            height: 50,
+                          ),
+                        ],
+                      ),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
+                });
               },
               child: Text(AppLocalizations.of(context).use),
             ),

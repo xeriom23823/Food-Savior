@@ -9,6 +9,7 @@ void main() {
   group('FoodItemListBloc', () {
     late FoodItemListBloc foodItemListBloc;
     final testFoodItem = FoodItem(
+      id: '1',
       name: 'Apple',
       type: FoodItemType.fruit,
       quantity: 3,
