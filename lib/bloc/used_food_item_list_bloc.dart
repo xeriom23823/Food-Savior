@@ -33,6 +33,17 @@ class UsedFoodItemListBloc
       emit(UsedFoodItemListLoaded(usedFoodItems: loadedUsedFoodItems));
     });
 
+    on<UsedFoodItemListLoad>((event, emit) async {
+      await SharedPreferences.getInstance().then((prefs) {
+        prefs.setStringList(
+          'usedFoodItems',
+          event.usedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+        );
+      });
+
+      emit(UsedFoodItemListLoaded(usedFoodItems: event.usedFoodItems));
+    });
+
     on<UsedFoodItemListAdd>((event, emit) async {
       if (state is UsedFoodItemListLoaded) {
         final List<UsedFoodItem> currentfoodItems =
@@ -53,10 +64,9 @@ class UsedFoodItemListBloc
                   id: event.usedFoodItem.id,
                   affectFoodPoint: consumedDateFoodPoint >= 10 ? 0 : 1))
               ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
-        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
 
         // 將新增的使用過食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
@@ -64,10 +74,12 @@ class UsedFoodItemListBloc
                 .toList(),
           );
         });
+
+        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
       }
     });
 
-    on<UsedFoodItemListRemove>((event, emit) {
+    on<UsedFoodItemListRemove>((event, emit) async {
       if (state is UsedFoodItemListLoaded) {
         final List<UsedFoodItem> currentfoodItems =
             (state as UsedFoodItemListLoaded).usedFoodItems;
@@ -76,11 +88,10 @@ class UsedFoodItemListBloc
         final List<UsedFoodItem> updatedUsedFoodItems =
             List.from(currentfoodItems)
               ..removeWhere((element) => element == event.usedFoodItem);
-        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
 
         // 刪除的食物點數回復
         final consumedDate = event.usedFoodItem.usedDate;
-        SharedPreferences.getInstance().then(
+        await SharedPreferences.getInstance().then(
           (prefs) {
             prefs.setInt(
                 'FoodPoint/${consumedDate.year}/${consumedDate.month}/${consumedDate.day}',
@@ -92,7 +103,7 @@ class UsedFoodItemListBloc
         );
 
         // 將刪除的使用過食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
@@ -100,6 +111,8 @@ class UsedFoodItemListBloc
                 .toList(),
           );
         });
+
+        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
       }
     });
 

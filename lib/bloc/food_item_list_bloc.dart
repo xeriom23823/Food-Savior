@@ -68,6 +68,17 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       },
     );
 
+    on<FoodItemListLoad>((event, emit) async {
+      // 將 food item list 存到 shared preferences
+      await SharedPreferences.getInstance().then((prefs) {
+        prefs.setStringList(
+          'foodItems',
+          event.foodItems.map((foodItem) => foodItem.toJson()).toList(),
+        );
+      });
+      emit(FoodItemListLoaded(foodItems: event.foodItems));
+    });
+
     on<FoodItemListAdd>((event, emit) async {
       if (state is FoodItemListLoaded) {
         final List<FoodItem> currentfoodItems =

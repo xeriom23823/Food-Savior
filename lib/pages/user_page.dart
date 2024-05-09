@@ -63,7 +63,25 @@ class UserPage extends StatelessWidget {
               child: const Text('備份'),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                final foodItemListBloc =
+                    BlocProvider.of<FoodItemListBloc>(context);
+                final usedFoodItemListBloc =
+                    BlocProvider.of<UsedFoodItemListBloc>(context);
+                final Map<String, dynamic> data = await restoreData(user.id);
+                if (data.isNotEmpty) {
+                  final List<FoodItem> foodItems = data['foodItems'];
+                  foodItemListBloc.add(
+                    FoodItemListLoad(foodItems: foodItems),
+                  );
+                  final List<UsedFoodItem> usedFoodItems =
+                      data['usedFoodItems'];
+
+                  usedFoodItemListBloc.add(
+                    UsedFoodItemListLoad(usedFoodItems: usedFoodItems),
+                  );
+                }
+              },
               child: const Text('還原'),
             ),
           ],
@@ -97,5 +115,34 @@ class UserPage extends StatelessWidget {
       'foodItems': foodItemsJson,
       'usedFoodItems': usedFoodItemsJson,
     });
+  }
+
+  Future<Map<String, dynamic>> restoreData(String userId) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // 從 Firestore 中獲取備份數據
+    final DocumentSnapshot<Map<String, dynamic>> backupDoc =
+        await firestore.collection('backups').doc(userId).get();
+
+    if (backupDoc.exists) {
+      // 將 JSON 格式的數據轉換回 FoodItem 對象
+      List<FoodItem> foodItems = (backupDoc['foodItems'] as List)
+          .map((foodItemJson) => FoodItem.fromJson(foodItemJson))
+          .toList();
+
+      // 將 JSON 格式的數據轉換回 UsedFoodItem 對象
+      List<UsedFoodItem> usedFoodItems = (backupDoc['usedFoodItems'] as List)
+          .map((usedFoodItemJson) => UsedFoodItem.fromJson(usedFoodItemJson))
+          .toList();
+
+      // 返回 foodItems 和 usedFoodItems
+      return {
+        'foodItems': foodItems,
+        'usedFoodItems': usedFoodItems,
+      };
+    }
+
+    // 如果沒有找到備份數據，則返回空的 Map
+    return {};
   }
 }
