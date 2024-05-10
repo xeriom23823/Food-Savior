@@ -14,6 +14,13 @@ class UsedFoodItemListPage extends StatefulWidget {
 class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
   FoodItemStatus dropdownValue = FoodItemStatus.consumed;
   DateTime selectedDate = DateTime.now();
+  List<DateTime> selectedWeek = [];
+
+  @override
+  void initState() {
+    super.initState();
+    updateSelectedWeek();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,39 +101,65 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           } else if (state is UsedFoodItemListLoaded) {
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate =
-                                selectedDate.subtract(const Duration(days: 1));
-                          });
-                        },
-                        child: const Icon(Icons.arrow_back),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate = DateTime.now();
-                          });
-                        },
-                        child: const Text('返回今天'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate =
-                                selectedDate.add(const Duration(days: 1));
-                          });
-                        },
-                        child: const Icon(Icons.arrow_forward),
-                      ),
-                    ],
+                Container(
+                  color: Theme.of(context).primaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        for (final day in selectedWeek) ...[
+                          Column(
+                            children: [
+                              Text(
+                                DateFormat('E').format(day),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: (DateTime.now().day ==
+                                              day.day &&
+                                          DateTime.now().month == day.month &&
+                                          DateTime.now().year == day.year)
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .secondary
+                                          .withAlpha(50)
+                                      : Theme.of(context).colorScheme.secondary,
+                                  shape: CircleBorder(
+                                      side: day == selectedDate
+                                          ? BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                              width: 2)
+                                          : BorderSide.none),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedDate = day;
+                                  });
+                                },
+                                child: Text(
+                                  DateFormat('dd').format(day),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: day == selectedDate
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -236,5 +269,12 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
         });
       }
     });
+  }
+
+  void updateSelectedWeek() {
+    final dayOfWeek = selectedDate.weekday;
+    final firstDayOfWeek = selectedDate.subtract(Duration(days: dayOfWeek - 1));
+    selectedWeek =
+        List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
   }
 }

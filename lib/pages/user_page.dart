@@ -25,7 +25,7 @@ class UserPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        actions: <Widget>[
+        actions: [
           IconButton(
             key: const Key('UserPage_logout_iconButton'),
             icon: Icon(

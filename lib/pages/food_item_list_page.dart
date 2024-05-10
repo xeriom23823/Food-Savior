@@ -72,177 +72,173 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               itemCount: state.foodItems.length,
               itemBuilder: (BuildContext context, int index) {
                 final FoodItem foodItem = state.foodItems[index];
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 70,
-                  child: Slidable(
-                    key: ValueKey(index),
+                return Slidable(
+                  key: ValueKey(index),
 
-                    // 左邊的動作面板
-                    startActionPane: ActionPane(
-                      extentRatio: 0.15,
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (_) {
-                            _showEditFoodItemDialog(context, foodItem);
-                            _slidableController.close();
-                          },
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit,
-                          label: AppLocalizations.of(context).edit,
-                        ),
-                      ],
-                    ),
-
-                    // 右邊的動作面板
-                    endActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (_) async {
-                            // 取得會使用的 bloc
-                            final FoodItemListBloc foodItemListBloc =
-                                context.read<FoodItemListBloc>();
-                            final UsedFoodItemListBloc usedFoodItemListBloc =
-                                context.read<UsedFoodItemListBloc>();
-
-                            // 建立新的用過的 FoodItem
-                            foodItemListBloc
-                                .add(FoodItemListRemove(foodItem: foodItem));
-                            UsedFoodItem newUsedFoodItem =
-                                foodItem.toUsedFoodItem(
-                                    id: _uuid.v4(),
-                                    usedStatus: FoodItemStatus.wasted,
-                                    usedDate: DateTime.now(),
-                                    usedQuantity: foodItem.quantity);
-
-                            // 加入用過的 FoodItem 清單
-                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
-                                usedFoodItem: newUsedFoodItem));
-
-                            _slidableController.close();
-
-                            // 提示使用者已刪除
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.white,
-                                  content: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          '${newUsedFoodItem.name} ${AppLocalizations.of(context).wasted}',
-                                          style: const TextStyle(
-                                              color: Colors.black)),
-                                      Lottie.asset(
-                                        'assets/animations/dumping.json',
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                    ],
-                                  ),
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            });
-                          },
-                          backgroundColor: FoodItemStatus.wasted.color,
-                          foregroundColor: Colors.white,
-                          icon: MdiIcons.deleteEmpty,
-                          label: AppLocalizations.of(context).expire,
-                        ),
-                        SlidableAction(
-                          onPressed: (_) {
-                            _showUseFoodItemDialog(context, foodItem);
-                            _slidableController.close();
-                          },
-                          backgroundColor: FoodItemStatus.consumed.color,
-                          foregroundColor: Colors.white,
-                          icon: Icons.restaurant,
-                          label: AppLocalizations.of(context).batchUse,
-                        ),
-                        SlidableAction(
-                          onPressed: (_) async {
-                            // 取得會使用的 bloc
-                            final FoodItemListBloc foodItemListBloc =
-                                context.read<FoodItemListBloc>();
-                            final UsedFoodItemListBloc usedFoodItemListBloc =
-                                context.read<UsedFoodItemListBloc>();
-
-                            // 建立新的用過的 FoodItem
-                            foodItemListBloc
-                                .add(FoodItemListRemove(foodItem: foodItem));
-
-                            UsedFoodItem newUsedFoodItem =
-                                foodItem.toUsedFoodItem(
-                                    id: _uuid.v4(),
-                                    usedStatus: FoodItemStatus.consumed,
-                                    usedDate: DateTime.now(),
-                                    usedQuantity: foodItem.quantity);
-
-                            // 加入用過的 FoodItem 清單
-                            usedFoodItemListBloc.add(UsedFoodItemListAdd(
-                                usedFoodItem: newUsedFoodItem));
-
-                            _slidableController.close();
-
-                            // 提示使用者已食用
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: Colors.white,
-                                  content: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                          '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
-                                          style: const TextStyle(
-                                              color: Colors.black)),
-                                      Lottie.asset(
-                                        'assets/animations/eating.json',
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                    ],
-                                  ),
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            });
-                          },
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.white,
-                          icon: Icons.restaurant,
-                          label: AppLocalizations.of(context).useAll,
-                        ),
-                      ],
-                    ),
-
-                    child: ListTile(
-                      onLongPress: () {
-                        setState(() {
-                          expandedIndex = -1;
-                        });
-                        _showEditFoodItemDialog(context, foodItem);
-                      },
-                      onTap: () {
-                        setState(() {
-                          expandedIndex = -1;
-                        });
-                        _showFoodItemInformationDialog(context, foodItem);
-                      },
-                      title: Text(
-                          '${foodItem.name} (${foodItem.quantityWithUnit(context)})'),
-                      leading: Icon(foodItem.type.icon,
-                          color: foodItem.status.color),
-                      subtitle: Text(foodItem.description),
-                      trailing: Text(
-                        '${AppLocalizations.of(context).expire} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
+                  // 左邊的動作面板
+                  startActionPane: ActionPane(
+                    extentRatio: 0.15,
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (_) {
+                          _showEditFoodItemDialog(context, foodItem);
+                          _slidableController.close();
+                        },
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        icon: Icons.edit,
+                        label: AppLocalizations.of(context).edit,
                       ),
+                    ],
+                  ),
+
+                  // 右邊的動作面板
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (_) async {
+                          // 取得會使用的 bloc
+                          final FoodItemListBloc foodItemListBloc =
+                              context.read<FoodItemListBloc>();
+                          final UsedFoodItemListBloc usedFoodItemListBloc =
+                              context.read<UsedFoodItemListBloc>();
+
+                          // 建立新的用過的 FoodItem
+                          foodItemListBloc
+                              .add(FoodItemListRemove(foodItem: foodItem));
+                          UsedFoodItem newUsedFoodItem =
+                              foodItem.toUsedFoodItem(
+                                  id: _uuid.v4(),
+                                  usedStatus: FoodItemStatus.wasted,
+                                  usedDate: DateTime.now(),
+                                  usedQuantity: foodItem.quantity);
+
+                          // 加入用過的 FoodItem 清單
+                          usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                              usedFoodItem: newUsedFoodItem));
+
+                          _slidableController.close();
+
+                          // 提示使用者已刪除
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.white,
+                                content: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        '${newUsedFoodItem.name} ${AppLocalizations.of(context).wasted}',
+                                        style: const TextStyle(
+                                            color: Colors.black)),
+                                    Lottie.asset(
+                                      'assets/animations/dumping.json',
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                  ],
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          });
+                        },
+                        backgroundColor: FoodItemStatus.wasted.color,
+                        foregroundColor: Colors.white,
+                        icon: MdiIcons.deleteEmpty,
+                        label: AppLocalizations.of(context).expire,
+                      ),
+                      SlidableAction(
+                        onPressed: (_) {
+                          _showUseFoodItemDialog(context, foodItem);
+                          _slidableController.close();
+                        },
+                        backgroundColor: FoodItemStatus.consumed.color,
+                        foregroundColor: Colors.white,
+                        icon: Icons.restaurant,
+                        label: AppLocalizations.of(context).batchUse,
+                      ),
+                      SlidableAction(
+                        onPressed: (_) async {
+                          // 取得會使用的 bloc
+                          final FoodItemListBloc foodItemListBloc =
+                              context.read<FoodItemListBloc>();
+                          final UsedFoodItemListBloc usedFoodItemListBloc =
+                              context.read<UsedFoodItemListBloc>();
+
+                          // 建立新的用過的 FoodItem
+                          foodItemListBloc
+                              .add(FoodItemListRemove(foodItem: foodItem));
+
+                          UsedFoodItem newUsedFoodItem =
+                              foodItem.toUsedFoodItem(
+                                  id: _uuid.v4(),
+                                  usedStatus: FoodItemStatus.consumed,
+                                  usedDate: DateTime.now(),
+                                  usedQuantity: foodItem.quantity);
+
+                          // 加入用過的 FoodItem 清單
+                          usedFoodItemListBloc.add(UsedFoodItemListAdd(
+                              usedFoodItem: newUsedFoodItem));
+
+                          _slidableController.close();
+
+                          // 提示使用者已食用
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: Colors.white,
+                                content: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                        '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                                        style: const TextStyle(
+                                            color: Colors.black)),
+                                    Lottie.asset(
+                                      'assets/animations/eating.json',
+                                      width: 50,
+                                      height: 50,
+                                    ),
+                                  ],
+                                ),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          });
+                        },
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        icon: Icons.restaurant,
+                        label: AppLocalizations.of(context).useAll,
+                      ),
+                    ],
+                  ),
+
+                  child: ListTile(
+                    onLongPress: () {
+                      setState(() {
+                        expandedIndex = -1;
+                      });
+                      _showEditFoodItemDialog(context, foodItem);
+                    },
+                    onTap: () {
+                      setState(() {
+                        expandedIndex = -1;
+                      });
+                      _showFoodItemInformationDialog(context, foodItem);
+                    },
+                    title: Text(
+                        '${foodItem.name} (${foodItem.quantityWithUnit(context)})'),
+                    leading:
+                        Icon(foodItem.type.icon, color: foodItem.status.color),
+                    subtitle: Text(foodItem.description),
+                    trailing: Text(
+                      '${AppLocalizations.of(context).expire} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
                     ),
                   ),
                 );
