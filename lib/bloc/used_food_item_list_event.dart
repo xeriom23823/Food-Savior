@@ -4,6 +4,12 @@ abstract class UsedFoodItemListEvent {}
 
 class UsedFoodItemListLoadFromDevice extends UsedFoodItemListEvent {}
 
+class UsedFoodItemListLoad extends UsedFoodItemListEvent {
+  final List<UsedFoodItem> usedFoodItems;
+
+  UsedFoodItemListLoad({required this.usedFoodItems});
+}
+
 class UsedFoodItemListAdd extends UsedFoodItemListEvent {
   final UsedFoodItem usedFoodItem;
 

@@ -113,7 +113,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                 .add(FoodItemListRemove(foodItem: foodItem));
                             UsedFoodItem newUsedFoodItem =
                                 foodItem.toUsedFoodItem(
-                                    id: Uuid().v4(),
+                                    id: _uuid.v4(),
                                     usedStatus: FoodItemStatus.wasted,
                                     usedDate: DateTime.now(),
                                     usedQuantity: foodItem.quantity);
