@@ -149,12 +149,10 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                             '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)})'),
                         leading: Icon(usedFoodItem.type.icon,
                             color: usedFoodItem.status.color),
-                        subtitle: usedFoodItem.description.isNotEmpty
-                            ? Text(usedFoodItem.description)
-                            : Text(
-                                '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
-                                style: TextStyle(
-                                    color: usedFoodItem.status.color)),
+                        subtitle: Text(
+                          '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
+                          style: TextStyle(color: usedFoodItem.status.color),
+                        ),
                         trailing: Text(
                           '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}',
                         ),

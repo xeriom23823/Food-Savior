@@ -876,6 +876,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   foodItemListBloc.add(FoodItemListUpdate(
                       originalFoodItem: usingFoodItem,
                       updatedFoodItem: remainFoodItem));
+                } else {
+                  foodItemListBloc
+                      .add(FoodItemListRemove(foodItem: usingFoodItem));
                 }
 
                 final UsedFoodItem usedFoodItem = usingFoodItem.toUsedFoodItem(
