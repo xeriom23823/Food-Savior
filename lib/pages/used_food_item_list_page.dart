@@ -102,22 +102,22 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
             return Column(
               children: [
                 Container(
-                  color: Theme.of(context).primaryColor,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24.0, vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (final day in selectedWeek) ...[
-                          Column(
+                  width: MediaQuery.of(context).size.width,
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                  child: Row(
+                    children: [
+                      for (final day in selectedWeek) ...[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 7,
+                          child: Column(
                             children: [
                               Text(
                                 DateFormat('E').format(day),
                                 style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 12,
+                                ),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -152,14 +152,15 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                                     fontWeight: day == selectedDate
                                         ? FontWeight.bold
                                         : FontWeight.normal,
+                                    fontSize: 9.5,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ],
-                    ),
+                    ],
                   ),
                 ),
                 Expanded(
