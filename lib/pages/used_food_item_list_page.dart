@@ -14,6 +14,13 @@ class UsedFoodItemListPage extends StatefulWidget {
 class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
   FoodItemStatus dropdownValue = FoodItemStatus.consumed;
   DateTime selectedDate = DateTime.now();
+  List<DateTime> selectedWeek = [];
+
+  @override
+  void initState() {
+    super.initState();
+    updateSelectedWeek();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,38 +101,65 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           } else if (state is UsedFoodItemListLoaded) {
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 8.0),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  color: Theme.of(context).appBarTheme.backgroundColor,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate =
-                                selectedDate.subtract(const Duration(days: 1));
-                          });
-                        },
-                        child: const Icon(Icons.arrow_back),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate = DateTime.now();
-                          });
-                        },
-                        child: const Text('返回今天'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedDate =
-                                selectedDate.add(const Duration(days: 1));
-                          });
-                        },
-                        child: const Icon(Icons.arrow_forward),
-                      ),
+                      for (final day in selectedWeek) ...[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 7,
+                          child: Column(
+                            children: [
+                              Text(
+                                DateFormat('E').format(day),
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 12,
+                                ),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: (DateTime.now().day ==
+                                              day.day &&
+                                          DateTime.now().month == day.month &&
+                                          DateTime.now().year == day.year)
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .secondary
+                                          .withAlpha(50)
+                                      : Theme.of(context).colorScheme.secondary,
+                                  shape: CircleBorder(
+                                      side: day == selectedDate
+                                          ? BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary,
+                                              width: 2)
+                                          : BorderSide.none),
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    selectedDate = day;
+                                  });
+                                },
+                                child: Text(
+                                  DateFormat('dd').format(day),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: day == selectedDate
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                    fontSize: 9.5,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -149,12 +183,10 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                             '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)})'),
                         leading: Icon(usedFoodItem.type.icon,
                             color: usedFoodItem.status.color),
-                        subtitle: usedFoodItem.description.isNotEmpty
-                            ? Text(usedFoodItem.description)
-                            : Text(
-                                '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
-                                style: TextStyle(
-                                    color: usedFoodItem.status.color)),
+                        subtitle: Text(
+                          '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
+                          style: TextStyle(color: usedFoodItem.status.color),
+                        ),
                         trailing: Text(
                           '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}',
                         ),
@@ -238,5 +270,12 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
         });
       }
     });
+  }
+
+  void updateSelectedWeek() {
+    final dayOfWeek = selectedDate.weekday;
+    final firstDayOfWeek = selectedDate.subtract(Duration(days: dayOfWeek - 1));
+    selectedWeek =
+        List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
   }
 }

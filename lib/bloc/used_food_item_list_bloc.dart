@@ -52,17 +52,26 @@ class UsedFoodItemListBloc
 
         // 確認當日的食物點數是否已經達到上限
         final consumedDate = event.usedFoodItem.usedDate;
-        int consumedDateFoodPoint = await SharedPreferences.getInstance().then(
-            (prefs) =>
-                prefs.getInt(
-                    'FoodPoint/${consumedDate.year}/${consumedDate.month}/${consumedDate.day}') ??
-                0);
+        int consumedDateFoodPoint = 0;
+        for (var foodItem in currentfoodItems) {
+          if (foodItem.usedDate.year == consumedDate.year &&
+              foodItem.usedDate.month == consumedDate.month &&
+              foodItem.usedDate.day == consumedDate.day) {
+            consumedDateFoodPoint += foodItem.affectFoodPoint;
+          }
+        }
 
         final List<UsedFoodItem> updatedUsedFoodItems =
             List.from(currentfoodItems)
               ..add(event.usedFoodItem.copyWith(
-                  id: event.usedFoodItem.id,
-                  affectFoodPoint: consumedDateFoodPoint >= 10 ? 0 : 1))
+                id: event.usedFoodItem.id,
+                affectFoodPoint:
+                    event.usedFoodItem.status == FoodItemStatus.consumed
+                        ? consumedDateFoodPoint >= 10
+                            ? 0
+                            : 1
+                        : -1,
+              ))
               ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
 
         // 將新增的使用過食物存到 shared preferences
@@ -88,19 +97,6 @@ class UsedFoodItemListBloc
         final List<UsedFoodItem> updatedUsedFoodItems =
             List.from(currentfoodItems)
               ..removeWhere((element) => element == event.usedFoodItem);
-
-        // 刪除的食物點數回復
-        final consumedDate = event.usedFoodItem.usedDate;
-        await SharedPreferences.getInstance().then(
-          (prefs) {
-            prefs.setInt(
-                'FoodPoint/${consumedDate.year}/${consumedDate.month}/${consumedDate.day}',
-                (prefs.getInt(
-                            'FoodPoint/${consumedDate.year}/${consumedDate.month}/${consumedDate.day}') ??
-                        0) -
-                    1);
-          },
-        );
 
         // 將刪除的使用過食物存到 shared preferences
         await SharedPreferences.getInstance().then((prefs) {

@@ -2,7 +2,6 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,19 +10,14 @@ import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/pages/char_and_statistics_page.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // if (kDebugMode) {
-  //   SharedPreferences.getInstance().then((prefs) {
-  //     prefs.clear();
-  //   });
-  // }
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
@@ -47,10 +41,11 @@ class FoodSavior extends StatefulWidget {
 
 class _FoodSaviorState extends State<FoodSavior> {
   final _pageController = PageController(initialPage: 1);
-  final int _pageIndex = 1;
+  final int _pageIndex = 2;
 
   final List<Widget> _pages = const [
     UserPage(),
+    ChartAndStatisticsPage(),
     FoodItemListPage(),
     UsedFoodItemListPage(),
     SettingsPage()
@@ -85,6 +80,11 @@ class _FoodSaviorState extends State<FoodSavior> {
             CurvedNavigationBarItem(
               child: const Icon(Icons.person),
               label: AppLocalizations.of(context).userNavigationBarTitle,
+            ),
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.bar_chart),
+              label: AppLocalizations.of(context)
+                  .chartAndStatisticsNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
               child: const Icon(Icons.food_bank),

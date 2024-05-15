@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_savior/models/food_item.dart';
@@ -69,14 +67,35 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
     );
 
     on<FoodItemListLoad>((event, emit) async {
+      // expiration date 小於 3 天的食物標記為即將過期並排序
+      List<FoodItem> processingFoodItems = event.foodItems.map((foodItem) {
+        if (foodItem.expirationDate.isBefore(
+          DateTime.now().add(const Duration(days: 3)),
+        )) {
+          return foodItem.copyWith(
+              id: foodItem.id, status: FoodItemStatus.nearExpired);
+        }
+        return foodItem;
+      }).toList()
+        ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+
+      // 標記過期的食物為已過期
+      processingFoodItems = processingFoodItems.map((foodItem) {
+        if (foodItem.expirationDate.isBefore(DateTime.now())) {
+          return foodItem.copyWith(
+              id: foodItem.id, status: FoodItemStatus.expired);
+        }
+        return foodItem;
+      }).toList();
+
       // 將 food item list 存到 shared preferences
       await SharedPreferences.getInstance().then((prefs) {
         prefs.setStringList(
           'foodItems',
-          event.foodItems.map((foodItem) => foodItem.toJson()).toList(),
+          processingFoodItems.map((foodItem) => foodItem.toJson()).toList(),
         );
       });
-      emit(FoodItemListLoaded(foodItems: event.foodItems));
+      emit(FoodItemListLoaded(foodItems: processingFoodItems));
     });
 
     on<FoodItemListAdd>((event, emit) async {
