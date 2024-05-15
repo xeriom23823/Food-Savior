@@ -16,7 +16,7 @@ class ThemeCubit extends Cubit<ThemeData> {
     colorScheme: const ColorScheme.light(
       primary: Color(0xFF0097A7),
       secondary: Color(0xFF009688),
-      background: Color(0xFFE0F2F1),
+      surface: Color(0xFFE0F2F1),
     ),
   );
 
@@ -29,7 +29,7 @@ class ThemeCubit extends Cubit<ThemeData> {
     colorScheme: const ColorScheme.dark(
       primary: Color(0xFF0097A7),
       secondary: Color(0xFF009688),
-      background: Color(0xFF424242),
+      surface: Color(0xFF424242),
       onPrimary: Colors.blueGrey,
     ),
   );
