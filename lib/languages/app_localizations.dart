@@ -56,6 +56,13 @@ class AppLocalizations {
     );
   }
 
+  String get chartAndStatisticsNavigationBarTitle {
+    return Intl.message(
+      '圖表與統計',
+      name: 'chartAndStatisticsNavigationBarTitle',
+    );
+  }
+
   String get foodItemListNavigationBarTitle {
     return Intl.message(
       '食物',
