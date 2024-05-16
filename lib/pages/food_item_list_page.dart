@@ -77,7 +77,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
                   // 左邊的動作面板
                   startActionPane: ActionPane(
-                    extentRatio: 0.15,
+                    extentRatio: 0.2,
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
@@ -95,6 +95,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
                   // 右邊的動作面板
                   endActionPane: ActionPane(
+                    extentRatio: 0.75,
                     motion: const ScrollMotion(),
                     children: [
                       SlidableAction(
@@ -238,7 +239,17 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         Icon(foodItem.type.icon, color: foodItem.status.color),
                     subtitle: Text(foodItem.description),
                     trailing: Text(
-                      '${AppLocalizations.of(context).expire} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}',
+                      foodItem.expirationDate
+                                  .difference(DateTime.now())
+                                  .inDays ==
+                              0
+                          ? AppLocalizations.of(context).expireToday
+                          : foodItem.expirationDate
+                                      .difference(DateTime.now())
+                                      .inDays <
+                                  0
+                              ? AppLocalizations.of(context).expired
+                              : '${AppLocalizations.of(context).expire} : ${foodItem.expirationDate.difference(DateTime.now()).inDays} ${AppLocalizations.of(context).days}',
                     ),
                   ),
                 );
