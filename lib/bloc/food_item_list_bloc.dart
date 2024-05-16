@@ -50,25 +50,41 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
           return foodItem;
         }).toList();
 
-        emit(
-          FoodItemListLoaded(
-            foodItems: loadedFoodItems,
-          ),
-        );
-
         // 將讀取的所有食物存到 shared preferences
-        SharedPreferences.getInstance().then((prefs) {
+        await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
             loadedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
           );
         });
+
+        List<FoodItem> expiredFoodItems = loadedFoodItems
+            .where((foodItem) => foodItem.status == FoodItemStatus.expired)
+            .toList();
+
+        // 有過期的食物
+        if (expiredFoodItems.isNotEmpty) {
+          loadedFoodItems = loadedFoodItems
+              .where((foodItem) => foodItem.status != FoodItemStatus.expired)
+              .toList();
+          emit(FoodItemListNeedProcessing(
+            remainFoodItems: loadedFoodItems,
+            tempFoodItems: expiredFoodItems,
+          ));
+          return;
+        }
+
+        emit(
+          FoodItemListLoaded(
+            foodItems: loadedFoodItems,
+          ),
+        );
       },
     );
 
     on<FoodItemListLoad>((event, emit) async {
       // expiration date 小於 3 天的食物標記為即將過期並排序
-      List<FoodItem> processingFoodItems = event.foodItems.map((foodItem) {
+      List<FoodItem> loadedFoodItems = event.foodItems.map((foodItem) {
         if (foodItem.expirationDate.isBefore(
           DateTime.now().add(const Duration(days: 3)),
         )) {
@@ -80,7 +96,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
       // 標記過期的食物為已過期
-      processingFoodItems = processingFoodItems.map((foodItem) {
+      loadedFoodItems = loadedFoodItems.map((foodItem) {
         if (foodItem.expirationDate.isBefore(DateTime.now())) {
           return foodItem.copyWith(
               id: foodItem.id, status: FoodItemStatus.expired);
@@ -92,10 +108,27 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       await SharedPreferences.getInstance().then((prefs) {
         prefs.setStringList(
           'foodItems',
-          processingFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+          loadedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
         );
       });
-      emit(FoodItemListLoaded(foodItems: processingFoodItems));
+
+      // 有過期的食物
+      List<FoodItem> expiredFoodItems = loadedFoodItems
+          .where((foodItem) => foodItem.status == FoodItemStatus.expired)
+          .toList();
+
+      if (expiredFoodItems.isNotEmpty) {
+        loadedFoodItems = loadedFoodItems
+            .where((foodItem) => foodItem.status != FoodItemStatus.expired)
+            .toList();
+        emit(FoodItemListNeedProcessing(
+          remainFoodItems: loadedFoodItems,
+          tempFoodItems: expiredFoodItems,
+        ));
+        return;
+      }
+
+      emit(FoodItemListLoaded(foodItems: loadedFoodItems));
     });
 
     on<FoodItemListAdd>((event, emit) async {
