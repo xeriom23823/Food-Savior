@@ -70,6 +70,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
           emit(FoodItemListNeedProcessing(
             remainFoodItems: loadedFoodItems,
             tempFoodItems: expiredFoodItems,
+            isConsumed: List.filled(expiredFoodItems.length, false),
           ));
           return;
         }
@@ -124,6 +125,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         emit(FoodItemListNeedProcessing(
           remainFoodItems: loadedFoodItems,
           tempFoodItems: expiredFoodItems,
+          isConsumed: List.filled(expiredFoodItems.length, false),
         ));
         return;
       }
@@ -206,6 +208,44 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         });
 
         emit(FoodItemListLoaded(foodItems: updatedFoodItems));
+      }
+    });
+
+    on<FoodItemListProcessingUpdate>((event, emit) async {
+      if (state is FoodItemListNeedProcessing) {
+        final List<FoodItem> remainFoodItems =
+            (state as FoodItemListNeedProcessing).remainFoodItems;
+        final List<FoodItem> tempFoodItems =
+            (state as FoodItemListNeedProcessing).tempFoodItems;
+        List<bool> isConsumed =
+            (state as FoodItemListNeedProcessing).isConsumed;
+        emit(const FoodItemListLoading());
+
+        isConsumed[event.updateIndex] = !isConsumed[event.updateIndex];
+
+        emit(FoodItemListNeedProcessing(
+          remainFoodItems: remainFoodItems,
+          tempFoodItems: tempFoodItems,
+          isConsumed: isConsumed,
+        ));
+      }
+    });
+
+    on<FoodItemListProcessComplete>((event, emit) async {
+      if (state is FoodItemListNeedProcessing) {
+        final List<FoodItem> remainFoodItems =
+            (state as FoodItemListNeedProcessing).remainFoodItems;
+        emit(const FoodItemListLoading());
+
+        // 將所有食物存到 shared preferences
+        await SharedPreferences.getInstance().then((prefs) {
+          prefs.setStringList(
+            'foodItems',
+            remainFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+          );
+        });
+
+        emit(FoodItemListLoaded(foodItems: remainFoodItems));
       }
     });
 

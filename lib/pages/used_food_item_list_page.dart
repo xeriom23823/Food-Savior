@@ -30,7 +30,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.sizeOf(context).width * 0.4,
               child: Center(
                 child: Row(
                   children: [
@@ -102,13 +102,13 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
             return Column(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   color: Theme.of(context).appBarTheme.backgroundColor,
                   child: Row(
                     children: [
                       for (final day in selectedWeek) ...[
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 7,
+                          width: MediaQuery.sizeOf(context).width / 7,
                           child: Column(
                             children: [
                               Text(
@@ -146,8 +146,8 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                                   });
                                 },
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width / 7,
-                                  height: MediaQuery.of(context).size.width /
+                                  width: MediaQuery.sizeOf(context).width / 7,
+                                  height: MediaQuery.sizeOf(context).width /
                                       7 *
                                       0.8,
                                   margin:

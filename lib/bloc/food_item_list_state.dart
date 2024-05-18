@@ -18,8 +18,11 @@ final class FoodItemListLoading extends FoodItemListState {
 final class FoodItemListNeedProcessing extends FoodItemListState {
   final List<FoodItem> remainFoodItems;
   final List<FoodItem> tempFoodItems;
+  final List<bool> isConsumed;
   const FoodItemListNeedProcessing(
-      {required this.remainFoodItems, required this.tempFoodItems});
+      {required this.remainFoodItems,
+      required this.tempFoodItems,
+      required this.isConsumed});
 
   @override
   List<Object> get props => [remainFoodItems, tempFoodItems];

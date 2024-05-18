@@ -33,42 +33,148 @@ class _FoodItemListPageState extends State<FoodItemListPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context).foodItemListNavigationBarTitle,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimary,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: BlocConsumer<FoodItemListBloc, FoodItemListState>(
-        listener: (BuildContext context, FoodItemListState state) {
-          if (state is FoodItemListError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.white,
-                content: Text(
-                  state.message,
-                  style: const TextStyle(color: Colors.black),
+    return BlocConsumer<FoodItemListBloc, FoodItemListState>(
+      listener: (BuildContext context, FoodItemListState state) {
+        if (state is FoodItemListError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.white,
+              content: Text(
+                state.message,
+                style: const TextStyle(color: Colors.black),
+              ),
+            ),
+          );
+        }
+      },
+      builder: (BuildContext context, FoodItemListState state) {
+        if (state is FoodItemListInitial) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is FoodItemListLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is FoodItemListNeedProcessing) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                '過期食物清單',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            );
-          }
-        },
-        builder: (BuildContext context, FoodItemListState state) {
-          if (state is FoodItemListInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is FoodItemListLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is FoodItemListLoaded) {
-            return ListView.builder(
+            ),
+            body: Column(
+              children: [
+                // 標題欄位
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '食物資訊',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '是否過期',
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: state.tempFoodItems.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      FoodItem foodItem = state.tempFoodItems[index];
+                      bool isConsumed = state.isConsumed[index];
+                      return ListTile(
+                        title: Text(
+                            '${foodItem.name} (${foodItem.quantityWithUnit(context)})'),
+                        leading: Icon(foodItem.type.icon,
+                            color: foodItem.status.color),
+                        subtitle: Text(foodItem.description),
+                        trailing: IconButton(
+                          onPressed: () {
+                            context.read<FoodItemListBloc>().add(
+                                  FoodItemListProcessingUpdate(
+                                    updateIndex: index,
+                                  ),
+                                );
+                          },
+                          icon: Icon(
+                            isConsumed
+                                ? Icons.check_box
+                                : Icons.check_box_outline_blank,
+                            color: isConsumed
+                                ? FoodItemStatus.consumed.color
+                                : Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                // 處理完成按鈕
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      List<FoodItem> tempFoodItems = state.tempFoodItems;
+                      List<bool> isConsumed = state.isConsumed;
+                      List<UsedFoodItem> usedFoodItems = [];
+                      for (int i = 0; i < tempFoodItems.length; i++) {
+                        if (isConsumed[i]) {
+                          FoodItem foodItem = tempFoodItems[i];
+                          UsedFoodItem usedFoodItem = foodItem.toUsedFoodItem(
+                            id: _uuid.v4(),
+                            usedStatus: FoodItemStatus.consumed,
+                            usedDate: DateTime.now(),
+                            usedQuantity: foodItem.quantity,
+                          );
+                          usedFoodItems.add(usedFoodItem);
+                        }
+                      }
+
+                      context.read<UsedFoodItemListBloc>().add(
+                            UsedFoodItemListAddMultiple(
+                              usedFoodItems: usedFoodItems,
+                            ),
+                          );
+
+                      context.read<FoodItemListBloc>().add(
+                            FoodItemListProcessComplete(),
+                          );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50), // 按鈕的最小尺寸
+                    ),
+                    child: const Text('處理完成'),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (state is FoodItemListLoaded) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                AppLocalizations.of(context).foodItemListNavigationBarTitle,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            body: ListView.builder(
               itemCount: state.foodItems.length,
               itemBuilder: (BuildContext context, int index) {
                 final FoodItem foodItem = state.foodItems[index];
@@ -100,14 +206,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     children: [
                       SlidableAction(
                         onPressed: (_) async {
-                          // 取得會使用的 bloc
-                          final FoodItemListBloc foodItemListBloc =
-                              context.read<FoodItemListBloc>();
-                          final UsedFoodItemListBloc usedFoodItemListBloc =
-                              context.read<UsedFoodItemListBloc>();
-
                           // 建立新的用過的 FoodItem
-                          foodItemListBloc
+                          context
+                              .read<FoodItemListBloc>()
                               .add(FoodItemListRemove(foodItem: foodItem));
                           UsedFoodItem newUsedFoodItem =
                               foodItem.toUsedFoodItem(
@@ -117,8 +218,9 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                   usedQuantity: foodItem.quantity);
 
                           // 加入用過的 FoodItem 清單
-                          usedFoodItemListBloc.add(UsedFoodItemListAdd(
-                              usedFoodItem: newUsedFoodItem));
+                          context.read<UsedFoodItemListBloc>().add(
+                              UsedFoodItemListAdd(
+                                  usedFoodItem: newUsedFoodItem));
 
                           _slidableController.close();
 
@@ -254,34 +356,34 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                 );
               },
-            );
-          } else {
-            return Center(
-              child: Column(
-                children: [
-                  Text(AppLocalizations.of(context).foodItemListError),
-                  ElevatedButton(
-                    onPressed: () {
-                      context
-                          .read<FoodItemListBloc>()
-                          .add(FoodItemListLoadFromDevice());
-                    },
-                    child: Text(AppLocalizations.of(context).refresh),
-                  ),
-                ],
-              ),
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        onPressed: () {
-          _showAddFoodItemDialog(context);
-        },
-        child: const Icon(Icons.add),
-      ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).primaryColor,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              onPressed: () {
+                _showAddFoodItemDialog(context);
+              },
+              child: const Icon(Icons.add),
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              children: [
+                Text(AppLocalizations.of(context).foodItemListError),
+                ElevatedButton(
+                  onPressed: () {
+                    context
+                        .read<FoodItemListBloc>()
+                        .add(FoodItemListLoadFromDevice());
+                  },
+                  child: Text(AppLocalizations.of(context).refresh),
+                ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 
