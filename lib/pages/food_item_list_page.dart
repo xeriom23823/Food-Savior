@@ -131,16 +131,16 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       List<bool> isConsumed = state.isConsumed;
                       List<UsedFoodItem> usedFoodItems = [];
                       for (int i = 0; i < tempFoodItems.length; i++) {
-                        if (isConsumed[i]) {
-                          FoodItem foodItem = tempFoodItems[i];
-                          UsedFoodItem usedFoodItem = foodItem.toUsedFoodItem(
-                            id: _uuid.v4(),
-                            usedStatus: FoodItemStatus.consumed,
-                            usedDate: DateTime.now(),
-                            usedQuantity: foodItem.quantity,
-                          );
-                          usedFoodItems.add(usedFoodItem);
-                        }
+                        FoodItem foodItem = tempFoodItems[i];
+                        UsedFoodItem usedFoodItem = foodItem.toUsedFoodItem(
+                          id: _uuid.v4(),
+                          usedStatus: isConsumed[i]
+                              ? FoodItemStatus.consumed
+                              : FoodItemStatus.wasted,
+                          usedDate: DateTime.now(),
+                          usedQuantity: foodItem.quantity,
+                        );
+                        usedFoodItems.add(usedFoodItem);
                       }
 
                       context.read<UsedFoodItemListBloc>().add(
