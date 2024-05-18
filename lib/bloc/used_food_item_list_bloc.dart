@@ -88,6 +88,51 @@ class UsedFoodItemListBloc
       }
     });
 
+    on<UsedFoodItemListAddMultiple>((event, emit) async {
+      if (state is UsedFoodItemListLoaded) {
+        final List<UsedFoodItem> currentfoodItems =
+            (state as UsedFoodItemListLoaded).usedFoodItems;
+        emit(const UsedFoodItemListLoading());
+
+        // 確認當日的食物點數是否已經達到上限並添加至使用過食物列表
+        List<UsedFoodItem> updatedUsedFoodItems = [];
+        for (var usedFoodItem in event.usedFoodItems) {
+          final consumedDate = usedFoodItem.usedDate;
+          int consumedDateFoodPoint = 0;
+          for (var foodItem in currentfoodItems) {
+            if (foodItem.usedDate.year == consumedDate.year &&
+                foodItem.usedDate.month == consumedDate.month &&
+                foodItem.usedDate.day == consumedDate.day) {
+              consumedDateFoodPoint += foodItem.affectFoodPoint;
+            }
+          }
+
+          updatedUsedFoodItems.add(usedFoodItem.copyWith(
+            id: usedFoodItem.id,
+            affectFoodPoint: usedFoodItem.status == FoodItemStatus.consumed
+                ? consumedDateFoodPoint >= 10
+                    ? 0
+                    : 1
+                : -1,
+          ));
+        }
+
+        updatedUsedFoodItems.sort((a, b) => a.usedDate.compareTo(b.usedDate));
+
+        // 將新增的使用過食物存到 shared preferences
+        await SharedPreferences.getInstance().then((prefs) {
+          prefs.setStringList(
+            'usedFoodItems',
+            updatedUsedFoodItems
+                .map((usedFoodItem) => usedFoodItem.toJson())
+                .toList(),
+          );
+        });
+
+        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
+      }
+    });
+
     on<UsedFoodItemListRemove>((event, emit) async {
       if (state is UsedFoodItemListLoaded) {
         final List<UsedFoodItem> currentfoodItems =

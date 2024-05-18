@@ -40,8 +40,7 @@ class FoodSavior extends StatefulWidget {
 }
 
 class _FoodSaviorState extends State<FoodSavior> {
-  final _pageController = PageController(initialPage: 1);
-  final int _pageIndex = 2;
+  final _pageController = PageController(initialPage: 2);
 
   final List<Widget> _pages = const [
     UserPage(),
@@ -73,8 +72,8 @@ class _FoodSaviorState extends State<FoodSavior> {
           backgroundColor: Theme.of(context).primaryColor,
           color: Theme.of(context).colorScheme.onPrimary,
           buttonBackgroundColor: Theme.of(context).colorScheme.onPrimary,
-          index: _pageIndex,
           animationDuration: const Duration(milliseconds: 500),
+          index: 2,
           onTap: _onTabTapped,
           items: [
             CurvedNavigationBarItem(

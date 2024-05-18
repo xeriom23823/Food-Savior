@@ -30,7 +30,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
+              width: MediaQuery.sizeOf(context).width * 0.4,
               child: Center(
                 child: Row(
                   children: [
@@ -102,13 +102,13 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
             return Column(
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery.sizeOf(context).width,
                   color: Theme.of(context).appBarTheme.backgroundColor,
                   child: Row(
                     children: [
                       for (final day in selectedWeek) ...[
                         SizedBox(
-                          width: MediaQuery.of(context).size.width / 7,
+                          width: MediaQuery.sizeOf(context).width / 7,
                           child: Column(
                             children: [
                               Text(
@@ -119,40 +119,70 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                                   fontSize: 12,
                                 ),
                               ),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: (DateTime.now().day ==
-                                              day.day &&
-                                          DateTime.now().month == day.month &&
-                                          DateTime.now().year == day.year)
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .secondary
-                                          .withAlpha(50)
-                                      : Theme.of(context).colorScheme.secondary,
-                                  shape: CircleBorder(
-                                      side: day == selectedDate
-                                          ? BorderSide(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .onPrimary,
-                                              width: 2)
-                                          : BorderSide.none),
-                                ),
-                                onPressed: () {
+                              GestureDetector(
+                                onHorizontalDragEnd: (DragEndDetails details) {
+                                  // 通過滑動速度的方向判斷滑動方向
+                                  if (details.velocity.pixelsPerSecond.dx > 0) {
+                                    // 向右滑動，減少日期
+                                    setState(() {
+                                      selectedDate = selectedDate
+                                          .subtract(const Duration(days: 1));
+                                      updateSelectedWeek();
+                                    });
+                                  } else if (details
+                                          .velocity.pixelsPerSecond.dx <
+                                      0) {
+                                    // 向左滑動，增加日期
+                                    setState(() {
+                                      selectedDate = selectedDate
+                                          .add(const Duration(days: 1));
+                                      updateSelectedWeek();
+                                    });
+                                  }
+                                },
+                                onTap: () {
                                   setState(() {
                                     selectedDate = day;
                                   });
                                 },
-                                child: Text(
-                                  DateFormat('dd').format(day),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: day == selectedDate
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                    fontSize: 9.5,
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width / 7,
+                                  height: MediaQuery.sizeOf(context).width /
+                                      7 *
+                                      0.8,
+                                  margin:
+                                      const EdgeInsets.only(top: 5, bottom: 5),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: (DateTime.now().day == day.day &&
+                                            DateTime.now().month == day.month &&
+                                            DateTime.now().year == day.year)
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary
+                                            .withAlpha(100)
+                                        : Colors.transparent,
+                                    border: Border.all(
+                                      color: day == selectedDate
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary
+                                          : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      DateFormat('dd').format(day),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: day == selectedDate
+                                            ? FontWeight.bold
+                                            : FontWeight.normal,
+                                        fontSize: 16,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -267,6 +297,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
       if (value != null) {
         setState(() {
           selectedDate = value;
+          updateSelectedWeek();
         });
       }
     });

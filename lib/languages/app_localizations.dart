@@ -247,6 +247,27 @@ class AppLocalizations {
     );
   }
 
+  String get expireToday {
+    return Intl.message(
+      '今天',
+      name: 'expireToday',
+    );
+  }
+
+  String get expired {
+    return Intl.message(
+      '已過期',
+      name: 'expired',
+    );
+  }
+
+  String get days {
+    return Intl.message(
+      '天',
+      name: 'days',
+    );
+  }
+
   String get batchUse {
     return Intl.message(
       '批量使用',

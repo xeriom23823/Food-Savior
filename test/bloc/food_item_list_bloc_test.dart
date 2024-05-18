@@ -47,6 +47,7 @@ void main() {
       build: () => foodItemListBloc,
       act: (bloc) => bloc.add(FoodItemListRemove(foodItem: testFoodItem)),
       expect: () => [
+        FoodItemListLoaded(foodItems: [testFoodItem]),
         const FoodItemListLoading(),
         const FoodItemListLoaded(foodItems: []),
       ],
