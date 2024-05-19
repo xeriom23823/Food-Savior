@@ -71,6 +71,33 @@ extension FoodItemTypeExtension on FoodItemType {
         return AppLocalizations.of(context).foodItemTypeOthers;
     }
   }
+
+  Color get color {
+    switch (this) {
+      case FoodItemType.vegetable:
+        return Colors.green.shade300;
+      case FoodItemType.fruit:
+        return Colors.red.shade300;
+      case FoodItemType.meat:
+        return Colors.brown.shade300;
+      case FoodItemType.eggAndMilk:
+        return Colors.yellow.shade300;
+      case FoodItemType.seafood:
+        return Colors.blue.shade300;
+      case FoodItemType.cannedFood:
+        return Colors.grey.shade500;
+      case FoodItemType.cookedFood:
+        return Colors.orange.shade300;
+      case FoodItemType.drink:
+        return Colors.purple.shade300;
+      case FoodItemType.snack:
+        return Colors.pink.shade300;
+      case FoodItemType.bread:
+        return Colors.brown.shade300;
+      case FoodItemType.others:
+        return Colors.grey.shade500;
+    }
+  }
 }
 
 enum FoodItemStatus { fresh, nearExpired, expired, consumed, wasted }

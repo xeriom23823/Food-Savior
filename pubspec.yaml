@@ -39,6 +39,7 @@ dependencies:
   lottie: ^3.1.0
   uuid: ^4.4.0
   cloud_firestore: ^4.17.3
+  fl_chart: ^0.68.0
 
 dev_dependencies:
   flutter_test:
