@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "376153272412",
     "project_id": "foodsavior-792ee",
-    "storage_bucket": "foodsavior-792ee.appspot.com"
+    "storage_bucket": "foodsavior-792ee.firebasestorage.app"
   },
   "client": [
     {
