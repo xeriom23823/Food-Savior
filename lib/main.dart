@@ -17,6 +17,7 @@ import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
+import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
@@ -56,6 +57,9 @@ class FoodSavior extends StatefulWidget {
 
 class _FoodSaviorState extends State<FoodSavior> {
   final _pageController = PageController(initialPage: 2);
+  final _foodItemBox =
+      HiveManager.instance.getBoxService<FoodItem>('foodItem')!.box;
+  late final FoodItemRepository _foodItemRepository;
 
   final List<Widget> _pages = const [
     UserPage(),
@@ -66,11 +70,19 @@ class _FoodSaviorState extends State<FoodSavior> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _foodItemRepository = FoodItemRepository(foodItemBox: _foodItemBox);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<FoodItemListBloc>(
-          create: (BuildContext context) => FoodItemListBloc(),
+          create: (BuildContext context) => FoodItemListBloc(
+            foodItemRepository: _foodItemRepository,
+          ),
         ),
         BlocProvider<UsedFoodItemListBloc>(
           create: (BuildContext context) => UsedFoodItemListBloc(),

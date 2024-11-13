@@ -70,7 +70,6 @@ flutter:
     - assets/
     - assets/animations/
     - assets/icons/
-    - lib/languages/
 
   fonts:
     - family: NotoSansTC

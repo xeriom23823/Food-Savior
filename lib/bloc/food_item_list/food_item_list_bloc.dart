@@ -1,13 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'food_item_list_event.dart';
 part 'food_item_list_state.dart';
 
 class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
-  FoodItemListBloc() : super(const FoodItemListInitial()) {
+  final FoodItemRepository foodItemRepository;
+
+  FoodItemListBloc({required this.foodItemRepository})
+      : super(const FoodItemListInitial()) {
     on<FoodItemListLoadFromDevice>(
       (event, emit) async {
         emit(const FoodItemListLoading());

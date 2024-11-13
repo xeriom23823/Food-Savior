@@ -128,7 +128,7 @@ class UserPage extends StatelessWidget {
     if (backupDoc.exists) {
       // 將 JSON 格式的數據轉換回 FoodItem 對象
       List<FoodItem> foodItems = (backupDoc['foodItems'] as List)
-          .map((foodItemJson) => FoodItem.fromJson(foodItemJson))
+          .map((foodItemJson) => FoodItem.fromJsonString(foodItemJson))
           .toList();
 
       // 將 JSON 格式的數據轉換回 UsedFoodItem 對象

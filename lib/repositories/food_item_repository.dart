@@ -48,12 +48,57 @@ class FoodItemRepository {
         .toList();
   }
 
-// 依狀態篩選食物項目
+  // 依狀態篩選食物項目
   List<FoodItem> filterByStatus(FoodItemStatus status) {
     return foodItemBox
         .getAll(foodItemBox.keys)
         .where((item) => item != null && item.status == status)
         .cast<FoodItem>()
+        .toList();
+  }
+
+  // 取得所有食物項目（包含狀態更新）
+  List<FoodItem> getAllFoodItemsWithStatus() {
+    List<FoodItem> items = getAllFoodItems();
+
+    // 更新食物狀態
+    items = items.map((foodItem) {
+      // 檢查是否即將過期（3天內）
+      if (foodItem.expirationDate.isBefore(
+        DateTime.now().add(const Duration(days: 3)),
+      )) {
+        return foodItem.copyWith(
+          id: foodItem.id,
+          status: FoodItemStatus.nearExpired,
+        );
+      }
+      // 檢查是否已過期
+      if (foodItem.expirationDate.isBefore(DateTime.now())) {
+        return foodItem.copyWith(
+          id: foodItem.id,
+          status: FoodItemStatus.expired,
+        );
+      }
+      return foodItem;
+    }).toList();
+
+    // 依過期日期排序
+    items.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+
+    return items;
+  }
+
+  // 取得過期食物項目
+  List<FoodItem> getExpiredFoodItems() {
+    return getAllFoodItemsWithStatus()
+        .where((item) => item.status == FoodItemStatus.expired)
+        .toList();
+  }
+
+  // 取得未過期食物項目
+  List<FoodItem> getNonExpiredFoodItems() {
+    return getAllFoodItemsWithStatus()
+        .where((item) => item.status != FoodItemStatus.expired)
         .toList();
   }
 
