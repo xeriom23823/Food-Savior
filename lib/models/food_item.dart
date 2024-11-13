@@ -368,6 +368,40 @@ class UsedFoodItem extends FoodItem {
     );
   }
 
+  // 將 UsedFoodItem 物件轉換為 JSON
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json.addAll({
+      'usedDate': usedDate.toIso8601String(),
+      'affectFoodPoint': affectFoodPoint,
+    });
+    return json;
+  }
+
+  // 從 JSON 創建一個 UsedFoodItem 物件
+  factory UsedFoodItem.fromJson(Map<String, dynamic> data) {
+    return UsedFoodItem(
+      id: data['id'],
+      name: data['name'],
+      type: FoodItemType.values.firstWhere(
+        (e) => e.toString() == data['type'],
+      ),
+      status: FoodItemStatus.values.firstWhere(
+        (e) => e.toString() == data['status'],
+      ),
+      quantity: data['quantity'],
+      unit: Unit.values.firstWhere(
+        (e) => e.toString() == data['unit'],
+      ),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+      usedDate: DateTime.parse(data['usedDate']),
+      affectFoodPoint: data['affectFoodPoint'] ?? 0,
+    );
+  }
+
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override
   String toJsonString() => json.encode({

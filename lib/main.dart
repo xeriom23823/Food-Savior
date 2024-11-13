@@ -18,6 +18,7 @@ import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
 import 'package:food_savior/repositories/food_item_repository.dart';
+import 'package:food_savior/repositories/used_food_item_repository.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
@@ -33,7 +34,10 @@ void main() async {
   final directory = await getApplicationDocumentsDirectory();
   await hiveManager.init(
     hiveBoxes: [
-      HiveBoxService<FoodItem>(boxName: 'foodItem', fromJson: FoodItem.fromJson)
+      HiveBoxService<FoodItem>(
+          boxName: 'foodItem', fromJson: FoodItem.fromJson),
+      HiveBoxService<UsedFoodItem>(
+          boxName: 'usedFoodItem', fromJson: UsedFoodItem.fromJson),
     ],
     dir: directory,
     isarLibPath: null,
@@ -60,6 +64,7 @@ class _FoodSaviorState extends State<FoodSavior> {
   final _foodItemBox =
       HiveManager.instance.getBoxService<FoodItem>('foodItem')!.box;
   late final FoodItemRepository _foodItemRepository;
+  late final UsedFoodItemRepository _usedFoodItemRepository;
 
   final List<Widget> _pages = const [
     UserPage(),
@@ -73,6 +78,10 @@ class _FoodSaviorState extends State<FoodSavior> {
   void initState() {
     super.initState();
     _foodItemRepository = FoodItemRepository(foodItemBox: _foodItemBox);
+    _usedFoodItemRepository = UsedFoodItemRepository(
+      usedFoodItemBox:
+          HiveManager.instance.getBoxService<UsedFoodItem>('usedFoodItem')!.box,
+    );
   }
 
   @override
@@ -85,7 +94,9 @@ class _FoodSaviorState extends State<FoodSavior> {
           ),
         ),
         BlocProvider<UsedFoodItemListBloc>(
-          create: (BuildContext context) => UsedFoodItemListBloc(),
+          create: (BuildContext context) => UsedFoodItemListBloc(
+            usedFoodItemRepository: _usedFoodItemRepository,
+          ),
         ),
       ],
       child: Scaffold(

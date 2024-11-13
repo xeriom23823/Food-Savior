@@ -16,55 +16,12 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       (event, emit) async {
         emit(const FoodItemListLoading());
 
-        // 若 shared preferences 有食物資料，則讀取並顯示
+        // 從 Hive 取得所有食物項目
         List<FoodItem> loadedFoodItems =
-            await SharedPreferences.getInstance().then(
-          (prefs) {
-            final List<String> foodItemsJson =
-                prefs.getStringList('foodItems') ?? <String>[];
-            return foodItemsJson
-                .map((foodItemJson) => FoodItem.fromJsonString(foodItemJson))
-                .toList();
-          },
-        );
+            foodItemRepository.getNonExpiredFoodItems();
 
-        if (loadedFoodItems.isEmpty) {
-          emit(const FoodItemListLoaded(foodItems: []));
-          return;
-        }
-
-        // expiration date 小於 3 天的食物標記為即將過期並排序
-        loadedFoodItems = loadedFoodItems.map((foodItem) {
-          if (foodItem.expirationDate.isBefore(
-            DateTime.now().add(const Duration(days: 3)),
-          )) {
-            return foodItem.copyWith(
-                id: foodItem.id, status: FoodItemStatus.nearExpired);
-          }
-          return foodItem;
-        }).toList()
-          ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
-
-        // 標記過期的食物為已過期
-        loadedFoodItems = loadedFoodItems.map((foodItem) {
-          if (foodItem.expirationDate.isBefore(DateTime.now())) {
-            return foodItem.copyWith(
-                id: foodItem.id, status: FoodItemStatus.expired);
-          }
-          return foodItem;
-        }).toList();
-
-        // 將讀取的所有食物存到 shared preferences
-        await SharedPreferences.getInstance().then((prefs) {
-          prefs.setStringList(
-            'foodItems',
-            loadedFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
-          );
-        });
-
-        List<FoodItem> expiredFoodItems = loadedFoodItems
-            .where((foodItem) => foodItem.status == FoodItemStatus.expired)
-            .toList();
+        List<FoodItem> expiredFoodItems =
+            foodItemRepository.getExpiredFoodItems();
 
         // 有過期的食物
         if (expiredFoodItems.isNotEmpty) {

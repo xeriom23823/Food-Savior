@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:food_savior/repositories/used_food_item_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'used_food_item_list_event.dart';
@@ -8,7 +9,9 @@ part 'used_food_item_list_state.dart';
 
 class UsedFoodItemListBloc
     extends Bloc<UsedFoodItemListEvent, UsedFoodItemListState> {
-  UsedFoodItemListBloc() : super(const UsedFoodItemListInitial()) {
+  final UsedFoodItemRepository usedFoodItemRepository;
+  UsedFoodItemListBloc({required this.usedFoodItemRepository})
+      : super(const UsedFoodItemListInitial()) {
     on<UsedFoodItemListLoadFromDevice>((event, emit) async {
       emit(const UsedFoodItemListLoading());
 
