@@ -20,7 +20,7 @@ class UsedFoodItemListBloc
               prefs.getStringList('usedFoodItems') ?? [];
           return usedFoodItemsJson
               .map((usedFoodItemsJson) =>
-                  UsedFoodItem.fromJson(usedFoodItemsJson))
+                  UsedFoodItem.fromJsonString(usedFoodItemsJson))
               .toList();
         },
       );
@@ -37,7 +37,9 @@ class UsedFoodItemListBloc
       await SharedPreferences.getInstance().then((prefs) {
         prefs.setStringList(
           'usedFoodItems',
-          event.usedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+          event.usedFoodItems
+              .map((foodItem) => foodItem.toJsonString())
+              .toList(),
         );
       });
 
@@ -79,7 +81,7 @@ class UsedFoodItemListBloc
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
-                .map((usedFoodItem) => usedFoodItem.toJson())
+                .map((usedFoodItem) => usedFoodItem.toJsonString())
                 .toList(),
           );
         });
@@ -124,7 +126,7 @@ class UsedFoodItemListBloc
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
-                .map((usedFoodItem) => usedFoodItem.toJson())
+                .map((usedFoodItem) => usedFoodItem.toJsonString())
                 .toList(),
           );
         });
@@ -148,7 +150,7 @@ class UsedFoodItemListBloc
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
-                .map((usedFoodItem) => usedFoodItem.toJson())
+                .map((usedFoodItem) => usedFoodItem.toJsonString())
                 .toList(),
           );
         });
@@ -175,7 +177,7 @@ class UsedFoodItemListBloc
           prefs.setStringList(
             'usedFoodItems',
             updatedUsedFoodItems
-                .map((usedFoodItem) => usedFoodItem.toJson())
+                .map((usedFoodItem) => usedFoodItem.toJsonString())
                 .toList(),
           );
         });

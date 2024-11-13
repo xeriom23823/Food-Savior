@@ -96,11 +96,12 @@ class UserPage extends StatelessWidget {
 
     // 將 foodItemList 轉換為 JSON 格式
     final List<String> foodItemsJson =
-        foodItemList.map((foodItem) => foodItem.toJson()).toList();
+        foodItemList.map((foodItem) => foodItem.toJsonString()).toList();
 
     // 將 usedFoodItemList 轉換為 JSON 格式
-    final List<String> usedFoodItemsJson =
-        usedFoodItemList.map((usedFoodItem) => usedFoodItem.toJson()).toList();
+    final List<String> usedFoodItemsJson = usedFoodItemList
+        .map((usedFoodItem) => usedFoodItem.toJsonString())
+        .toList();
 
     // 確認 Firestore 中是否已有該用戶的備份資料
     final DocumentSnapshot backupDoc =
@@ -132,7 +133,8 @@ class UserPage extends StatelessWidget {
 
       // 將 JSON 格式的數據轉換回 UsedFoodItem 對象
       List<UsedFoodItem> usedFoodItems = (backupDoc['usedFoodItems'] as List)
-          .map((usedFoodItemJson) => UsedFoodItem.fromJson(usedFoodItemJson))
+          .map((usedFoodItemJson) =>
+              UsedFoodItem.fromJsonString(usedFoodItemJson))
           .toList();
 
       // 返回 foodItems 和 usedFoodItems
