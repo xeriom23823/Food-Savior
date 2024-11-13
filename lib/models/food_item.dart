@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:convert';
 
@@ -48,27 +48,27 @@ extension FoodItemTypeExtension on FoodItemType {
   String name(BuildContext context) {
     switch (this) {
       case FoodItemType.vegetable:
-        return AppLocalizations.of(context).foodItemTypeVegetable;
+        return S.of(context).foodItemTypeVegetable;
       case FoodItemType.fruit:
-        return AppLocalizations.of(context).foodItemTypeFruit;
+        return S.of(context).foodItemTypeFruit;
       case FoodItemType.meat:
-        return AppLocalizations.of(context).foodItemTypeMeat;
+        return S.of(context).foodItemTypeMeat;
       case FoodItemType.eggAndMilk:
-        return AppLocalizations.of(context).foodItemTypeEggAndMilk;
+        return S.of(context).foodItemTypeEggAndMilk;
       case FoodItemType.seafood:
-        return AppLocalizations.of(context).foodItemTypeSeafood;
+        return S.of(context).foodItemTypeSeafood;
       case FoodItemType.cannedFood:
-        return AppLocalizations.of(context).foodItemTypeCannedFood;
+        return S.of(context).foodItemTypeCannedFood;
       case FoodItemType.cookedFood:
-        return AppLocalizations.of(context).foodItemTypeCookedFood;
+        return S.of(context).foodItemTypeCookedFood;
       case FoodItemType.drink:
-        return AppLocalizations.of(context).foodItemTypeDrink;
+        return S.of(context).foodItemTypeDrink;
       case FoodItemType.snack:
-        return AppLocalizations.of(context).foodItemTypeSnack;
+        return S.of(context).foodItemTypeSnack;
       case FoodItemType.bread:
-        return AppLocalizations.of(context).foodItemTypeBread;
+        return S.of(context).foodItemTypeBread;
       case FoodItemType.others:
-        return AppLocalizations.of(context).foodItemTypeOthers;
+        return S.of(context).foodItemTypeOthers;
     }
   }
 
@@ -123,17 +123,17 @@ extension FoodItemStatusExtension on FoodItemStatus {
   String name(BuildContext context) {
     switch (this) {
       case FoodItemStatus.fresh:
-        return AppLocalizations.of(context).foodItemStatusFresh;
+        return S.of(context).foodItemStatusFresh;
       case FoodItemStatus.nearExpired:
-        return AppLocalizations.of(context).foodItemStatusNearExpired;
+        return S.of(context).foodItemStatusNearExpired;
       case FoodItemStatus.expired:
-        return AppLocalizations.of(context).foodItemStatusExpired;
+        return S.of(context).foodItemStatusExpired;
       case FoodItemStatus.consumed:
-        return AppLocalizations.of(context).foodItemStatusConsumed;
+        return S.of(context).foodItemStatusConsumed;
       case FoodItemStatus.wasted:
-        return AppLocalizations.of(context).foodItemStatusWasted;
+        return S.of(context).foodItemStatusWasted;
       default:
-        return AppLocalizations.of(context).foodItemStatusUnknown;
+        return S.of(context).foodItemStatusUnknown;
     }
   }
 }
@@ -144,11 +144,11 @@ extension UnitExtension on Unit {
   String name(BuildContext context) {
     switch (this) {
       case Unit.gram:
-        return AppLocalizations.of(context).unitGram;
+        return S.of(context).unitGram;
       case Unit.milliliter:
-        return AppLocalizations.of(context).unitMilliliter;
+        return S.of(context).unitMilliliter;
       case Unit.piece:
-        return AppLocalizations.of(context).unitPiece;
+        return S.of(context).unitPiece;
     }
   }
 }

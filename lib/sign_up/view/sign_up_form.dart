@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
 
@@ -20,8 +20,7 @@ class SignUpForm extends StatelessWidget {
               SnackBar(
                 backgroundColor: Colors.white,
                 content: Text(
-                  state.errorMessage ??
-                      AppLocalizations.of(context).signUpFailure,
+                  state.errorMessage ?? S.of(context).signUpFailure,
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
@@ -61,7 +60,7 @@ class _EmailInput extends StatelessWidget {
             labelText: 'email',
             helperText: '',
             errorText: state.email.displayError != null
-                ? AppLocalizations.of(context).invalidEmail
+                ? S.of(context).invalidEmail
                 : null,
           ),
         );
@@ -85,7 +84,7 @@ class _PasswordInput extends StatelessWidget {
             labelText: 'password',
             helperText: '',
             errorText: state.password.displayError != null
-                ? AppLocalizations.of(context).invalidPassword
+                ? S.of(context).invalidPassword
                 : null,
           ),
         );
@@ -109,10 +108,10 @@ class _ConfirmPasswordInput extends StatelessWidget {
               .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
           decoration: InputDecoration(
-            labelText: AppLocalizations.of(context).confirmPassword,
+            labelText: S.of(context).confirmPassword,
             helperText: '',
             errorText: state.confirmedPassword.displayError != null
-                ? AppLocalizations.of(context).passwordsDoNotMatch
+                ? S.of(context).passwordsDoNotMatch
                 : null,
           ),
         );
@@ -139,7 +138,7 @@ class _SignUpButton extends StatelessWidget {
                 onPressed: state.isValid
                     ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
-                child: Text(AppLocalizations.of(context).signUp),
+                child: Text(S.of(context).signUp),
               );
       },
     );

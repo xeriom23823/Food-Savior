@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:food_savior/bloc/theme_cubit.dart';
+import 'package:food_savior/cubits/theme_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

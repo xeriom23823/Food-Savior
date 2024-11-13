@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:food_savior/app/app.dart';
-import 'package:food_savior/bloc/locale_cubit.dart';
-import 'package:food_savior/bloc/theme_cubit.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/cubits/locale_cubit.dart';
+import 'package:food_savior/cubits/theme_cubit.dart';
+import 'package:food_savior/generated/l10n.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -48,28 +48,12 @@ class AppView extends StatelessWidget {
                 debugShowCheckedModeBanner: false,
                 locale: locale,
                 localizationsDelegates: const [
-                  AppLocalizationsDelegate(),
+                  S.delegate,
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
                 ],
-                supportedLocales: const [
-                  Locale('zh', 'TW'),
-                  Locale('en', 'US'),
-                ],
-                localeResolutionCallback: (locale, supportedLocales) {
-                  if (locale == null) {
-                    return supportedLocales.first;
-                  }
-                  for (var supportedLocale in supportedLocales) {
-                    if (supportedLocale.languageCode == locale.languageCode &&
-                        supportedLocale.countryCode == locale.countryCode) {
-                      return supportedLocale;
-                    }
-                  }
-                  return supportedLocales.first;
-                },
-                title: AppLocalizations.of(context).title,
+                supportedLocales: S.delegate.supportedLocales,
                 theme: theme,
                 home: FlowBuilder<AppStatus>(
                   state: context.select((AppBloc bloc) => bloc.state.status),

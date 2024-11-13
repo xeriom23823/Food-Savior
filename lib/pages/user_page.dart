@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_savior/app/bloc/app_bloc.dart';
-import 'package:food_savior/bloc/food_item_list_bloc.dart';
-import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/widgets/avatar.dart';
 
@@ -18,7 +18,7 @@ class UserPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).userPageTitle,
+          S.of(context).userPageTitle,
           style: TextStyle(
             color: Theme.of(context).colorScheme.onPrimary,
             fontSize: 20,
