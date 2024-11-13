@@ -231,7 +231,7 @@ class FoodItem {
   }
 
   // 將 FoodItem 物件轉換為 JSON 字符串
-  String toJson() => json.encode({
+  String toJsonString() => json.encode({
         'id': id,
         'name': name,
         'type': type.toString(),
@@ -244,7 +244,7 @@ class FoodItem {
       });
 
   // 從 JSON 字符串創建一個 FoodItem 物件
-  static FoodItem fromJson(String jsonString) {
+  static FoodItem fromJsonString(String jsonString) {
     final data = json.decode(jsonString);
     return FoodItem(
       id: data['id'],
@@ -263,6 +263,40 @@ class FoodItem {
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
     );
+  }
+
+  factory FoodItem.fromJson(Map<String, dynamic> data) {
+    return FoodItem(
+      id: data['id'],
+      name: data['name'],
+      type: FoodItemType.values.firstWhere(
+        (e) => e.toString() == data['type'],
+      ),
+      status: FoodItemStatus.values.firstWhere(
+        (e) => e.toString() == data['status'],
+      ),
+      quantity: data['quantity'],
+      unit: Unit.values.firstWhere(
+        (e) => e.toString() == data['unit'],
+      ),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'type': type.toString(),
+      'status': status.toString(),
+      'quantity': quantity,
+      'unit': unit.toString(),
+      'description': description,
+      'storageDate': storageDate.toIso8601String(),
+      'expirationDate': expirationDate.toIso8601String(),
+    };
   }
 
   // 複寫 == 運算符，以便在比較 FoodItem 物件時使用
@@ -336,7 +370,7 @@ class UsedFoodItem extends FoodItem {
 
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override
-  String toJson() => json.encode({
+  String toJsonString() => json.encode({
         'id': id,
         'name': name,
         'type': type.toString(),
@@ -351,7 +385,7 @@ class UsedFoodItem extends FoodItem {
       });
 
   // 從 JSON 字符串創建一個 UsedFoodItem 物件
-  static UsedFoodItem fromJson(String jsonString) {
+  static UsedFoodItem fromJsonString(String jsonString) {
     final data = json.decode(jsonString);
     return UsedFoodItem(
       id: data['id'],

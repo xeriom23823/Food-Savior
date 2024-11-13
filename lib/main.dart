@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bee_hive/bee_hive.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,11 +11,13 @@ import 'package:food_savior/bloc/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/pages/char_and_statistics_page.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +25,18 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
+
+  final hiveManager = HiveManager.instance;
+  final directory = await getApplicationDocumentsDirectory();
+  await hiveManager.init(
+    hiveBoxes: [
+      HiveBoxService<FoodItem>(boxName: 'foodItem', fromJson: FoodItem.fromJson)
+    ],
+    dir: directory,
+    isarLibPath: null,
+  );
+
+  hiveManager.allBoxes;
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {

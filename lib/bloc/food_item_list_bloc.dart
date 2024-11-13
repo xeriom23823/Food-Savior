@@ -19,7 +19,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
             final List<String> foodItemsJson =
                 prefs.getStringList('foodItems') ?? <String>[];
             return foodItemsJson
-                .map((foodItemJson) => FoodItem.fromJson(foodItemJson))
+                .map((foodItemJson) => FoodItem.fromJsonString(foodItemJson))
                 .toList();
           },
         );
@@ -54,7 +54,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
-            loadedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+            loadedFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
           );
         });
 
@@ -109,7 +109,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       await SharedPreferences.getInstance().then((prefs) {
         prefs.setStringList(
           'foodItems',
-          loadedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+          loadedFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
         );
       });
 
@@ -156,7 +156,9 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
-            updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+            updatedFoodItems
+                .map((foodItem) => foodItem.toJsonString())
+                .toList(),
           );
         });
 
@@ -178,7 +180,9 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
-            updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+            updatedFoodItems
+                .map((foodItem) => foodItem.toJsonString())
+                .toList(),
           );
         });
 
@@ -203,7 +207,9 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
-            updatedFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+            updatedFoodItems
+                .map((foodItem) => foodItem.toJsonString())
+                .toList(),
           );
         });
 
@@ -241,7 +247,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         await SharedPreferences.getInstance().then((prefs) {
           prefs.setStringList(
             'foodItems',
-            remainFoodItems.map((foodItem) => foodItem.toJson()).toList(),
+            remainFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
           );
         });
 
