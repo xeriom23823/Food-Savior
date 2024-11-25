@@ -65,12 +65,6 @@ class _FoodSaviorState extends State<FoodSavior> {
     SettingsPage()
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    _openBoxes();
-  }
-
   Future<void> _openBoxes() async {
     _foodItemBox = await Hive.openBox('foodItem');
     _usedFoodItemBox = await Hive.openBox('usedFoodItem');
@@ -78,64 +72,80 @@ class _FoodSaviorState extends State<FoodSavior> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        RepositoryProvider(
-          create: (context) => FoodItemRepository(foodItemBox: _foodItemBox),
-          child: BlocProvider<FoodItemListBloc>(
-            create: (BuildContext context) => FoodItemListBloc(
-              foodItemRepository: context.read<FoodItemRepository>(),
+    return FutureBuilder(
+      future: _openBoxes(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MultiRepositoryProvider(
+            providers: [
+              RepositoryProvider(
+                create: (context) =>
+                    FoodItemRepository(foodItemBox: _foodItemBox),
+              ),
+              RepositoryProvider(
+                create: (context) =>
+                    UsedFoodItemRepository(usedFoodItemBox: _usedFoodItemBox),
+              ),
+            ],
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<FoodItemListBloc>(
+                  create: (context) => FoodItemListBloc(
+                    foodItemRepository: context.read<FoodItemRepository>(),
+                  ),
+                ),
+                BlocProvider<UsedFoodItemListBloc>(
+                  create: (context) => UsedFoodItemListBloc(
+                    usedFoodItemRepository:
+                        context.read<UsedFoodItemRepository>(),
+                  ),
+                ),
+              ],
+              child: Scaffold(
+                body: PageView(
+                  controller: _pageController,
+                  onPageChanged: null,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: _pages,
+                ),
+                bottomNavigationBar: CurvedNavigationBar(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  buttonBackgroundColor:
+                      Theme.of(context).colorScheme.onPrimary,
+                  animationDuration: const Duration(milliseconds: 500),
+                  index: 2,
+                  onTap: _onTabTapped,
+                  items: [
+                    CurvedNavigationBarItem(
+                      child: const Icon(Icons.person),
+                      label: S.of(context).userNavigationBarTitle,
+                    ),
+                    CurvedNavigationBarItem(
+                      child: const Icon(Icons.bar_chart),
+                      label: S.of(context).chartAndStatisticsNavigationBarTitle,
+                    ),
+                    CurvedNavigationBarItem(
+                      child: const Icon(Icons.food_bank),
+                      label: S.of(context).foodItemListNavigationBarTitle,
+                    ),
+                    CurvedNavigationBarItem(
+                      child: const Icon(Icons.history),
+                      label: S.of(context).usedFoodItemListNavigationBarTitle,
+                    ),
+                    CurvedNavigationBarItem(
+                      child: const Icon(Icons.settings),
+                      label: S.of(context).settingsNavigationBarTitle,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ),
-        RepositoryProvider(
-          create: (context) =>
-              UsedFoodItemRepository(usedFoodItemBox: _usedFoodItemBox),
-          child: BlocProvider<UsedFoodItemListBloc>(
-            create: (BuildContext context) => UsedFoodItemListBloc(
-              usedFoodItemRepository: context.read<UsedFoodItemRepository>(),
-            ),
-          ),
-        ),
-      ],
-      child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: null,
-          physics: const NeverScrollableScrollPhysics(),
-          children: _pages,
-        ),
-        bottomNavigationBar: CurvedNavigationBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          color: Theme.of(context).colorScheme.onPrimary,
-          buttonBackgroundColor: Theme.of(context).colorScheme.onPrimary,
-          animationDuration: const Duration(milliseconds: 500),
-          index: 2,
-          onTap: _onTabTapped,
-          items: [
-            CurvedNavigationBarItem(
-              child: const Icon(Icons.person),
-              label: S.of(context).userNavigationBarTitle,
-            ),
-            CurvedNavigationBarItem(
-              child: const Icon(Icons.bar_chart),
-              label: S.of(context).chartAndStatisticsNavigationBarTitle,
-            ),
-            CurvedNavigationBarItem(
-              child: const Icon(Icons.food_bank),
-              label: S.of(context).foodItemListNavigationBarTitle,
-            ),
-            CurvedNavigationBarItem(
-              child: const Icon(Icons.history),
-              label: S.of(context).usedFoodItemListNavigationBarTitle,
-            ),
-            CurvedNavigationBarItem(
-              child: const Icon(Icons.settings),
-              label: S.of(context).settingsNavigationBarTitle,
-            ),
-          ],
-        ),
-      ),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 
