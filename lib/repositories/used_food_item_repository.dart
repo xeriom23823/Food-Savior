@@ -1,5 +1,5 @@
-import 'package:hive/hive.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:hive_ce/hive.dart';
 
 class UsedFoodItemRepository {
   final Box<UsedFoodItem> usedFoodItemBox;
@@ -8,11 +8,7 @@ class UsedFoodItemRepository {
 
   // 取得所有已使用的食物項目
   List<UsedFoodItem> getAllUsedFoodItems() {
-    return usedFoodItemBox
-        .getAll(usedFoodItemBox.keys)
-        .where((item) => item != null)
-        .cast<UsedFoodItem>()
-        .toList();
+    return usedFoodItemBox.values.toList();
   }
 
   // 依照 ID 取得已使用的食物項目
@@ -32,10 +28,9 @@ class UsedFoodItemRepository {
 
   // 依照名稱篩選已使用的食物項目
   List<UsedFoodItem> filterByName(String name) {
-    return usedFoodItemBox
-        .getAll(usedFoodItemBox.keys)
+    return usedFoodItemBox.values
         .where((item) {
-          return item != null && item.name.contains(name);
+          return item.name.contains(name);
         })
         .cast<UsedFoodItem>()
         .toList();
@@ -43,10 +38,9 @@ class UsedFoodItemRepository {
 
   // 依類型篩選已使用的食物項目
   List<UsedFoodItem> filterByType(FoodItemType type) {
-    return usedFoodItemBox
-        .getAll(usedFoodItemBox.keys)
+    return usedFoodItemBox.values
         .where((item) {
-          return item != null && item.type == type;
+          return item.type == type;
         })
         .cast<UsedFoodItem>()
         .toList();
@@ -54,10 +48,9 @@ class UsedFoodItemRepository {
 
   // 依狀態篩選已使用的食物項目
   List<UsedFoodItem> filterByStatus(FoodItemStatus status) {
-    return usedFoodItemBox
-        .getAll(usedFoodItemBox.keys)
+    return usedFoodItemBox.values
         .where((item) {
-          return item != null && item.status == status;
+          return item.status == status;
         })
         .cast<UsedFoodItem>()
         .toList();

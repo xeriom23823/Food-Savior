@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_savior/generated/l10n.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:convert';
 
@@ -153,7 +154,7 @@ extension UnitExtension on Unit {
   }
 }
 
-class FoodItem {
+class FoodItem extends HiveObject {
   final String id;
   final String name;
   final FoodItemType type;

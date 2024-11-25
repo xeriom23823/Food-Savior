@@ -1,1 +1,5 @@
 flutter/ephemeral
+
+# generated files
+GeneratedPluginRegistrant.*
+generated_plugin_registrant.*

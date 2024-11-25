@@ -32,3 +32,8 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# generated files
+GeneratedPluginRegistrant.*
+generated_plugin_registrant.*
+PodFile.lock

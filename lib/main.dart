@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:bee_hive/bee_hive.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,6 +10,7 @@ import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/generated/l10n.dart';
+import 'package:food_savior/hive/hive_registrar.g.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/pages/char_and_statistics_page.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
@@ -19,6 +19,7 @@ import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
 import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:food_savior/repositories/used_food_item_repository.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() async {
@@ -30,18 +31,10 @@ void main() async {
   await authenticationRepository.user.first;
 
   // 初始化 Hive & Boxes
-  final hiveManager = HiveManager.instance;
   final directory = await getApplicationDocumentsDirectory();
-  await hiveManager.init(
-    hiveBoxes: [
-      HiveBoxService<FoodItem>(
-          boxName: 'foodItem', fromJson: FoodItem.fromJson),
-      HiveBoxService<UsedFoodItem>(
-          boxName: 'usedFoodItem', fromJson: UsedFoodItem.fromJson),
-    ],
-    dir: directory,
-    isarLibPath: null,
-  );
+  Hive
+    ..init(directory.path)
+    ..registerAdapters();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
@@ -61,10 +54,8 @@ class FoodSavior extends StatefulWidget {
 
 class _FoodSaviorState extends State<FoodSavior> {
   final _pageController = PageController(initialPage: 2);
-  final _foodItemBox =
-      HiveManager.instance.getBoxService<FoodItem>('foodItem')!.box;
-  late final FoodItemRepository _foodItemRepository;
-  late final UsedFoodItemRepository _usedFoodItemRepository;
+  late final Box<FoodItem> _foodItemBox;
+  late final Box<UsedFoodItem> _usedFoodItemBox;
 
   final List<Widget> _pages = const [
     UserPage(),
@@ -77,25 +68,33 @@ class _FoodSaviorState extends State<FoodSavior> {
   @override
   void initState() {
     super.initState();
-    _foodItemRepository = FoodItemRepository(foodItemBox: _foodItemBox);
-    _usedFoodItemRepository = UsedFoodItemRepository(
-      usedFoodItemBox:
-          HiveManager.instance.getBoxService<UsedFoodItem>('usedFoodItem')!.box,
-    );
+    _openBoxes();
+  }
+
+  Future<void> _openBoxes() async {
+    _foodItemBox = await Hive.openBox('foodItem');
+    _usedFoodItemBox = await Hive.openBox('usedFoodItem');
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<FoodItemListBloc>(
-          create: (BuildContext context) => FoodItemListBloc(
-            foodItemRepository: _foodItemRepository,
+        RepositoryProvider(
+          create: (context) => FoodItemRepository(foodItemBox: _foodItemBox),
+          child: BlocProvider<FoodItemListBloc>(
+            create: (BuildContext context) => FoodItemListBloc(
+              foodItemRepository: context.read<FoodItemRepository>(),
+            ),
           ),
         ),
-        BlocProvider<UsedFoodItemListBloc>(
-          create: (BuildContext context) => UsedFoodItemListBloc(
-            usedFoodItemRepository: _usedFoodItemRepository,
+        RepositoryProvider(
+          create: (context) =>
+              UsedFoodItemRepository(usedFoodItemBox: _usedFoodItemBox),
+          child: BlocProvider<UsedFoodItemListBloc>(
+            create: (BuildContext context) => UsedFoodItemListBloc(
+              usedFoodItemRepository: context.read<UsedFoodItemRepository>(),
+            ),
           ),
         ),
       ],

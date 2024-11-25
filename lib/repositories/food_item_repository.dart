@@ -1,5 +1,5 @@
-import 'package:hive/hive.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:hive_ce/hive.dart';
 
 class FoodItemRepository {
   final Box<FoodItem> foodItemBox;
@@ -8,11 +8,7 @@ class FoodItemRepository {
 
   // 取得所有食物項目
   List<FoodItem> getAllFoodItems() {
-    return foodItemBox
-        .getAll(foodItemBox.keys)
-        .where((item) => item != null)
-        .cast<FoodItem>()
-        .toList();
+    return foodItemBox.values.toList();
   }
 
   // 依照 ID 取得食物項目
@@ -32,27 +28,24 @@ class FoodItemRepository {
 
   // 依照名稱篩選食物項目
   List<FoodItem> filterByName(String name) {
-    return foodItemBox
-        .getAll(foodItemBox.keys)
-        .where((item) => item != null && item.name.contains(name))
+    return foodItemBox.values
+        .where((item) => item.name.contains(name))
         .cast<FoodItem>()
         .toList();
   }
 
   // 依類型篩選食物項目
   List<FoodItem> filterByType(FoodItemType type) {
-    return foodItemBox
-        .getAll(foodItemBox.keys)
-        .where((item) => item != null && item.type == type)
+    return foodItemBox.values
+        .where((item) => item.type == type)
         .cast<FoodItem>()
         .toList();
   }
 
   // 依狀態篩選食物項目
   List<FoodItem> filterByStatus(FoodItemStatus status) {
-    return foodItemBox
-        .getAll(foodItemBox.keys)
-        .where((item) => item != null && item.status == status)
+    return foodItemBox.values
+        .where((item) => item.status == status)
         .cast<FoodItem>()
         .toList();
   }
