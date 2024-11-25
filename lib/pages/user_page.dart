@@ -70,15 +70,16 @@ class UserPage extends StatelessWidget {
                     BlocProvider.of<UsedFoodItemListBloc>(context);
                 final Map<String, dynamic> data = await restoreData(user.id);
                 if (data.isNotEmpty) {
-                  final List<FoodItem> foodItems = data['foodItems'];
-                  foodItemListBloc.add(
-                    FoodItemListLoad(foodItems: foodItems),
-                  );
                   final List<UsedFoodItem> usedFoodItems =
                       data['usedFoodItems'];
 
                   usedFoodItemListBloc.add(
                     UsedFoodItemListLoad(usedFoodItems: usedFoodItems),
+                  );
+
+                  final List<FoodItem> foodItems = data['foodItems'];
+                  foodItemListBloc.add(
+                    FoodItemListLoad(foodItems: foodItems),
                   );
                 }
               },

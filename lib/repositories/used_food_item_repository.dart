@@ -28,32 +28,23 @@ class UsedFoodItemRepository {
 
   // 依照名稱篩選已使用的食物項目
   List<UsedFoodItem> filterByName(String name) {
-    return usedFoodItemBox.values
-        .where((item) {
-          return item.name.contains(name);
-        })
-        .cast<UsedFoodItem>()
-        .toList();
+    return usedFoodItemBox.values.where((item) {
+      return item.name.contains(name);
+    }).toList();
   }
 
   // 依類型篩選已使用的食物項目
   List<UsedFoodItem> filterByType(FoodItemType type) {
-    return usedFoodItemBox.values
-        .where((item) {
-          return item.type == type;
-        })
-        .cast<UsedFoodItem>()
-        .toList();
+    return usedFoodItemBox.values.where((item) {
+      return item.type == type;
+    }).toList();
   }
 
   // 依狀態篩選已使用的食物項目
   List<UsedFoodItem> filterByStatus(FoodItemStatus status) {
-    return usedFoodItemBox.values
-        .where((item) {
-          return item.status == status;
-        })
-        .cast<UsedFoodItem>()
-        .toList();
+    return usedFoodItemBox.values.where((item) {
+      return item.status == status;
+    }).toList();
   }
 
   // 清空所有已使用的食物項目

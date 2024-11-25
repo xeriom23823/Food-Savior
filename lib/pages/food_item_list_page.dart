@@ -375,7 +375,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   onPressed: () {
                     context
                         .read<FoodItemListBloc>()
-                        .add(FoodItemListLoadFromDevice());
+                        .add(LoadFoodItemListFromDevice());
                   },
                   child: Text(S.of(context).refresh),
                 ),

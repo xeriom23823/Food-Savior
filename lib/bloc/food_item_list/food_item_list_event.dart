@@ -2,7 +2,7 @@ part of 'food_item_list_bloc.dart';
 
 abstract class FoodItemListEvent {}
 
-class FoodItemListLoadFromDevice extends FoodItemListEvent {}
+class LoadFoodItemListFromDevice extends FoodItemListEvent {}
 
 class FoodItemListLoad extends FoodItemListEvent {
   final List<FoodItem> foodItems;

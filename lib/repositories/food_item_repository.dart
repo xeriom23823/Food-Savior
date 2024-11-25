@@ -36,26 +36,20 @@ class FoodItemRepository {
 
   // 依類型篩選食物項目
   List<FoodItem> filterByType(FoodItemType type) {
-    return foodItemBox.values
-        .where((item) => item.type == type)
-        .cast<FoodItem>()
-        .toList();
+    return foodItemBox.values.where((item) => item.type == type).toList();
   }
 
   // 依狀態篩選食物項目
   List<FoodItem> filterByStatus(FoodItemStatus status) {
-    return foodItemBox.values
-        .where((item) => item.status == status)
-        .cast<FoodItem>()
-        .toList();
+    return foodItemBox.values.where((item) => item.status == status).toList();
   }
 
-  // 取得所有食物項目（包含狀態更新）
-  List<FoodItem> getAllFoodItemsWithStatus() {
-    List<FoodItem> items = getAllFoodItems();
+  // 更新 foodItemBox 中所有食物的狀態
+  Future<void> updateAllFoodItemsStatus() async {
+    final items = getAllFoodItems();
 
     // 更新食物狀態
-    items = items.map((foodItem) {
+    final updatedItems = items.map((foodItem) {
       // 檢查是否即將過期（3天內）
       if (foodItem.expirationDate.isBefore(
         DateTime.now().add(const Duration(days: 3)),
@@ -75,22 +69,22 @@ class FoodItemRepository {
       return foodItem;
     }).toList();
 
-    // 依過期日期排序
-    items.sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
-
-    return items;
+    // 更新狀態
+    for (var item in updatedItems) {
+      foodItemBox.put(item.id, item);
+    }
   }
 
   // 取得過期食物項目
   List<FoodItem> getExpiredFoodItems() {
-    return getAllFoodItemsWithStatus()
+    return getAllFoodItems()
         .where((item) => item.status == FoodItemStatus.expired)
         .toList();
   }
 
   // 取得未過期食物項目
   List<FoodItem> getNonExpiredFoodItems() {
-    return getAllFoodItemsWithStatus()
+    return getAllFoodItems()
         .where((item) => item.status != FoodItemStatus.expired)
         .toList();
   }
@@ -98,5 +92,13 @@ class FoodItemRepository {
   // 清空所有食物項目
   Future<void> clearAll() async {
     foodItemBox.clear();
+  }
+
+  // 將食物項目存入 Hive
+  Future<void> saveAllFoodItems(List<FoodItem> items) async {
+    clearAll();
+    for (var item in items) {
+      foodItemBox.put(item.id, item);
+    }
   }
 }

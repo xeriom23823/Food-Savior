@@ -12,9 +12,12 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
   FoodItemListBloc({required this.foodItemRepository})
       : super(const FoodItemListInitial()) {
-    on<FoodItemListLoadFromDevice>(
+    on<LoadFoodItemListFromDevice>(
       (event, emit) async {
         emit(const FoodItemListLoading());
+
+        // 更新 foodItemBox 中所有食物的狀態
+        await foodItemRepository.updateAllFoodItemsStatus();
 
         // 從 Hive 取得所有食物項目
         List<FoodItem> loadedFoodItems =
@@ -46,38 +49,23 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
     on<FoodItemListLoad>((event, emit) async {
       // expiration date 小於 3 天的食物標記為即將過期並排序
-      List<FoodItem> loadedFoodItems = event.foodItems.map((foodItem) {
-        if (foodItem.expirationDate.isBefore(
-          DateTime.now().add(const Duration(days: 3)),
-        )) {
-          return foodItem.copyWith(
-              id: foodItem.id, status: FoodItemStatus.nearExpired);
-        }
-        return foodItem;
-      }).toList()
+      List<FoodItem> loadedFoodItems = event.foodItems
+          .map((foodItem) => foodItem.expirationDate.isBefore(
+                DateTime.now().add(const Duration(days: 3)),
+              )
+                  ? foodItem.copyWith(
+                      id: foodItem.id, status: FoodItemStatus.nearExpired)
+                  : foodItem)
+          .toList()
         ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
       // 標記過期的食物為已過期
-      loadedFoodItems = loadedFoodItems.map((foodItem) {
-        if (foodItem.expirationDate.isBefore(DateTime.now())) {
-          return foodItem.copyWith(
-              id: foodItem.id, status: FoodItemStatus.expired);
-        }
-        return foodItem;
-      }).toList();
-
-      // 將 food item list 存到 shared preferences
-      await SharedPreferences.getInstance().then((prefs) {
-        prefs.setStringList(
-          'foodItems',
-          loadedFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
-        );
-      });
-
-      // 有過期的食物
-      List<FoodItem> expiredFoodItems = loadedFoodItems
+      final List<FoodItem> expiredFoodItems = loadedFoodItems
           .where((foodItem) => foodItem.status == FoodItemStatus.expired)
           .toList();
+
+      // 將 food item list 存到 Hive 中
+      await foodItemRepository.replaceAllFoodItems(loadedFoodItems);
 
       if (expiredFoodItems.isNotEmpty) {
         loadedFoodItems = loadedFoodItems
@@ -216,6 +204,6 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       }
     });
 
-    add(FoodItemListLoadFromDevice());
+    add(LoadFoodItemListFromDevice());
   }
 }
