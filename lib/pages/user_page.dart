@@ -51,13 +51,15 @@ class UserPage extends StatelessWidget {
             // 新增兩個按鈕：備份與還原
             ElevatedButton(
               onPressed: () {
-                final foodItemList = (context.read<FoodItemListBloc>().state
-                        as FoodItemListLoaded)
-                    .foodItems;
-                final usedFoodItemList = (context
-                        .read<UsedFoodItemListBloc>()
-                        .state as UsedFoodItemListLoaded)
-                    .usedFoodItems;
+                final foodItemList = context
+                    .read<FoodItemListBloc>()
+                    .foodItemRepository
+                    .getAllFoodItems();
+                final usedFoodItemList = context
+                    .read<UsedFoodItemListBloc>()
+                    .usedFoodItemRepository
+                    .getAllUsedFoodItems();
+
                 backupData(user.id, foodItemList, usedFoodItemList);
               },
               child: const Text('備份'),

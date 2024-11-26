@@ -95,7 +95,7 @@ class FoodItemRepository {
   }
 
   // 將食物項目存入 Hive
-  Future<void> saveAllFoodItems(List<FoodItem> items) async {
+  Future<void> replaceAllFoodItems(List<FoodItem> items) async {
     clearAll();
     for (var item in items) {
       foodItemBox.put(item.id, item);
