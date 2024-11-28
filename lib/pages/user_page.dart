@@ -8,8 +8,16 @@ import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/widgets/avatar.dart';
 
-class UserPage extends StatelessWidget {
+class UserPage extends StatefulWidget {
   const UserPage({super.key});
+
+  @override
+  State<UserPage> createState() => _UserPageState();
+}
+
+class _UserPageState extends State<UserPage> {
+  bool _isRestoring = false;
+  bool _isBackingUp = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,30 +70,55 @@ class UserPage extends StatelessWidget {
 
                 backupData(user.id, foodItemList, usedFoodItemList);
               },
-              child: const Text('備份'),
+              child: _isBackingUp
+                  ? const CircularProgressIndicator()
+                  : const Text('備份'),
             ),
             ElevatedButton(
               onPressed: () async {
-                final foodItemListBloc =
-                    BlocProvider.of<FoodItemListBloc>(context);
-                final usedFoodItemListBloc =
-                    BlocProvider.of<UsedFoodItemListBloc>(context);
-                final Map<String, dynamic> data = await restoreData(user.id);
-                if (data.isNotEmpty) {
-                  final List<UsedFoodItem> usedFoodItems =
-                      data['usedFoodItems'];
+                try {
+                  final foodItemListBloc =
+                      BlocProvider.of<FoodItemListBloc>(context);
+                  final usedFoodItemListBloc =
+                      BlocProvider.of<UsedFoodItemListBloc>(context);
+                  _isRestoring = true;
 
-                  usedFoodItemListBloc.add(
-                    UsedFoodItemListLoad(usedFoodItems: usedFoodItems),
-                  );
+                  // 從伺服器取得資料
+                  final Map<String, dynamic> data = await restoreData(user.id);
 
-                  final List<FoodItem> foodItems = data['foodItems'];
-                  foodItemListBloc.add(
-                    FoodItemListLoad(foodItems: foodItems),
+                  if (data.isNotEmpty) {
+                    // 還原已使用食物資料
+                    final List<UsedFoodItem> usedFoodItems =
+                        data['usedFoodItems'];
+                    await usedFoodItemListBloc.usedFoodItemRepository
+                        .replaceAllUsedFoodItems(usedFoodItems);
+                    usedFoodItemListBloc.add(UsedFoodItemListLoadFromDevice());
+
+                    // 還原食物資料
+                    final List<FoodItem> foodItems = data['foodItems'];
+                    await foodItemListBloc.foodItemRepository
+                        .replaceAllFoodItems(foodItems);
+                    foodItemListBloc.add(LoadFoodItemListFromDevice());
+
+                    _isRestoring = false;
+
+                    // 顯示成功訊息
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('資料還原成功')),
+                    );
+                  }
+                } catch (e) {
+                  _isRestoring = false;
+
+                  // 顯示錯誤訊息
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('資料還原失敗: $e')),
                   );
                 }
               },
-              child: const Text('還原'),
+              child: _isRestoring
+                  ? const CircularProgressIndicator()
+                  : const Text('還原'),
             ),
           ],
         ),
@@ -95,6 +128,7 @@ class UserPage extends StatelessWidget {
 
   Future<void> backupData(String userId, List<FoodItem> foodItemList,
       List<UsedFoodItem> usedFoodItemList) async {
+    _isBackingUp = true;
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // 將 foodItemList 轉換為 JSON 格式
@@ -119,6 +153,13 @@ class UserPage extends StatelessWidget {
       'foodItems': foodItemsJson,
       'usedFoodItems': usedFoodItemsJson,
     });
+
+    _isBackingUp = false;
+
+    // 顯示成功訊息
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('資料備份成功')),
+    );
   }
 
   Future<Map<String, dynamic>> restoreData(String userId) async {

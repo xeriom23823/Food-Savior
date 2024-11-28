@@ -50,6 +50,13 @@ class FoodItemRepository {
 
     // 更新食物狀態
     final updatedItems = items.map((foodItem) {
+      // 檢查是否已過期
+      if (foodItem.expirationDate.isBefore(DateTime.now())) {
+        return foodItem.copyWith(
+          id: foodItem.id,
+          status: FoodItemStatus.expired,
+        );
+      }
       // 檢查是否即將過期（3天內）
       if (foodItem.expirationDate.isBefore(
         DateTime.now().add(const Duration(days: 3)),
@@ -57,13 +64,6 @@ class FoodItemRepository {
         return foodItem.copyWith(
           id: foodItem.id,
           status: FoodItemStatus.nearExpired,
-        );
-      }
-      // 檢查是否已過期
-      if (foodItem.expirationDate.isBefore(DateTime.now())) {
-        return foodItem.copyWith(
-          id: foodItem.id,
-          status: FoodItemStatus.expired,
         );
       }
       return foodItem;
@@ -98,7 +98,7 @@ class FoodItemRepository {
   Future<void> replaceAllFoodItems(List<FoodItem> items) async {
     clearAll();
     for (var item in items) {
-      foodItemBox.put(item.id, item);
+      saveFoodItem(item);
     }
   }
 }

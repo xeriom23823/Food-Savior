@@ -51,4 +51,12 @@ class UsedFoodItemRepository {
   Future<void> clearAll() async {
     usedFoodItemBox.clear();
   }
+
+  // 將已使用食物項目存入 Hive
+  Future<void> replaceAllUsedFoodItems(List<UsedFoodItem> items) async {
+    clearAll();
+    for (var item in items) {
+      saveUsedFoodItem(item);
+    }
+  }
 }

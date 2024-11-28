@@ -82,7 +82,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '是否過期',
+                        '是否食用',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
