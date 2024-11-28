@@ -8,6 +8,9 @@ import 'package:food_savior/hive/hive_adapters.dart';
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
     registerAdapter(FoodItemAdapter());
+    registerAdapter(FoodItemStatusAdapter());
+    registerAdapter(FoodItemTypeAdapter());
+    registerAdapter(UnitAdapter());
     registerAdapter(UsedFoodItemAdapter());
   }
 }

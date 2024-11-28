@@ -101,15 +101,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
           ..add(newFoodItem)
           ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
-        // 將所有食物存到 shared preferences
-        await SharedPreferences.getInstance().then((prefs) {
-          prefs.setStringList(
-            'foodItems',
-            updatedFoodItems
-                .map((foodItem) => foodItem.toJsonString())
-                .toList(),
-          );
-        });
+        // 使用 repository 儲存資料
+        await foodItemRepository.saveFoodItem(newFoodItem);
 
         emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }
@@ -125,15 +118,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
             .where((foodItem) => foodItem != event.foodItem)
             .toList();
 
-        // 將所有食物存到 shared preferences
-        await SharedPreferences.getInstance().then((prefs) {
-          prefs.setStringList(
-            'foodItems',
-            updatedFoodItems
-                .map((foodItem) => foodItem.toJsonString())
-                .toList(),
-          );
-        });
+        // 使用 repository 刪除資料
+        await foodItemRepository.deleteFoodItem(event.foodItem.id);
 
         emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }
@@ -152,15 +138,8 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
             .toList()
           ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 
-        // 將所有食物存到 shared preferences
-        await SharedPreferences.getInstance().then((prefs) {
-          prefs.setStringList(
-            'foodItems',
-            updatedFoodItems
-                .map((foodItem) => foodItem.toJsonString())
-                .toList(),
-          );
-        });
+        // 使用 repository 更新資料
+        await foodItemRepository.saveFoodItem(event.updatedFoodItem);
 
         emit(FoodItemListLoaded(foodItems: updatedFoodItems));
       }

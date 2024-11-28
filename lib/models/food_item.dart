@@ -270,16 +270,10 @@ class FoodItem extends HiveObject {
     return FoodItem(
       id: data['id'],
       name: data['name'],
-      type: FoodItemType.values.firstWhere(
-        (e) => e.toString() == data['type'],
-      ),
-      status: FoodItemStatus.values.firstWhere(
-        (e) => e.toString() == data['status'],
-      ),
+      type: FoodItemType.values.byName(data['type']),
+      status: FoodItemStatus.values.byName(data['status']),
       quantity: data['quantity'],
-      unit: Unit.values.firstWhere(
-        (e) => e.toString() == data['unit'],
-      ),
+      unit: Unit.values.byName(data['unit']),
       description: data['description'],
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
@@ -290,10 +284,10 @@ class FoodItem extends HiveObject {
     return {
       'id': id,
       'name': name,
-      'type': type.toString(),
-      'status': status.toString(),
+      'type': type.name,
+      'status': status.name,
       'quantity': quantity,
-      'unit': unit.toString(),
+      'unit': unit.name,
       'description': description,
       'storageDate': storageDate.toIso8601String(),
       'expirationDate': expirationDate.toIso8601String(),
@@ -385,16 +379,10 @@ class UsedFoodItem extends FoodItem {
     return UsedFoodItem(
       id: data['id'],
       name: data['name'],
-      type: FoodItemType.values.firstWhere(
-        (e) => e.toString() == data['type'],
-      ),
-      status: FoodItemStatus.values.firstWhere(
-        (e) => e.toString() == data['status'],
-      ),
+      type: FoodItemType.values.byName(data['type']),
+      status: FoodItemStatus.values.byName(data['status']),
       quantity: data['quantity'],
-      unit: Unit.values.firstWhere(
-        (e) => e.toString() == data['unit'],
-      ),
+      unit: Unit.values.byName(data['unit']),
       description: data['description'],
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
