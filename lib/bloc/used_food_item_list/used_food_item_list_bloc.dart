@@ -90,6 +90,13 @@ class UsedFoodItemListBloc
       emit(const UsedFoodItemListLoaded(usedFoodItems: []));
     });
 
+    on<UsedFoodItemListLoadByDate>((event, emit) {
+      emit(const UsedFoodItemListLoading());
+      final loadedUsedFoodItems =
+          usedFoodItemRepository.filterByDate(event.date);
+      emit(UsedFoodItemListLoaded(usedFoodItems: loadedUsedFoodItems));
+    });
+
     add(UsedFoodItemListLoadFromDevice());
   }
 }

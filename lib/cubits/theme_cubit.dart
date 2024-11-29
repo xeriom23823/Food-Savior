@@ -9,6 +9,7 @@ class ThemeCubit extends Cubit<ThemeData> {
 
   // 將主題定義在這
   static final lightTheme = ThemeData(
+    brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
       backgroundColor: Color(0xFF0097A7),
       elevation: 4,
@@ -22,9 +23,10 @@ class ThemeCubit extends Cubit<ThemeData> {
 
   static final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Color(0xFF212121),
-      elevation: 4,
+    appBarTheme: AppBarTheme(
+      backgroundColor: ColorScheme.dark(
+        primary: Color(0xFF212121),
+      ).primary,
     ),
     colorScheme: const ColorScheme.dark(
       primary: Color(0xFF0097A7),

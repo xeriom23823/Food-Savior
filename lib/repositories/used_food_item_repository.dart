@@ -32,7 +32,7 @@ class UsedFoodItemRepository {
     usedFoodItemBox.delete(id);
   }
 
-  // 依照名稱篩選已使用的食物項目
+  // 依名稱篩選已使用的食物項目
   List<UsedFoodItem> filterByName(String name) {
     return usedFoodItemBox.values.where((item) {
       return item.name.contains(name);
@@ -50,6 +50,15 @@ class UsedFoodItemRepository {
   List<UsedFoodItem> filterByStatus(FoodItemStatus status) {
     return usedFoodItemBox.values.where((item) {
       return item.status == status;
+    }).toList();
+  }
+
+  // 依日期篩選已使用的食物項目
+  List<UsedFoodItem> filterByDate(DateTime date) {
+    return usedFoodItemBox.values.where((item) {
+      return item.usedDate.year == date.year &&
+          item.usedDate.month == date.month &&
+          item.usedDate.day == date.day;
     }).toList();
   }
 

@@ -31,3 +31,9 @@ class UsedFoodItemListUpdate extends UsedFoodItemListEvent {
 }
 
 class UsedFoodItemListClear extends UsedFoodItemListEvent {}
+
+class UsedFoodItemListLoadByDate extends UsedFoodItemListEvent {
+  final DateTime date;
+
+  UsedFoodItemListLoadByDate({required this.date});
+}

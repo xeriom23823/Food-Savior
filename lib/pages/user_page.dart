@@ -56,6 +56,7 @@ class _UserPageState extends State<UserPage> {
             Text(user.email ?? '', style: textTheme.titleLarge),
             const SizedBox(height: 4),
             Text(user.name ?? '', style: textTheme.headlineSmall),
+
             // 新增兩個按鈕：備份與還原
             ElevatedButton(
               onPressed: _isBackingUp
