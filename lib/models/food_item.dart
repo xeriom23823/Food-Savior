@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/generated/l10n.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'dart:convert';
 
@@ -48,27 +49,27 @@ extension FoodItemTypeExtension on FoodItemType {
   String name(BuildContext context) {
     switch (this) {
       case FoodItemType.vegetable:
-        return AppLocalizations.of(context).foodItemTypeVegetable;
+        return S.of(context).foodItemTypeVegetable;
       case FoodItemType.fruit:
-        return AppLocalizations.of(context).foodItemTypeFruit;
+        return S.of(context).foodItemTypeFruit;
       case FoodItemType.meat:
-        return AppLocalizations.of(context).foodItemTypeMeat;
+        return S.of(context).foodItemTypeMeat;
       case FoodItemType.eggAndMilk:
-        return AppLocalizations.of(context).foodItemTypeEggAndMilk;
+        return S.of(context).foodItemTypeEggAndMilk;
       case FoodItemType.seafood:
-        return AppLocalizations.of(context).foodItemTypeSeafood;
+        return S.of(context).foodItemTypeSeafood;
       case FoodItemType.cannedFood:
-        return AppLocalizations.of(context).foodItemTypeCannedFood;
+        return S.of(context).foodItemTypeCannedFood;
       case FoodItemType.cookedFood:
-        return AppLocalizations.of(context).foodItemTypeCookedFood;
+        return S.of(context).foodItemTypeCookedFood;
       case FoodItemType.drink:
-        return AppLocalizations.of(context).foodItemTypeDrink;
+        return S.of(context).foodItemTypeDrink;
       case FoodItemType.snack:
-        return AppLocalizations.of(context).foodItemTypeSnack;
+        return S.of(context).foodItemTypeSnack;
       case FoodItemType.bread:
-        return AppLocalizations.of(context).foodItemTypeBread;
+        return S.of(context).foodItemTypeBread;
       case FoodItemType.others:
-        return AppLocalizations.of(context).foodItemTypeOthers;
+        return S.of(context).foodItemTypeOthers;
     }
   }
 
@@ -123,17 +124,17 @@ extension FoodItemStatusExtension on FoodItemStatus {
   String name(BuildContext context) {
     switch (this) {
       case FoodItemStatus.fresh:
-        return AppLocalizations.of(context).foodItemStatusFresh;
+        return S.of(context).foodItemStatusFresh;
       case FoodItemStatus.nearExpired:
-        return AppLocalizations.of(context).foodItemStatusNearExpired;
+        return S.of(context).foodItemStatusNearExpired;
       case FoodItemStatus.expired:
-        return AppLocalizations.of(context).foodItemStatusExpired;
+        return S.of(context).foodItemStatusExpired;
       case FoodItemStatus.consumed:
-        return AppLocalizations.of(context).foodItemStatusConsumed;
+        return S.of(context).foodItemStatusConsumed;
       case FoodItemStatus.wasted:
-        return AppLocalizations.of(context).foodItemStatusWasted;
+        return S.of(context).foodItemStatusWasted;
       default:
-        return AppLocalizations.of(context).foodItemStatusUnknown;
+        return S.of(context).foodItemStatusUnknown;
     }
   }
 }
@@ -144,16 +145,16 @@ extension UnitExtension on Unit {
   String name(BuildContext context) {
     switch (this) {
       case Unit.gram:
-        return AppLocalizations.of(context).unitGram;
+        return S.of(context).unitGram;
       case Unit.milliliter:
-        return AppLocalizations.of(context).unitMilliliter;
+        return S.of(context).unitMilliliter;
       case Unit.piece:
-        return AppLocalizations.of(context).unitPiece;
+        return S.of(context).unitPiece;
     }
   }
 }
 
-class FoodItem {
+class FoodItem extends HiveObject {
   final String id;
   final String name;
   final FoodItemType type;
@@ -227,11 +228,11 @@ class FoodItem {
         storageDate: storageDate,
         expirationDate: expirationDate,
         usedDate: usedDate,
-        affectFoodPoint: 0);
+        affectFoodPoint: usedStatus == FoodItemStatus.consumed ? 1 : -1);
   }
 
   // 將 FoodItem 物件轉換為 JSON 字符串
-  String toJson() => json.encode({
+  String toJsonString() => json.encode({
         'id': id,
         'name': name,
         'type': type.toString(),
@@ -244,7 +245,7 @@ class FoodItem {
       });
 
   // 從 JSON 字符串創建一個 FoodItem 物件
-  static FoodItem fromJson(String jsonString) {
+  static FoodItem fromJsonString(String jsonString) {
     final data = json.decode(jsonString);
     return FoodItem(
       id: data['id'],
@@ -263,6 +264,34 @@ class FoodItem {
       storageDate: DateTime.parse(data['storageDate']),
       expirationDate: DateTime.parse(data['expirationDate']),
     );
+  }
+
+  factory FoodItem.fromJson(Map<String, dynamic> data) {
+    return FoodItem(
+      id: data['id'],
+      name: data['name'],
+      type: FoodItemType.values.byName(data['type']),
+      status: FoodItemStatus.values.byName(data['status']),
+      quantity: data['quantity'],
+      unit: Unit.values.byName(data['unit']),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'type': type.name,
+      'status': status.name,
+      'quantity': quantity,
+      'unit': unit.name,
+      'description': description,
+      'storageDate': storageDate.toIso8601String(),
+      'expirationDate': expirationDate.toIso8601String(),
+    };
   }
 
   // 複寫 == 運算符，以便在比較 FoodItem 物件時使用
@@ -334,9 +363,37 @@ class UsedFoodItem extends FoodItem {
     );
   }
 
+  // 將 UsedFoodItem 物件轉換為 JSON
+  @override
+  Map<String, dynamic> toJson() {
+    final json = super.toJson();
+    json.addAll({
+      'usedDate': usedDate.toIso8601String(),
+      'affectFoodPoint': affectFoodPoint,
+    });
+    return json;
+  }
+
+  // 從 JSON 創建一個 UsedFoodItem 物件
+  factory UsedFoodItem.fromJson(Map<String, dynamic> data) {
+    return UsedFoodItem(
+      id: data['id'],
+      name: data['name'],
+      type: FoodItemType.values.byName(data['type']),
+      status: FoodItemStatus.values.byName(data['status']),
+      quantity: data['quantity'],
+      unit: Unit.values.byName(data['unit']),
+      description: data['description'],
+      storageDate: DateTime.parse(data['storageDate']),
+      expirationDate: DateTime.parse(data['expirationDate']),
+      usedDate: DateTime.parse(data['usedDate']),
+      affectFoodPoint: data['affectFoodPoint'] ?? 0,
+    );
+  }
+
   // 將 UsedFoodItem 物件轉換為 JSON 字符串
   @override
-  String toJson() => json.encode({
+  String toJsonString() => json.encode({
         'id': id,
         'name': name,
         'type': type.toString(),
@@ -351,7 +408,7 @@ class UsedFoodItem extends FoodItem {
       });
 
   // 從 JSON 字符串創建一個 UsedFoodItem 物件
-  static UsedFoodItem fromJson(String jsonString) {
+  static UsedFoodItem fromJsonString(String jsonString) {
     final data = json.decode(jsonString);
     return UsedFoodItem(
       id: data['id'],

@@ -6,28 +6,58 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/app/view/app.dart';
-import 'package:food_savior/bloc/food_item_list_bloc.dart';
-import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
+import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
 import 'package:food_savior/firebase_options.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/generated/l10n.dart';
+import 'package:food_savior/hive/hive_registrar.g.dart';
+import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/pages/char_and_statistics_page.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
+import 'package:food_savior/repositories/food_item_repository.dart';
+import 'package:food_savior/repositories/used_food_item_repository.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // 初始化 Firebase & AuthenticationRepository
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
   await authenticationRepository.user.first;
 
+  // 初始化 Hive & Boxes
+  final directory = await getApplicationDocumentsDirectory();
+  Hive
+    ..init(directory.path)
+    ..registerAdapters();
+
+  // 開啟 Boxes
+  final Box<FoodItem> foodItemBox = await Hive.openBox('foodItem');
+  final Box<UsedFoodItem> usedFoodItemBox = await Hive.openBox('usedFoodItem');
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(App(
-      authenticationRepository: authenticationRepository,
-    ));
+    runApp(
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+            create: (context) => FoodItemRepository(foodItemBox: foodItemBox),
+          ),
+          RepositoryProvider(
+            create: (context) =>
+                UsedFoodItemRepository(usedFoodItemBox: usedFoodItemBox),
+          ),
+        ],
+        child: App(
+          authenticationRepository: authenticationRepository,
+        ),
+      ),
+    );
   });
 }
 
@@ -55,10 +85,14 @@ class _FoodSaviorState extends State<FoodSavior> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<FoodItemListBloc>(
-          create: (BuildContext context) => FoodItemListBloc(),
+          create: (context) => FoodItemListBloc(
+            foodItemRepository: context.read<FoodItemRepository>(),
+          ),
         ),
         BlocProvider<UsedFoodItemListBloc>(
-          create: (BuildContext context) => UsedFoodItemListBloc(),
+          create: (context) => UsedFoodItemListBloc(
+            usedFoodItemRepository: context.read<UsedFoodItemRepository>(),
+          ),
         ),
       ],
       child: Scaffold(
@@ -78,26 +112,23 @@ class _FoodSaviorState extends State<FoodSavior> {
           items: [
             CurvedNavigationBarItem(
               child: const Icon(Icons.person),
-              label: AppLocalizations.of(context).userNavigationBarTitle,
+              label: S.of(context).userNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
               child: const Icon(Icons.bar_chart),
-              label: AppLocalizations.of(context)
-                  .chartAndStatisticsNavigationBarTitle,
+              label: S.of(context).chartAndStatisticsNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
               child: const Icon(Icons.food_bank),
-              label:
-                  AppLocalizations.of(context).foodItemListNavigationBarTitle,
+              label: S.of(context).foodItemListNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
               child: const Icon(Icons.history),
-              label: AppLocalizations.of(context)
-                  .usedFoodItemListNavigationBarTitle,
+              label: S.of(context).usedFoodItemListNavigationBarTitle,
             ),
             CurvedNavigationBarItem(
               child: const Icon(Icons.settings),
-              label: AppLocalizations.of(context).settingsNavigationBarTitle,
+              label: S.of(context).settingsNavigationBarTitle,
             ),
           ],
         ),

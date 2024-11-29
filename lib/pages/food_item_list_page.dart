@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:food_savior/bloc/food_item_list_bloc.dart';
-import 'package:food_savior/bloc/used_food_item_list_bloc.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
+import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
@@ -82,7 +82,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        '是否過期',
+                        '是否食用',
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
@@ -144,7 +144,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       }
 
                       context.read<UsedFoodItemListBloc>().add(
-                            UsedFoodItemListAddMultiple(
+                            UsedFoodItemListLoad(
                               usedFoodItems: usedFoodItems,
                             ),
                           );
@@ -166,7 +166,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                AppLocalizations.of(context).foodItemListNavigationBarTitle,
+                S.of(context).foodItemListNavigationBarTitle,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontSize: 20,
@@ -194,7 +194,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                         icon: Icons.edit,
-                        label: AppLocalizations.of(context).edit,
+                        label: S.of(context).edit,
                       ),
                     ],
                   ),
@@ -234,7 +234,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                        '${newUsedFoodItem.name} ${AppLocalizations.of(context).wasted}',
+                                        '${newUsedFoodItem.name} ${S.of(context).wasted}',
                                         style: const TextStyle(
                                             color: Colors.black)),
                                     Lottie.asset(
@@ -252,7 +252,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         backgroundColor: FoodItemStatus.wasted.color,
                         foregroundColor: Colors.white,
                         icon: MdiIcons.deleteEmpty,
-                        label: AppLocalizations.of(context).expire,
+                        label: S.of(context).expire,
                       ),
                       SlidableAction(
                         onPressed: (_) {
@@ -262,7 +262,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         backgroundColor: FoodItemStatus.consumed.color,
                         foregroundColor: Colors.white,
                         icon: Icons.restaurant,
-                        label: AppLocalizations.of(context).batchUse,
+                        label: S.of(context).batchUse,
                       ),
                       SlidableAction(
                         onPressed: (_) async {
@@ -299,7 +299,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                        '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                                        '${newUsedFoodItem.name} ${newUsedFoodItem.quantityWithUnit(context)} ${S.of(context).consumed}',
                                         style: const TextStyle(
                                             color: Colors.black)),
                                     Lottie.asset(
@@ -317,7 +317,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                         icon: Icons.restaurant,
-                        label: AppLocalizations.of(context).useAll,
+                        label: S.of(context).useAll,
                       ),
                     ],
                   ),
@@ -345,13 +345,13 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                                   .difference(DateTime.now())
                                   .inDays ==
                               0
-                          ? AppLocalizations.of(context).expireToday
+                          ? S.of(context).expireToday
                           : foodItem.expirationDate
                                       .difference(DateTime.now())
                                       .inDays <
                                   0
-                              ? AppLocalizations.of(context).expired
-                              : '${AppLocalizations.of(context).expire} : ${foodItem.expirationDate.difference(DateTime.now()).inDays} ${AppLocalizations.of(context).days}',
+                              ? S.of(context).expired
+                              : '${S.of(context).expire} : ${foodItem.expirationDate.difference(DateTime.now()).inDays} ${S.of(context).days}',
                     ),
                   ),
                 );
@@ -370,14 +370,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           return Center(
             child: Column(
               children: [
-                Text(AppLocalizations.of(context).foodItemListError),
+                Text(S.of(context).foodItemListError),
                 ElevatedButton(
                   onPressed: () {
                     context
                         .read<FoodItemListBloc>()
-                        .add(FoodItemListLoadFromDevice());
+                        .add(LoadFoodItemListFromDevice());
                   },
-                  child: Text(AppLocalizations.of(context).refresh),
+                  child: Text(S.of(context).refresh),
                 ),
               ],
             ),
@@ -431,11 +431,11 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 ),
                 Text(foodItem.description),
                 Text(
-                    '${AppLocalizations.of(context).quantity} : ${foodItem.quantity} ${foodItem.unit.name(context)}'),
+                    '${S.of(context).quantity} : ${foodItem.quantity} ${foodItem.unit.name(context)}'),
                 Text(
-                    '${AppLocalizations.of(context).storageDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.storageDate)}'),
+                    '${S.of(context).storageDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.storageDate)}'),
                 Text(
-                    '${AppLocalizations.of(context).expirationDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}'),
+                    '${S.of(context).expirationDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.expirationDate)}'),
               ],
             ),
           ),
@@ -493,7 +493,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).addFoodItem),
+          title: Text(S.of(context).addFoodItem),
           content: SingleChildScrollView(
             child: Form(
               key: formKey, // Set the maximum height here
@@ -519,22 +519,21 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).name),
+                    decoration: InputDecoration(labelText: S.of(context).name),
                     onChanged: (value) {
                       formKey.currentState!.validate();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context).nameCannotBeEmpty;
+                        return S.of(context).nameCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: quantityController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).quantity),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).quantity),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       quantityController.text = value;
@@ -542,18 +541,15 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)
-                            .quantityCannotBeEmpty;
+                        return S.of(context).quantityCannotBeEmpty;
                       }
 
                       if (int.tryParse(value) == null) {
-                        return AppLocalizations.of(context)
-                            .quanityMustBeANumber;
+                        return S.of(context).quanityMustBeANumber;
                       }
 
                       if (int.parse(value) <= 0) {
-                        return AppLocalizations.of(context)
-                            .quantityMustBePositive;
+                        return S.of(context).quantityMustBePositive;
                       }
 
                       return null;
@@ -570,19 +566,18 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         child: Text(unit.name(context)),
                       );
                     }).toList(),
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).unit),
+                    decoration: InputDecoration(labelText: S.of(context).unit),
                     validator: (value) {
                       if (value == null) {
-                        return AppLocalizations.of(context).unitCannotBeEmpty;
+                        return S.of(context).unitCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextField(
                     controller: descriptionController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).description),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).description),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -592,8 +587,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       child: TextField(
                         controller: storageDateController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context).storageDate),
+                            labelText: S.of(context).storageDate),
                       ),
                     ),
                   ),
@@ -608,8 +602,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       child: TextField(
                         controller: expirationDateController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context).expirationDate),
+                            labelText: S.of(context).expirationDate),
                       ),
                     ),
                   ),
@@ -622,7 +615,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -648,14 +641,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   SnackBar(
                     backgroundColor: Colors.white,
                     content: Text(
-                      '${newFoodItem.name} ${AppLocalizations.of(context).added}',
+                      '${newFoodItem.name} ${S.of(context).added}',
                       style: const TextStyle(color: Colors.black),
                     ),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              child: Text(AppLocalizations.of(context).add),
+              child: Text(S.of(context).add),
             ),
           ],
         );
@@ -698,7 +691,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context).editFoodItem),
+              Text(S.of(context).editFoodItem),
               IconButton(
                 icon: const Icon(Icons.delete),
                 onPressed: () {
@@ -734,23 +727,22 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).name),
+                    decoration: InputDecoration(labelText: S.of(context).name),
                     onChanged: (value) {
                       nameController.text = value;
                       formKey.currentState!.validate();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context).nameCannotBeEmpty;
+                        return S.of(context).nameCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextFormField(
                     controller: quantityController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).quantity),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).quantity),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       quantityController.text = value;
@@ -758,18 +750,15 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)
-                            .quantityCannotBeEmpty;
+                        return S.of(context).quantityCannotBeEmpty;
                       }
 
                       if (int.tryParse(value) == null) {
-                        return AppLocalizations.of(context)
-                            .quanityMustBeANumber;
+                        return S.of(context).quanityMustBeANumber;
                       }
 
                       if (int.parse(value) <= 0) {
-                        return AppLocalizations.of(context)
-                            .quantityMustBePositive;
+                        return S.of(context).quantityMustBePositive;
                       }
 
                       return null;
@@ -786,19 +775,18 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         child: Text(unit.name(context)),
                       );
                     }).toList(),
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).unit),
+                    decoration: InputDecoration(labelText: S.of(context).unit),
                     validator: (value) {
                       if (value == null) {
-                        return AppLocalizations.of(context).unitCannotBeEmpty;
+                        return S.of(context).unitCannotBeEmpty;
                       }
                       return null;
                     },
                   ),
                   TextField(
                     controller: descriptionController,
-                    decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).description),
+                    decoration:
+                        InputDecoration(labelText: S.of(context).description),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -808,8 +796,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       child: TextField(
                         controller: storageDateController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context).storageDate),
+                            labelText: S.of(context).storageDate),
                       ),
                     ),
                   ),
@@ -824,8 +811,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       child: TextField(
                         controller: expirationDateController,
                         decoration: InputDecoration(
-                            labelText:
-                                AppLocalizations.of(context).expirationDate),
+                            labelText: S.of(context).expirationDate),
                       ),
                     ),
                   ),
@@ -838,7 +824,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () {
@@ -867,13 +853,13 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   SnackBar(
                     backgroundColor: Colors.white,
                     content: Text(
-                        '${updatedFoodItem.name} ${AppLocalizations.of(context).updated}',
+                        '${updatedFoodItem.name} ${S.of(context).updated}',
                         style: const TextStyle(color: Colors.black)),
                     duration: const Duration(seconds: 1),
                   ),
                 );
               },
-              child: Text(AppLocalizations.of(context).save),
+              child: Text(S.of(context).save),
             ),
           ],
         );
@@ -902,18 +888,17 @@ class _FoodItemListPageState extends State<FoodItemListPage>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(AppLocalizations.of(context).useFoodItem),
+          title: Text(S.of(context).useFoodItem),
           content: SingleChildScrollView(
             child: Form(
               key: formKey, // Set the maximum height here
               child: Column(
                 children: [
-                  Text(
-                      '${AppLocalizations.of(context).use} ${usingFoodItem.name}'),
+                  Text('${S.of(context).use} ${usingFoodItem.name}'),
                   TextFormField(
                     controller: quantityController,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context).quantity,
+                      labelText: S.of(context).quantity,
                       suffixText: usingFoodItem.unit.name(context),
                     ),
                     keyboardType: TextInputType.number,
@@ -927,19 +912,16 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return AppLocalizations.of(context)
-                            .quantityCannotBeEmpty;
+                        return S.of(context).quantityCannotBeEmpty;
                       }
 
                       int enteredQuantity = int.tryParse(value) ?? 0;
                       if (enteredQuantity <= 0) {
-                        return AppLocalizations.of(context)
-                            .quantityMustBePositive;
+                        return S.of(context).quantityMustBePositive;
                       }
 
                       if (enteredQuantity > usingFoodItem.quantity) {
-                        return AppLocalizations.of(context)
-                            .quantityExceedsAvailable;
+                        return S.of(context).quantityExceedsAvailable;
                       }
 
                       return null;
@@ -953,8 +935,8 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     child: AbsorbPointer(
                       child: TextField(
                         controller: usedDateController,
-                        decoration: InputDecoration(
-                            labelText: AppLocalizations.of(context).usedDate),
+                        decoration:
+                            InputDecoration(labelText: S.of(context).usedDate),
                       ),
                     ),
                   ),
@@ -967,7 +949,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(AppLocalizations.of(context).cancel),
+              child: Text(S.of(context).cancel),
             ),
             TextButton(
               onPressed: () async {
@@ -1012,7 +994,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                              '${usedFoodItem.name} ${usedFoodItem.quantityWithUnit(context)} ${AppLocalizations.of(context).consumed}',
+                              '${usedFoodItem.name} ${usedFoodItem.quantityWithUnit(context)} ${S.of(context).consumed}',
                               style: const TextStyle(color: Colors.black)),
                           Lottie.asset(
                             'assets/animations/eating.json',
@@ -1026,7 +1008,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                   );
                 });
               },
-              child: Text(AppLocalizations.of(context).use),
+              child: Text(S.of(context).use),
             ),
           ],
         );

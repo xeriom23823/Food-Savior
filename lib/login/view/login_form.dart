@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_savior/languages/app_localizations.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/login/login.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,8 +20,7 @@ class LoginForm extends StatelessWidget {
               SnackBar(
                 backgroundColor: Colors.white,
                 content: Text(
-                  state.errorMessage ??
-                      AppLocalizations.of(context).logInFailure,
+                  state.errorMessage ?? S.of(context).logInFailure,
                   style: const TextStyle(color: Colors.black),
                 ),
               ),
@@ -70,7 +69,7 @@ class _EmailInput extends StatelessWidget {
             labelText: 'email',
             helperText: '',
             errorText: state.email.displayError != null
-                ? AppLocalizations.of(context).invalidEmail
+                ? S.of(context).invalidEmail
                 : null,
           ),
         );
@@ -94,7 +93,7 @@ class _PasswordInput extends StatelessWidget {
             labelText: 'password',
             helperText: '',
             errorText: state.password.displayError != null
-                ? AppLocalizations.of(context).invalidPassword
+                ? S.of(context).invalidPassword
                 : null,
           ),
         );
@@ -121,7 +120,7 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.isValid
                     ? () => context.read<LoginCubit>().logInWithCredentials()
                     : null,
-                child: Text(AppLocalizations.of(context).logIn),
+                child: Text(S.of(context).logIn),
               );
       },
     );
@@ -135,7 +134,7 @@ class _GoogleLoginButton extends StatelessWidget {
     return ElevatedButton.icon(
       key: const Key('loginForm_googleLogin_raisedButton'),
       label: Text(
-        AppLocalizations.of(context).signInWithGoogle,
+        S.of(context).signInWithGoogle,
         style: const TextStyle(color: Colors.white),
       ),
       style: ElevatedButton.styleFrom(
@@ -158,7 +157,7 @@ class _SignUpButton extends StatelessWidget {
       key: const Key('loginForm_createAccount_flatButton'),
       onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
       child: Text(
-        AppLocalizations.of(context).createAccount,
+        S.of(context).createAccount,
         style: TextStyle(color: theme.primaryColor),
       ),
     );
