@@ -21,6 +21,12 @@ class FoodItemRepository {
     foodItemBox.put(item.id, item);
   }
 
+  Future<void> saveFoodItems(List<FoodItem> items) async {
+    for (var item in items) {
+      await saveFoodItem(item);
+    }
+  }
+
   // 刪除食物項目
   Future<void> deleteFoodItem(String id) async {
     foodItemBox.delete(id);
@@ -92,13 +98,5 @@ class FoodItemRepository {
   // 清空所有食物項目
   Future<void> clearAll() async {
     foodItemBox.clear();
-  }
-
-  // 將食物項目存入 Hive
-  Future<void> replaceAllFoodItems(List<FoodItem> items) async {
-    clearAll();
-    for (var item in items) {
-      saveFoodItem(item);
-    }
   }
 }

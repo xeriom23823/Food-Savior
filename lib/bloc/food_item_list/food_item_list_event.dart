@@ -30,6 +30,8 @@ class FoodItemListUpdate extends FoodItemListEvent {
       {required this.originalFoodItem, required this.updatedFoodItem});
 }
 
+class FoodItemListClear extends FoodItemListEvent {}
+
 class FoodItemListProcessingUpdate extends FoodItemListEvent {
   final int updateIndex;
 

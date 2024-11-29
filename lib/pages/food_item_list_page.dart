@@ -144,7 +144,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       }
 
                       context.read<UsedFoodItemListBloc>().add(
-                            UsedFoodItemListAddMultiple(
+                            UsedFoodItemListLoad(
                               usedFoodItems: usedFoodItems,
                             ),
                           );

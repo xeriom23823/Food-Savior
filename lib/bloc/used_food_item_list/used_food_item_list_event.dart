@@ -16,12 +16,6 @@ class UsedFoodItemListAdd extends UsedFoodItemListEvent {
   UsedFoodItemListAdd({required this.usedFoodItem});
 }
 
-class UsedFoodItemListAddMultiple extends UsedFoodItemListEvent {
-  final List<UsedFoodItem> usedFoodItems;
-
-  UsedFoodItemListAddMultiple({required this.usedFoodItems});
-}
-
 class UsedFoodItemListRemove extends UsedFoodItemListEvent {
   final UsedFoodItem usedFoodItem;
 
@@ -35,3 +29,5 @@ class UsedFoodItemListUpdate extends UsedFoodItemListEvent {
   UsedFoodItemListUpdate(
       {required this.originalUsedFoodItem, required this.updatedUsedFoodItem});
 }
+
+class UsedFoodItemListClear extends UsedFoodItemListEvent {}

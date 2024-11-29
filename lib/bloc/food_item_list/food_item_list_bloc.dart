@@ -48,31 +48,39 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
     );
 
     on<FoodItemListLoad>((event, emit) async {
-      // expiration date 小於 3 天的食物標記為即將過期並排序
-      List<FoodItem> loadedFoodItems = event.foodItems
-          .map((foodItem) => foodItem.expirationDate.isBefore(
-                DateTime.now().add(const Duration(days: 3)),
-              )
-                  ? foodItem.copyWith(
-                      id: foodItem.id, status: FoodItemStatus.nearExpired)
-                  : foodItem)
-          .toList()
-        ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
+      List<FoodItem> loadedFoodItems = event.foodItems;
+      emit(const FoodItemListLoading());
 
-      // 標記過期的食物為已過期
+      // 標記 expired date 小於今天的食物為 expired
       final List<FoodItem> expiredFoodItems = loadedFoodItems
-          .where((foodItem) => foodItem.status == FoodItemStatus.expired)
+          .where((foodItem) => foodItem.expirationDate.isBefore(DateTime.now()))
+          .map((foodItem) => foodItem.copyWith(status: FoodItemStatus.expired))
           .toList();
 
+      // 紀錄 expirationDate 大於等於今天的食物
+      List<FoodItem> remainFoodItems = loadedFoodItems
+          .where((foodItem) => foodItem.expirationDate.isAfter(DateTime.now()))
+          .toList();
+
+      // 將 remainFoodItems 中 expirationDate 小於 3 天的食物標記為 nearExpired
+      remainFoodItems = remainFoodItems.map((foodItem) {
+        if (foodItem.expirationDate.isBefore(
+          DateTime.now().add(const Duration(days: 3)),
+        )) {
+          return foodItem.copyWith(status: FoodItemStatus.nearExpired);
+        }
+        return foodItem;
+      }).toList();
+
       // 將 food item list 存到 Hive 中
-      await foodItemRepository.replaceAllFoodItems(loadedFoodItems);
+      await foodItemRepository.saveFoodItems(remainFoodItems);
 
       if (expiredFoodItems.isNotEmpty) {
         loadedFoodItems = loadedFoodItems
             .where((foodItem) => foodItem.status != FoodItemStatus.expired)
             .toList();
         emit(FoodItemListNeedProcessing(
-          remainFoodItems: loadedFoodItems,
+          remainFoodItems: remainFoodItems,
           tempFoodItems: expiredFoodItems,
           isConsumed: List.filled(expiredFoodItems.length, false),
         ));
@@ -145,6 +153,17 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       }
     });
 
+    on<FoodItemListClear>((event, emit) async {
+      if (state is FoodItemListLoaded) {
+        emit(const FoodItemListLoading());
+
+        // 使用 repository 清空資料
+        await foodItemRepository.clearAll();
+
+        emit(const FoodItemListLoaded(foodItems: []));
+      }
+    });
+
     on<FoodItemListProcessingUpdate>((event, emit) async {
       if (state is FoodItemListNeedProcessing) {
         final List<FoodItem> remainFoodItems =
@@ -167,18 +186,12 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
     on<FoodItemListProcessComplete>((event, emit) async {
       if (state is FoodItemListNeedProcessing) {
-        final List<FoodItem> remainFoodItems =
+        List<FoodItem> remainFoodItems =
             (state as FoodItemListNeedProcessing).remainFoodItems;
+
         emit(const FoodItemListLoading());
 
-        // 將所有食物存到 shared preferences
-        await SharedPreferences.getInstance().then((prefs) {
-          prefs.setStringList(
-            'foodItems',
-            remainFoodItems.map((foodItem) => foodItem.toJsonString()).toList(),
-          );
-        });
-
+        remainFoodItems = foodItemRepository.getNonExpiredFoodItems();
         emit(FoodItemListLoaded(foodItems: remainFoodItems));
       }
     });

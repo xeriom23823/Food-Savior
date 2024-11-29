@@ -18,9 +18,7 @@ class UsedFoodItemListBloc
     });
 
     on<UsedFoodItemListLoad>((event, emit) async {
-      for (var item in event.usedFoodItems) {
-        await usedFoodItemRepository.saveUsedFoodItem(item);
-      }
+      usedFoodItemRepository.saveUsedFoodItems(event.usedFoodItems);
       emit(UsedFoodItemListLoaded(usedFoodItems: event.usedFoodItems));
     });
 
@@ -59,46 +57,6 @@ class UsedFoodItemListBloc
       }
     });
 
-    on<UsedFoodItemListAddMultiple>((event, emit) async {
-      if (state is UsedFoodItemListLoaded) {
-        final List<UsedFoodItem> currentfoodItems =
-            usedFoodItemRepository.getAllUsedFoodItems();
-        emit(const UsedFoodItemListLoading());
-
-        // 確認當日的食物點數是否已經達到上限並添加至使用過食物列表
-        List<UsedFoodItem> updatedUsedFoodItems = [];
-        for (var usedFoodItem in event.usedFoodItems) {
-          final consumedDate = usedFoodItem.usedDate;
-          int consumedDateFoodPoint = 0;
-          for (var foodItem in currentfoodItems) {
-            if (foodItem.usedDate.year == consumedDate.year &&
-                foodItem.usedDate.month == consumedDate.month &&
-                foodItem.usedDate.day == consumedDate.day) {
-              consumedDateFoodPoint += foodItem.affectFoodPoint;
-            }
-          }
-
-          updatedUsedFoodItems.add(usedFoodItem.copyWith(
-            id: usedFoodItem.id,
-            affectFoodPoint: usedFoodItem.status == FoodItemStatus.consumed
-                ? consumedDateFoodPoint >= 10
-                    ? 0
-                    : 1
-                : -1,
-          ));
-        }
-
-        for (var item in updatedUsedFoodItems) {
-          await usedFoodItemRepository.saveUsedFoodItem(item);
-        }
-
-        final finalUsedFoodItems = usedFoodItemRepository.getAllUsedFoodItems()
-          ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
-
-        emit(UsedFoodItemListLoaded(usedFoodItems: finalUsedFoodItems));
-      }
-    });
-
     on<UsedFoodItemListRemove>((event, emit) async {
       if (state is UsedFoodItemListLoaded) {
         emit(const UsedFoodItemListLoading());
@@ -123,6 +81,13 @@ class UsedFoodItemListBloc
 
         emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
       }
+    });
+
+    on<UsedFoodItemListClear>((event, emit) async {
+      emit(const UsedFoodItemListLoading());
+
+      await usedFoodItemRepository.clearAll();
+      emit(const UsedFoodItemListLoaded(usedFoodItems: []));
     });
 
     add(UsedFoodItemListLoadFromDevice());

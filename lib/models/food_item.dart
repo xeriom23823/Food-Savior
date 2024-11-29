@@ -228,7 +228,7 @@ class FoodItem extends HiveObject {
         storageDate: storageDate,
         expirationDate: expirationDate,
         usedDate: usedDate,
-        affectFoodPoint: 0);
+        affectFoodPoint: usedStatus == FoodItemStatus.consumed ? 1 : -1);
   }
 
   // 將 FoodItem 物件轉換為 JSON 字符串

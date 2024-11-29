@@ -58,64 +58,74 @@ class _UserPageState extends State<UserPage> {
             Text(user.name ?? '', style: textTheme.headlineSmall),
             // 新增兩個按鈕：備份與還原
             ElevatedButton(
-              onPressed: () {
-                final foodItemList = context
-                    .read<FoodItemListBloc>()
-                    .foodItemRepository
-                    .getAllFoodItems();
-                final usedFoodItemList = context
-                    .read<UsedFoodItemListBloc>()
-                    .usedFoodItemRepository
-                    .getAllUsedFoodItems();
+              onPressed: _isBackingUp
+                  ? null
+                  : () {
+                      final foodItemList = context
+                          .read<FoodItemListBloc>()
+                          .foodItemRepository
+                          .getAllFoodItems();
+                      final usedFoodItemList = context
+                          .read<UsedFoodItemListBloc>()
+                          .usedFoodItemRepository
+                          .getAllUsedFoodItems();
 
-                backupData(user.id, foodItemList, usedFoodItemList);
-              },
+                      backupData(user.id, foodItemList, usedFoodItemList);
+                    },
               child: _isBackingUp
                   ? const CircularProgressIndicator()
                   : const Text('備份'),
             ),
             ElevatedButton(
-              onPressed: () async {
-                try {
-                  final foodItemListBloc =
-                      BlocProvider.of<FoodItemListBloc>(context);
-                  final usedFoodItemListBloc =
-                      BlocProvider.of<UsedFoodItemListBloc>(context);
-                  _isRestoring = true;
+              onPressed: _isRestoring
+                  ? null
+                  : () async {
+                      try {
+                        final foodItemListBloc =
+                            BlocProvider.of<FoodItemListBloc>(context);
+                        final usedFoodItemListBloc =
+                            BlocProvider.of<UsedFoodItemListBloc>(context);
+                        setState(() => _isRestoring = true);
 
-                  // 從伺服器取得資料
-                  final Map<String, dynamic> data = await restoreData(user.id);
+                        // 清除在地資料
+                        foodItemListBloc.add(FoodItemListClear());
+                        usedFoodItemListBloc.add(UsedFoodItemListClear());
 
-                  if (data.isNotEmpty) {
-                    // 還原已使用食物資料
-                    final List<UsedFoodItem> usedFoodItems =
-                        data['usedFoodItems'];
-                    await usedFoodItemListBloc.usedFoodItemRepository
-                        .replaceAllUsedFoodItems(usedFoodItems);
-                    usedFoodItemListBloc.add(UsedFoodItemListLoadFromDevice());
+                        // 從伺服器取得資料
+                        final Map<String, dynamic> data =
+                            await restoreData(user.id);
 
-                    // 還原食物資料
-                    final List<FoodItem> foodItems = data['foodItems'];
-                    await foodItemListBloc.foodItemRepository
-                        .replaceAllFoodItems(foodItems);
-                    foodItemListBloc.add(LoadFoodItemListFromDevice());
+                        if (data.isNotEmpty) {
+                          // 還原已使用食物資料
+                          final List<UsedFoodItem> usedFoodItems =
+                              data['usedFoodItems'];
 
-                    _isRestoring = false;
+                          usedFoodItemListBloc.add(UsedFoodItemListLoad(
+                              usedFoodItems: usedFoodItems));
 
-                    // 顯示成功訊息
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('資料還原成功')),
-                    );
-                  }
-                } catch (e) {
-                  _isRestoring = false;
+                          // 還原食物資料
+                          final List<FoodItem> foodItems = data['foodItems'];
+                          foodItemListBloc
+                              .add(FoodItemListLoad(foodItems: foodItems));
 
-                  // 顯示錯誤訊息
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('資料還原失敗: $e')),
-                  );
-                }
-              },
+                          setState(() => _isRestoring = false);
+
+                          // 顯示成功訊息
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('資料還原成功')),
+                          );
+                        }
+                      } catch (e) {
+                        setState(() {
+                          _isRestoring = false;
+                        });
+
+                        // 顯示錯誤訊息
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('資料還原失敗: $e')),
+                        );
+                      }
+                    },
               child: _isRestoring
                   ? const CircularProgressIndicator()
                   : const Text('還原'),
@@ -128,7 +138,9 @@ class _UserPageState extends State<UserPage> {
 
   Future<void> backupData(String userId, List<FoodItem> foodItemList,
       List<UsedFoodItem> usedFoodItemList) async {
-    _isBackingUp = true;
+    setState(() {
+      _isBackingUp = true;
+    });
     final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     // 將 foodItemList 轉換為 JSON 格式
@@ -154,7 +166,7 @@ class _UserPageState extends State<UserPage> {
       'usedFoodItems': usedFoodItemsJson,
     });
 
-    _isBackingUp = false;
+    setState(() => _isBackingUp = false);
 
     // 顯示成功訊息
     ScaffoldMessenger.of(context).showSnackBar(

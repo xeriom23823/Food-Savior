@@ -36,11 +36,28 @@ void main() async {
     ..init(directory.path)
     ..registerAdapters();
 
+  // 開啟 Boxes
+  final Box<FoodItem> foodItemBox = await Hive.openBox('foodItem');
+  final Box<UsedFoodItem> usedFoodItemBox = await Hive.openBox('usedFoodItem');
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(App(
-      authenticationRepository: authenticationRepository,
-    ));
+    runApp(
+      MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(
+            create: (context) => FoodItemRepository(foodItemBox: foodItemBox),
+          ),
+          RepositoryProvider(
+            create: (context) =>
+                UsedFoodItemRepository(usedFoodItemBox: usedFoodItemBox),
+          ),
+        ],
+        child: App(
+          authenticationRepository: authenticationRepository,
+        ),
+      ),
+    );
   });
 }
 
@@ -54,8 +71,6 @@ class FoodSavior extends StatefulWidget {
 
 class _FoodSaviorState extends State<FoodSavior> {
   final _pageController = PageController(initialPage: 2);
-  late final Box<FoodItem> _foodItemBox;
-  late final Box<UsedFoodItem> _usedFoodItemBox;
 
   final List<Widget> _pages = const [
     UserPage(),
@@ -65,87 +80,59 @@ class _FoodSaviorState extends State<FoodSavior> {
     SettingsPage()
   ];
 
-  Future<void> _openBoxes() async {
-    _foodItemBox = await Hive.openBox('foodItem');
-    _usedFoodItemBox = await Hive.openBox('usedFoodItem');
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _openBoxes(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return MultiRepositoryProvider(
-            providers: [
-              RepositoryProvider(
-                create: (context) =>
-                    FoodItemRepository(foodItemBox: _foodItemBox),
-              ),
-              RepositoryProvider(
-                create: (context) =>
-                    UsedFoodItemRepository(usedFoodItemBox: _usedFoodItemBox),
-              ),
-            ],
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider<FoodItemListBloc>(
-                  create: (context) => FoodItemListBloc(
-                    foodItemRepository: context.read<FoodItemRepository>(),
-                  ),
-                ),
-                BlocProvider<UsedFoodItemListBloc>(
-                  create: (context) => UsedFoodItemListBloc(
-                    usedFoodItemRepository:
-                        context.read<UsedFoodItemRepository>(),
-                  ),
-                ),
-              ],
-              child: Scaffold(
-                body: PageView(
-                  controller: _pageController,
-                  onPageChanged: null,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: _pages,
-                ),
-                bottomNavigationBar: CurvedNavigationBar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  buttonBackgroundColor:
-                      Theme.of(context).colorScheme.onPrimary,
-                  animationDuration: const Duration(milliseconds: 500),
-                  index: 2,
-                  onTap: _onTabTapped,
-                  items: [
-                    CurvedNavigationBarItem(
-                      child: const Icon(Icons.person),
-                      label: S.of(context).userNavigationBarTitle,
-                    ),
-                    CurvedNavigationBarItem(
-                      child: const Icon(Icons.bar_chart),
-                      label: S.of(context).chartAndStatisticsNavigationBarTitle,
-                    ),
-                    CurvedNavigationBarItem(
-                      child: const Icon(Icons.food_bank),
-                      label: S.of(context).foodItemListNavigationBarTitle,
-                    ),
-                    CurvedNavigationBarItem(
-                      child: const Icon(Icons.history),
-                      label: S.of(context).usedFoodItemListNavigationBarTitle,
-                    ),
-                    CurvedNavigationBarItem(
-                      child: const Icon(Icons.settings),
-                      label: S.of(context).settingsNavigationBarTitle,
-                    ),
-                  ],
-                ),
-              ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FoodItemListBloc>(
+          create: (context) => FoodItemListBloc(
+            foodItemRepository: context.read<FoodItemRepository>(),
+          ),
+        ),
+        BlocProvider<UsedFoodItemListBloc>(
+          create: (context) => UsedFoodItemListBloc(
+            usedFoodItemRepository: context.read<UsedFoodItemRepository>(),
+          ),
+        ),
+      ],
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: null,
+          physics: const NeverScrollableScrollPhysics(),
+          children: _pages,
+        ),
+        bottomNavigationBar: CurvedNavigationBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          color: Theme.of(context).colorScheme.onPrimary,
+          buttonBackgroundColor: Theme.of(context).colorScheme.onPrimary,
+          animationDuration: const Duration(milliseconds: 500),
+          index: 2,
+          onTap: _onTabTapped,
+          items: [
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.person),
+              label: S.of(context).userNavigationBarTitle,
             ),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.bar_chart),
+              label: S.of(context).chartAndStatisticsNavigationBarTitle,
+            ),
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.food_bank),
+              label: S.of(context).foodItemListNavigationBarTitle,
+            ),
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.history),
+              label: S.of(context).usedFoodItemListNavigationBarTitle,
+            ),
+            CurvedNavigationBarItem(
+              child: const Icon(Icons.settings),
+              label: S.of(context).settingsNavigationBarTitle,
+            ),
+          ],
+        ),
+      ),
     );
   }
 
