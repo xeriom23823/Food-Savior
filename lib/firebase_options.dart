@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '376153272412',
     projectId: 'foodsavior-792ee',
     storageBucket: 'foodsavior-792ee.firebasestorage.app',
-    iosClientId: '376153272412-sf2597v7c6ntg5785lcfa8jv6sb8o53f.apps.googleusercontent.com',
+    iosClientId:
+        '376153272412-sf2597v7c6ntg5785lcfa8jv6sb8o53f.apps.googleusercontent.com',
     iosBundleId: 'com.RateyHJ.foodSavior',
   );
 
@@ -74,8 +75,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '376153272412',
     projectId: 'foodsavior-792ee',
     storageBucket: 'foodsavior-792ee.firebasestorage.app',
-    iosClientId: '376153272412-m4n3gg1uinh6j2qidrgds5ugt83uqkrl.apps.googleusercontent.com',
-    iosBundleId: 'com.example.foodSavior',
+    iosClientId:
+        '376153272412-m4n3gg1uinh6j2qidrgds5ugt83uqkrl.apps.googleusercontent.com',
+    iosBundleId: 'com.RateyHJ.foodSavior',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -87,5 +89,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'foodsavior-792ee.firebasestorage.app',
     measurementId: 'G-4XS8FL8T0W',
   );
-
 }

@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/repositories/food_item_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'food_item_list_event.dart';
 part 'food_item_list_state.dart';
@@ -51,7 +50,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       List<FoodItem> loadedFoodItems = event.foodItems;
       emit(const FoodItemListLoading());
 
-      // 標記 expired date 小於今天的食物為 expired
+      // 標記 expirationDate 小於今天的食物為 expired
       final List<FoodItem> expiredFoodItems = loadedFoodItems
           .where((foodItem) => foodItem.expirationDate.isBefore(DateTime.now()))
           .map((foodItem) => foodItem.copyWith(status: FoodItemStatus.expired))
@@ -72,7 +71,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
         return foodItem;
       }).toList();
 
-      // 將 food item list 存到 Hive 中
+      // 將沒過期的 food item 存到 Hive 中
       await foodItemRepository.saveFoodItems(remainFoodItems);
 
       if (expiredFoodItems.isNotEmpty) {
