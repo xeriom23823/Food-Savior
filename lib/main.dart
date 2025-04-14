@@ -11,6 +11,7 @@ import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.da
 import 'package:food_savior/firebase_options.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/hive/hive_registrar.g.dart';
+import 'package:food_savior/mcp/services/mcp_service.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/pages/char_and_statistics_page.dart';
 import 'package:food_savior/pages/food_item_list_page.dart';
@@ -21,6 +22,9 @@ import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:food_savior/repositories/used_food_item_repository.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:path_provider/path_provider.dart';
+
+// 全局 MCP 服務實例
+late McpService mcpService;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,17 +44,34 @@ void main() async {
   final Box<FoodItem> foodItemBox = await Hive.openBox('foodItem');
   final Box<UsedFoodItem> usedFoodItemBox = await Hive.openBox('usedFoodItem');
 
+  // 初始化存儲庫
+  final foodItemRepository = FoodItemRepository(foodItemBox: foodItemBox);
+  final usedFoodItemRepository =
+      UsedFoodItemRepository(usedFoodItemBox: usedFoodItemBox);
+
+  // 初始化並啟動 MCP 服務
+  mcpService = McpService(
+    foodItemRepository: foodItemRepository,
+    usedFoodItemRepository: usedFoodItemRepository,
+  );
+
+  // 嘗試啟動 MCP 服務
+  try {
+    await mcpService.start(port: 8080);
+  } catch (e) {
+    print('啟動 MCP 服務失敗: $e');
+  }
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(
       MultiRepositoryProvider(
         providers: [
-          RepositoryProvider(
-            create: (context) => FoodItemRepository(foodItemBox: foodItemBox),
+          RepositoryProvider.value(
+            value: foodItemRepository,
           ),
-          RepositoryProvider(
-            create: (context) =>
-                UsedFoodItemRepository(usedFoodItemBox: usedFoodItemBox),
+          RepositoryProvider.value(
+            value: usedFoodItemRepository,
           ),
         ],
         child: App(
