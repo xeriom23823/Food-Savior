@@ -76,34 +76,29 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
         final availableWidth = constraints.maxWidth;
         final chartHeight = availableWidth * 0.6;
 
-        return Container(
-          width: availableWidth,
-          height: chartHeight,
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Text(
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-              const SizedBox(height: 8),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: availableWidth,
+                  height: chartHeight,
                   child: chart,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
