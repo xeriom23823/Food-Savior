@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  語言：繁體中文。所有 artifacts 以繁體中文撰寫；OpenSpec 結構標題（Purpose、Requirements、Requirement、Scenario、ADDED/MODIFIED/REMOVED）
+  與 SHALL/MUST/WHEN/THEN 關鍵字保留英文；技術名詞（Bloc、Cubit、Repository、Hive、Firestore、l10n）保留英文。
+
+  產品：Food Savior 食物救世主 —— 記錄家中生鮮食物的保存期限、提醒即將過期、
+  以食物點數（Food Point）獎勵食用／懲罰浪費的手機 App。Android 優先、iOS 次之；桌面與 Web 只維持可編譯。
+
+  技術棧：Flutter 3.47 / Dart 3.13、flutter_bloc 9（Bloc + Cubit）、Equatable、Hive CE（本機儲存）、
+  Firebase Auth + Cloud Firestore、intl / intl_utils 多語系（zh-TW 預設、en）、fl_chart、flutter_slidable、Lottie、Material 3。
+
+  架構：pages（純 UI）→ Bloc / Cubit（狀態與商業邏輯）→ Repository（資料存取）→ Hive Box / Firebase。
+  狀態物件不可變（Equatable）；Repository 是唯一觸碰 Hive / Firestore 的層；所有使用者可見文字經由 l10n。
+
+  規格即真相：openspec/specs/ 描述系統「現在」的行為；任何行為變更必須先以 change 的 delta spec 提出，
+  實作完成並通過驗證後 archive 併入主規格。
+
+  半年 roadmap（依序）：UI 設計系統重製、過期提醒（本機通知）、條碼／QR 掃描與電子發票載具、
+  Hive ↔ Firestore 雙向同步、AI 料理推薦（Claude API 經後端代理）。相關領域知識見 .claude/skills/。
+
+rules:
+  proposal:
+    - 以使用者可感知的結果與要驗證的假設開頭，並說明為何現在做。
+    - 必須包含「非目標」與「範圍上限」（頁面數、資料欄位數、支援平台、新增套件數）。
+    - 列出對資料模型（Hive schema、Firestore 結構）、Bloc 狀態、l10n 字串、平台權限（Android / iOS）的影響；Hive 欄位變更必須說明既有資料的相容策略。
+  specs:
+    - 每個 Requirement 至少一個 Scenario；Scenario 以 WHEN / THEN（必要時加 GIVEN）描述使用者可觀察的行為，不描述實作細節。
+    - 涉及日期與期限的需求必須寫明「以裝置當地日期為準」與邊界條件（例如 3 天內視為快過期、到期日當天的判定）。
+    - 涉及文字的需求以 l10n key 名稱指稱（例如 `quantityExceedsAvailable`），不硬編碼中文或英文字串。
+    - 涉及顏色、字級、間距的需求引用 design-system 規格的 token 名稱，不寫數值。
+  design:
+    - 說明 Bloc 事件／狀態的變化、Repository 介面、資料流方向，以及錯誤、離線、權限被拒等情境的處理。
+    - 新增套件時列出套件名稱、版本約束、平台需求（minSdk、Info.plist 權限、Gradle 設定）與捨棄的替代方案。
+    - 涉及時間的邏輯必須可注入時鐘（clock）以便測試。
+  tasks:
+    - 每個 Bloc / Cubit / Repository 變更都配一個 bloc_test 或單元測試任務；每個新頁面配一個 widget test 任務。
+    - 新增使用者可見文字的任務要包含更新 lib/l10n/intl_zh.arb 與 intl_en.arb 並重新產生。
+    - 涉及 Hive adapter 的任務要包含 build_runner 重新產生與「舊資料仍可開啟」的驗證。
+    - 最後一節固定為「驗證」：dart format、flutter analyze、flutter test、在裝置或模擬器實際操作變更到的畫面（明暗主題、zh / en）、openspec validate --all --strict。
+
+operations:
+  apply:
+    guidance:
+      - 先讀 openspec/specs/ 中受影響能力的現行規格，再讀 change 的 delta；以 delta 為準，但不可破壞 delta 未提及的既有 Scenario。
+      - 商業邏輯放在 Bloc / Repository，不放在 pages；新字串一律進 arb 再重新產生，不硬編碼。
+      - 每完成一個任務立即勾選 tasks.md；結束前執行 node .claude/hooks/stop-verify.cjs --manual 取得驗證證據並如實回報。
+  archive:
+    guidance:
+      - archive 前必須 flutter test 全綠且 openspec validate --all --strict 通過（PreToolUse hook 會強制檢查）。
+      - 在回報中記錄實機驗證結果（裝置或模擬器、平台版本、主題與語系）與尚未完成的後續事項。

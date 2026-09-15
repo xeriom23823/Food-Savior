@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "enabledMcpjsonServers": ["dart"],
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze:*)",
+      "Bash(flutter test:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter pub outdated:*)",
+      "Bash(flutter pub deps:*)",
+      "Bash(flutter doctor:*)",
+      "Bash(flutter devices:*)",
+      "Bash(flutter --version:*)",
+      "Bash(flutter gen-l10n:*)",
+      "Bash(dart format:*)",
+      "Bash(dart analyze:*)",
+      "Bash(dart fix:*)",
+      "Bash(dart run build_runner:*)",
+      "Bash(dart run intl_utils:*)",
+      "Bash(dart pub:*)",
+      "Bash(openspec status:*)",
+      "Bash(openspec list:*)",
+      "Bash(openspec show:*)",
+      "Bash(openspec view:*)",
+      "Bash(openspec validate:*)",
+      "Bash(openspec instructions:*)",
+      "Bash(openspec schemas:*)",
+      "Bash(openspec new:*)",
+      "Bash(node .claude/hooks/*)",
+      "Bash(node tool/*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git branch:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/dart-post-edit.cjs",
+            "timeout": 90
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/openspec-archive-gate.cjs",
+            "timeout": 600
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/stop-verify.cjs",
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}

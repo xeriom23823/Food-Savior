@@ -1,0 +1,42 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "apply_patch|Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/dart-post-edit.cjs",
+            "statusMessage": "dart format 變更檔案",
+            "timeout": 90
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|shell|shell_command|local_shell|exec_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/openspec-archive-gate.cjs",
+            "statusMessage": "OpenSpec archive 品質關卡",
+            "timeout": 600
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/stop-verify.cjs",
+            "statusMessage": "dart format / flutter analyze / flutter test",
+            "timeout": 600
+          }
+        ]
+      }
+    ]
+  }
+}

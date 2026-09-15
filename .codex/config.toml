@@ -1,0 +1,9 @@
+# 專案層級 Codex 設定（Codex 需將此專案標記為 trusted 才會讀取）。
+# hooks 定義在 .codex/hooks.json，腳本與 Claude Code 共用（.claude/hooks/*.cjs）。
+
+# Dart/Flutter 官方 MCP server：analyze、pub、run_tests、launch_app、hot_reload、
+# get_runtime_errors、widget_inspector 等。若此檔未被讀取，請把這段貼到 ~/.codex/config.toml。
+[mcp_servers.dart]
+command = "dart"
+args = ["mcp-server"]
+startup_timeout_sec = 60
