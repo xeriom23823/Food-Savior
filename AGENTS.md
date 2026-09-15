@@ -111,7 +111,7 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 5. `.github/workflows/flutter_ci.yml` 已更新到 actions v4／Flutter 3.47.4／build-android 用 JDK 21，但尚未在 GitHub 上實際跑過；本機 `flutter build apk --debug` 已通過。
 6. 食物類型圖示已從停止維護的 `material_design_icons_flutter` 換成 `font_awesome_flutter` 11（Flutter 3.47 相容性所迫），外觀待 design-system-redesign 一併審視；不可再引入 MDI。
 7. `FoodItemListUpdate` 以值相等尋找原項目；呼叫端必須傳清單中的同一實例。design-system-redesign D8 改為以 id 比對。
-8. Google 登入已遷移到 google_sign_in 7（`GoogleSignIn.instance.initialize()` → `authenticate()` → 只用 ID token），**尚未實機驗證**；Android 依賴 google-services.json 內的 web OAuth client 自動當 serverClientId。iOS／macOS 的 `GoogleService-Info.plist`／URL scheme 設定需在 macOS 上建置驗證。
+8. Google 登入已遷移到 google_sign_in 7（`GoogleSignIn.instance.initialize()` → `authenticate()` → 只用 ID token）。Android 依賴 google-services.json 內的 web OAuth client 自動當 serverClientId，**且 Firebase Android app 必須登錄該機器簽章的 SHA-1**（2026-09-15 首次實機測試出現「Sign in was cancelled」就是因為沒有登錄；已用 `firebase apps:android:sha:create` 登錄本機 debug keystore 的 SHA-1／SHA-256，並重新下載 google-services.json，現在含 Android OAuth client）。換電腦、換 keystore 或發 release 時要再登錄對應 SHA：`keytool -list -v -keystore <keystore>`，然後 `firebase apps:android:sha:create 1:376153272412:android:f98c38314b3282de043699 <SHA> --project foodsavior-792ee`，再 `firebase apps:sdkconfig android <appId> --project foodsavior-792ee --out <暫存檔>` 覆蓋 `android/app/google-services.json`。iOS／macOS 設定需在 macOS 上建置驗證。
 9. `image_cropper`、`image_picker`、`dotted_border`、`google_fonts` 已於 2026-09-15 移除（未使用）；未來做頭像上傳時再加回 `image_picker`。
 
 已修正（change `fix-inventory-and-points-consistency`，待 archive）：過期處理後項目未刪除、批次寫入不套用點數上限、`copyWith` 把 id 清成空字串、`==`／`hashCode` 契約、Repository 未 `await` 寫入、列舉擴充 `name()` 遮蔽 `Enum.name` 使 `toJson` 失效、載入未排序、4 個 deprecation。

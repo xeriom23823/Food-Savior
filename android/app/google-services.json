@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "376153272412-kfeot1ogpq26t9u76rj1iucvqbgq1sll.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.food_savior",
+            "certificate_hash": "e2237607ef272206f2243d40650c7d491322dbf0"
+          }
+        },
+        {
           "client_id": "376153272412-meb796d00mlh8qndirkdnm7ndfr2o276.apps.googleusercontent.com",
           "client_type": 3
         }

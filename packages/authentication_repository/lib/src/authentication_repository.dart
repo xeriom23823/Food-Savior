@@ -145,13 +145,40 @@ class LogInWithGoogleFailure implements Exception {
   }
 
   /// Create an authentication message from a google_sign_in exception.
+  ///
+  /// Note: on Android, a missing or mismatched signing SHA-1 in the Firebase
+  /// project surfaces as [GoogleSignInExceptionCode.canceled] (Credential
+  /// Manager dismisses the picker), so the "cancelled" message also hints at
+  /// configuration.
   factory LogInWithGoogleFailure.fromGoogleSignIn(GoogleSignInException e) {
     switch (e.code) {
       case GoogleSignInExceptionCode.canceled:
-        return const LogInWithGoogleFailure('Sign in was cancelled.');
-      default:
         return const LogInWithGoogleFailure(
-          'Google Sign-In failed. Please try again.',
+          'Sign in was cancelled. If you did not cancel, check that this '
+          "build's signing SHA-1 is registered in the Firebase project.",
+        );
+      case GoogleSignInExceptionCode.interrupted:
+        return const LogInWithGoogleFailure(
+          'Sign in was interrupted. Please try again.',
+        );
+      case GoogleSignInExceptionCode.clientConfigurationError:
+      case GoogleSignInExceptionCode.providerConfigurationError:
+        return LogInWithGoogleFailure(
+          'Google Sign-In is not configured correctly'
+          '${e.description == null ? '' : ': ${e.description}'}.',
+        );
+      case GoogleSignInExceptionCode.uiUnavailable:
+        return const LogInWithGoogleFailure(
+          'Google Sign-In UI is unavailable on this device.',
+        );
+      case GoogleSignInExceptionCode.userMismatch:
+        return const LogInWithGoogleFailure(
+          'A different Google account was returned than requested.',
+        );
+      case GoogleSignInExceptionCode.unknownError:
+        return LogInWithGoogleFailure(
+          'Google Sign-In failed'
+          '${e.description == null ? '' : ': ${e.description}'}.',
         );
     }
   }
