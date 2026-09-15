@@ -104,8 +104,8 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 
 ## 已知問題與技術債（開 change 修正，勿默默順手改）
 
-1. `LocaleCubit` 未持久化，重啟後語系回到 zh-TW（需要決定是否持久化 → 小 change）。
-2. 月趨勢圖以 `usedDate.month` 為鍵，跨年資料會疊加（需要決定 X 軸粒度 → 小 change）。
+1. ~~`LocaleCubit` 未持久化~~ 已修正（change `persist-locale-selection`，待 archive）。
+2. ~~月趨勢圖跨年疊加~~ 已修正（change `monthly-trend-year-month`，待 archive）；統計頁字串已 l10n。
 3. 備份使用 `toJsonString`（列舉以 `FoodItemType.x` 字串序列化）；`toJson`／`fromJson`（以 `name` 序列化）已可用，firestore-sync 時整併並提供讀取兩種格式的遷移。
 4. `food_item_list_page.dart` 超過 1000 行、頁面內含商業邏輯與硬編碼中文（「過期食物清單」、「處理完成」、「備份」、「還原」等）；由 design-system-redesign D8 處理。
 5. `.github/workflows/flutter_ci.yml` 已更新到 actions v4／Flutter 3.47.4／build-android 用 JDK 21，但尚未在 GitHub 上實際跑過；本機 `flutter build apk --debug` 已通過。
