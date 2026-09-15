@@ -1,4 +1,9 @@
 {
   "@@locale": "messages",
-  "@@last_modified": "2024-10-28T22:52:35.808598"
+  "@@last_modified": "2024-10-28T22:52:35.808598",
+  "chartAndStatisticsPageTitle": "圖表與統計",
+  "consumedFoodPointsByType": "食物點數消耗統計",
+  "wastedFoodPointsByType": "食物點數浪費統計",
+  "monthlyTrend": "每月趨勢",
+  "noData": "尚無資料"
 }

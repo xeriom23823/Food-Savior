@@ -77,5 +77,10 @@
   "expireToday": "Expire Today",
   "expired": "Expired",
   "quantityExceedsAvailable": "Quantity exceeds available",
-  "days": "days"
+  "days": "days",
+  "chartAndStatisticsPageTitle": "Charts & Statistics",
+  "consumedFoodPointsByType": "Consumed food points by type",
+  "wastedFoodPointsByType": "Wasted food points by type",
+  "monthlyTrend": "Monthly trend",
+  "noData": "No data yet"
 }

@@ -21,5 +21,16 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'messages';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "chartAndStatisticsPageTitle": MessageLookupByLibrary.simpleMessage(
+          "圖表與統計",
+        ),
+        "consumedFoodPointsByType": MessageLookupByLibrary.simpleMessage(
+          "食物點數消耗統計",
+        ),
+        "monthlyTrend": MessageLookupByLibrary.simpleMessage("每月趨勢"),
+        "noData": MessageLookupByLibrary.simpleMessage("尚無資料"),
+        "wastedFoodPointsByType":
+            MessageLookupByLibrary.simpleMessage("食物點數浪費統計"),
+      };
 }

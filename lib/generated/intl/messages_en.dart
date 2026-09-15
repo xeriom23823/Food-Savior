@@ -29,9 +29,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "chartAndStatisticsNavigationBarTitle":
             MessageLookupByLibrary.simpleMessage("Chart"),
+        "chartAndStatisticsPageTitle": MessageLookupByLibrary.simpleMessage(
+          "Charts & Statistics",
+        ),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm Password"),
         "consumed": MessageLookupByLibrary.simpleMessage("Consumed"),
+        "consumedFoodPointsByType": MessageLookupByLibrary.simpleMessage(
+          "Consumed food points by type",
+        ),
         "createAccount": MessageLookupByLibrary.simpleMessage("Create Account"),
         "darkMode": MessageLookupByLibrary.simpleMessage("Dark Mode"),
         "days": MessageLookupByLibrary.simpleMessage("days"),
@@ -44,9 +50,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "expireToday": MessageLookupByLibrary.simpleMessage("Expire Today"),
         "expired": MessageLookupByLibrary.simpleMessage("Expired"),
         "foodItemListError": MessageLookupByLibrary.simpleMessage(
-            "Failed to load, please try again"),
-        "foodItemListNavigationBarTitle":
-            MessageLookupByLibrary.simpleMessage("Food"),
+          "Failed to load, please try again",
+        ),
+        "foodItemListNavigationBarTitle": MessageLookupByLibrary.simpleMessage(
+          "Food",
+        ),
         "foodItemListViewTitle":
             MessageLookupByLibrary.simpleMessage("Food List"),
         "foodItemStatusConsumed":
@@ -54,19 +62,23 @@ class MessageLookup extends MessageLookupByLibrary {
         "foodItemStatusExpired":
             MessageLookupByLibrary.simpleMessage("Expired"),
         "foodItemStatusFresh": MessageLookupByLibrary.simpleMessage("Fresh"),
-        "foodItemStatusNearExpired":
-            MessageLookupByLibrary.simpleMessage("Near Expiry"),
+        "foodItemStatusNearExpired": MessageLookupByLibrary.simpleMessage(
+          "Near Expiry",
+        ),
         "foodItemStatusUnknown":
             MessageLookupByLibrary.simpleMessage("Unknown"),
         "foodItemStatusWasted": MessageLookupByLibrary.simpleMessage("Wasted"),
         "foodItemTypeBread": MessageLookupByLibrary.simpleMessage("Bread"),
-        "foodItemTypeCannedFood":
-            MessageLookupByLibrary.simpleMessage("Canned Food"),
-        "foodItemTypeCookedFood":
-            MessageLookupByLibrary.simpleMessage("Cooked Food"),
+        "foodItemTypeCannedFood": MessageLookupByLibrary.simpleMessage(
+          "Canned Food",
+        ),
+        "foodItemTypeCookedFood": MessageLookupByLibrary.simpleMessage(
+          "Cooked Food",
+        ),
         "foodItemTypeDrink": MessageLookupByLibrary.simpleMessage("Drink"),
-        "foodItemTypeEggAndMilk":
-            MessageLookupByLibrary.simpleMessage("Egg and Milk"),
+        "foodItemTypeEggAndMilk": MessageLookupByLibrary.simpleMessage(
+          "Egg and Milk",
+        ),
         "foodItemTypeFruit": MessageLookupByLibrary.simpleMessage("Fruit"),
         "foodItemTypeMeat": MessageLookupByLibrary.simpleMessage("Meat"),
         "foodItemTypeOthers": MessageLookupByLibrary.simpleMessage("Others"),
@@ -81,38 +93,50 @@ class MessageLookup extends MessageLookupByLibrary {
         "logIn": MessageLookupByLibrary.simpleMessage("Log In"),
         "logInFailure": MessageLookupByLibrary.simpleMessage("Log In Failed"),
         "loginPageTitle": MessageLookupByLibrary.simpleMessage("Log In Page"),
+        "monthlyTrend": MessageLookupByLibrary.simpleMessage("Monthly trend"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
-        "nameCannotBeEmpty":
-            MessageLookupByLibrary.simpleMessage("Name cannot be empty"),
-        "passwordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
-        "quanityMustBeANumber":
-            MessageLookupByLibrary.simpleMessage("Quantity must be a number"),
+        "nameCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+          "Name cannot be empty",
+        ),
+        "noData": MessageLookupByLibrary.simpleMessage("No data yet"),
+        "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+          "Passwords do not match",
+        ),
+        "quanityMustBeANumber": MessageLookupByLibrary.simpleMessage(
+          "Quantity must be a number",
+        ),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
-        "quantityCannotBeEmpty":
-            MessageLookupByLibrary.simpleMessage("Quantity cannot be empty"),
-        "quantityExceedsAvailable":
-            MessageLookupByLibrary.simpleMessage("Quantity exceeds available"),
-        "quantityMustBePositive":
-            MessageLookupByLibrary.simpleMessage("Quantity must be positive"),
+        "quantityCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+          "Quantity cannot be empty",
+        ),
+        "quantityExceedsAvailable": MessageLookupByLibrary.simpleMessage(
+          "Quantity exceeds available",
+        ),
+        "quantityMustBePositive": MessageLookupByLibrary.simpleMessage(
+          "Quantity must be positive",
+        ),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
-        "settingsNavigationBarTitle":
-            MessageLookupByLibrary.simpleMessage("Settings"),
+        "settingsNavigationBarTitle": MessageLookupByLibrary.simpleMessage(
+          "Settings",
+        ),
         "settingsPageTitle":
             MessageLookupByLibrary.simpleMessage("Settings Page"),
-        "showNotification":
-            MessageLookupByLibrary.simpleMessage("Show Notification"),
-        "signInWithGoogle":
-            MessageLookupByLibrary.simpleMessage("Sign In with Google"),
+        "showNotification": MessageLookupByLibrary.simpleMessage(
+          "Show Notification",
+        ),
+        "signInWithGoogle": MessageLookupByLibrary.simpleMessage(
+          "Sign In with Google",
+        ),
         "signUp": MessageLookupByLibrary.simpleMessage("Sign Up"),
         "signUpFailure": MessageLookupByLibrary.simpleMessage("Sign Up Failed"),
         "signUpPageTitle": MessageLookupByLibrary.simpleMessage("Sign Up Page"),
         "storageDate": MessageLookupByLibrary.simpleMessage("Storage Date"),
         "title": MessageLookupByLibrary.simpleMessage("Food Savior"),
         "unit": MessageLookupByLibrary.simpleMessage("Unit"),
-        "unitCannotBeEmpty":
-            MessageLookupByLibrary.simpleMessage("Please select a unit"),
+        "unitCannotBeEmpty": MessageLookupByLibrary.simpleMessage(
+          "Please select a unit",
+        ),
         "unitGram": MessageLookupByLibrary.simpleMessage("gram"),
         "unitMilliliter": MessageLookupByLibrary.simpleMessage("milliliter"),
         "unitPiece": MessageLookupByLibrary.simpleMessage("piece"),
@@ -122,9 +146,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "useFoodItem": MessageLookupByLibrary.simpleMessage("Use Food"),
         "usedDate": MessageLookupByLibrary.simpleMessage("Used Date"),
         "usedFoodItemListNavigationBarTitle":
-            MessageLookupByLibrary.simpleMessage("Records"),
+            MessageLookupByLibrary.simpleMessage(
+          "Records",
+        ),
         "userNavigationBarTitle": MessageLookupByLibrary.simpleMessage("User"),
         "userPageTitle": MessageLookupByLibrary.simpleMessage("User Page"),
-        "wasted": MessageLookupByLibrary.simpleMessage("Wasted")
+        "wasted": MessageLookupByLibrary.simpleMessage("Wasted"),
+        "wastedFoodPointsByType": MessageLookupByLibrary.simpleMessage(
+          "Wasted food points by type",
+        ),
       };
 }

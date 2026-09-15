@@ -77,5 +77,10 @@
   "expireToday": "今日過期",
   "expired": "已過期",
   "quantityExceedsAvailable": "數量超過可使用的量",
-  "days": "天"
+  "days": "天",
+  "chartAndStatisticsPageTitle": "圖表與統計",
+  "consumedFoodPointsByType": "食物點數消耗統計",
+  "wastedFoodPointsByType": "食物點數浪費統計",
+  "monthlyTrend": "每月趨勢",
+  "noData": "尚無資料"
 }

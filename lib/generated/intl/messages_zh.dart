@@ -29,8 +29,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "chartAndStatisticsNavigationBarTitle":
             MessageLookupByLibrary.simpleMessage("圖表"),
+        "chartAndStatisticsPageTitle": MessageLookupByLibrary.simpleMessage(
+          "圖表與統計",
+        ),
         "confirmPassword": MessageLookupByLibrary.simpleMessage("確認密碼"),
         "consumed": MessageLookupByLibrary.simpleMessage("使用"),
+        "consumedFoodPointsByType": MessageLookupByLibrary.simpleMessage(
+          "食物點數消耗統計",
+        ),
         "createAccount": MessageLookupByLibrary.simpleMessage("建立帳號"),
         "darkMode": MessageLookupByLibrary.simpleMessage("黑夜模式"),
         "days": MessageLookupByLibrary.simpleMessage("天"),
@@ -42,8 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "expireToday": MessageLookupByLibrary.simpleMessage("今日過期"),
         "expired": MessageLookupByLibrary.simpleMessage("已過期"),
         "foodItemListError": MessageLookupByLibrary.simpleMessage("載入失敗，請重試"),
-        "foodItemListNavigationBarTitle":
-            MessageLookupByLibrary.simpleMessage("食物"),
+        "foodItemListNavigationBarTitle": MessageLookupByLibrary.simpleMessage(
+          "食物",
+        ),
         "foodItemListViewTitle": MessageLookupByLibrary.simpleMessage("食物清單"),
         "foodItemStatusConsumed": MessageLookupByLibrary.simpleMessage("已使用"),
         "foodItemStatusExpired": MessageLookupByLibrary.simpleMessage("已過期"),
@@ -69,14 +76,17 @@ class MessageLookup extends MessageLookupByLibrary {
         "logIn": MessageLookupByLibrary.simpleMessage("登入"),
         "logInFailure": MessageLookupByLibrary.simpleMessage("登入失敗"),
         "loginPageTitle": MessageLookupByLibrary.simpleMessage("登入頁面"),
+        "monthlyTrend": MessageLookupByLibrary.simpleMessage("每月趨勢"),
         "name": MessageLookupByLibrary.simpleMessage("名稱"),
         "nameCannotBeEmpty": MessageLookupByLibrary.simpleMessage("名稱不能為空"),
+        "noData": MessageLookupByLibrary.simpleMessage("尚無資料"),
         "passwordsDoNotMatch": MessageLookupByLibrary.simpleMessage("密碼不相符"),
         "quanityMustBeANumber": MessageLookupByLibrary.simpleMessage("數量必須為數字"),
         "quantity": MessageLookupByLibrary.simpleMessage("數量"),
         "quantityCannotBeEmpty": MessageLookupByLibrary.simpleMessage("數量不能為空"),
-        "quantityExceedsAvailable":
-            MessageLookupByLibrary.simpleMessage("數量超過可使用的量"),
+        "quantityExceedsAvailable": MessageLookupByLibrary.simpleMessage(
+          "數量超過可使用的量",
+        ),
         "quantityMustBePositive":
             MessageLookupByLibrary.simpleMessage("數量必須為正數"),
         "refresh": MessageLookupByLibrary.simpleMessage("重新整理"),
@@ -103,9 +113,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "useFoodItem": MessageLookupByLibrary.simpleMessage("使用食物"),
         "usedDate": MessageLookupByLibrary.simpleMessage("使用日期"),
         "usedFoodItemListNavigationBarTitle":
-            MessageLookupByLibrary.simpleMessage("紀錄"),
+            MessageLookupByLibrary.simpleMessage(
+          "紀錄",
+        ),
         "userNavigationBarTitle": MessageLookupByLibrary.simpleMessage("用戶"),
         "userPageTitle": MessageLookupByLibrary.simpleMessage("使用者頁面"),
-        "wasted": MessageLookupByLibrary.simpleMessage("浪費")
+        "wasted": MessageLookupByLibrary.simpleMessage("浪費"),
+        "wastedFoodPointsByType":
+            MessageLookupByLibrary.simpleMessage("食物點數浪費統計"),
       };
 }

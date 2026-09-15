@@ -2,7 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:food_savior/statistics/monthly_trend.dart';
 
 class ChartAndStatisticsPage extends StatefulWidget {
   const ChartAndStatisticsPage({super.key});
@@ -14,8 +16,7 @@ class ChartAndStatisticsPage extends StatefulWidget {
 class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
   List<MyPieChartData> _consumedFoodPointsData = [];
   List<MyPieChartData> _wastedFoodPointsData = [];
-  List<FlSpot> _monthlyConsumedTrend = [];
-  List<FlSpot> _monthlyWastedTrend = [];
+  List<MonthlyTrendPoint> _monthlyTrend = [];
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
         return Scaffold(
           appBar: AppBar(
             title: Text(
-              '圖表與統計',
+              S.of(context).chartAndStatisticsPageTitle,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimary,
                 fontSize: 20,
@@ -49,15 +50,15 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
                     child: Column(
                       children: [
                         _buildChartCard(
-                          '食物點數消耗統計',
+                          S.of(context).consumedFoodPointsByType,
                           _buildPieChart(_consumedFoodPointsData),
                         ),
                         _buildChartCard(
-                          '食物點數浪費統計',
+                          S.of(context).wastedFoodPointsByType,
                           _buildPieChart(_wastedFoodPointsData),
                         ),
                         _buildChartCard(
-                          '每月趨勢',
+                          S.of(context).monthlyTrend,
                           _buildLineChart(),
                         ),
                       ],
@@ -107,7 +108,7 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
 
   Widget _buildPieChart(List<MyPieChartData> data) {
     if (data.isEmpty) {
-      return const Center(child: Text('尚無資料'));
+      return Center(child: Text(S.of(context).noData));
     }
     return PieChart(
       PieChartData(
@@ -134,29 +135,63 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
   }
 
   Widget _buildLineChart() {
+    if (_monthlyTrend.isEmpty) {
+      return Center(child: Text(S.of(context).noData));
+    }
+    // X 軸用索引，刻度文字取 yyyy/MM；點數多時每隔幾個才標，避免重疊
+    final labelStep = (_monthlyTrend.length / 6).ceil();
+    List<FlSpot> spots(int Function(MonthlyTrendPoint p) value) => [
+          for (var i = 0; i < _monthlyTrend.length; i++)
+            FlSpot(i.toDouble(), value(_monthlyTrend[i]).toDouble()),
+        ];
     return LineChart(
       LineChartData(
         gridData: FlGridData(show: true),
+        minX: 0,
+        maxX: (_monthlyTrend.length - 1).clamp(1, 1 << 20).toDouble(),
         titlesData: FlTitlesData(
+          topTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles:
+              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 32),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
+              interval: 1,
+              getTitlesWidget: (value, meta) {
+                final index = value.round();
+                final isTick = (value - index).abs() < 0.001;
+                final inRange = index >= 0 && index < _monthlyTrend.length;
+                final isLast = index == _monthlyTrend.length - 1;
+                if (!isTick ||
+                    !inRange ||
+                    (index % labelStep != 0 && !isLast)) {
+                  return const SizedBox.shrink();
+                }
+                return SideTitleWidget(
+                  meta: meta,
+                  child: Text(
+                    _monthlyTrend[index].label,
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                );
+              },
             ),
           ),
         ),
         lineBarsData: [
           LineChartBarData(
-            spots: _monthlyConsumedTrend,
+            spots: spots((p) => p.consumed),
             color: Colors.green,
             barWidth: 2,
             dotData: FlDotData(show: true),
           ),
           LineChartBarData(
-            spots: _monthlyWastedTrend,
+            spots: spots((p) => p.wasted),
             color: Colors.red,
             barWidth: 2,
             dotData: FlDotData(show: true),
@@ -189,26 +224,8 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
   }
 
   void _getMonthlyTrendData(List<UsedFoodItem> usedFoodItems) {
-    final Map<int, int> consumedByMonth = {};
-    final Map<int, int> wastedByMonth = {};
-
-    for (var item in usedFoodItems) {
-      final monthKey = item.usedDate.month;
-      if (item.status == FoodItemStatus.consumed) {
-        consumedByMonth[monthKey] =
-            (consumedByMonth[monthKey] ?? 0) + item.affectFoodPoint;
-      } else if (item.status == FoodItemStatus.wasted) {
-        wastedByMonth[monthKey] =
-            (wastedByMonth[monthKey] ?? 0) + item.affectFoodPoint;
-      }
-    }
-
-    _monthlyConsumedTrend = consumedByMonth.entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value.toDouble()))
-        .toList();
-    _monthlyWastedTrend = wastedByMonth.entries
-        .map((e) => FlSpot(e.key.toDouble(), e.value.toDouble()))
-        .toList();
+    // statistics-charts：年月粒度、補 0、最近 12 個月（純函式，可測試）
+    _monthlyTrend = monthlyTrend(usedFoodItems);
   }
 }
 
