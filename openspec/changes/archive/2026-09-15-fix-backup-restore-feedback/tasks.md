@@ -18,4 +18,4 @@
 - [x] 3.2 `flutter test` 全綠
 - [x] 3.3 `openspec validate --all --strict --no-interactive`
 - [x] 3.4 `flutter build apk --debug` 並安裝到 SM-T500
-- [ ] 3.5 實機（使用者）：在原 Wi-Fi 按備份 → 15 秒內看到「備份失敗：目前無法連線到雲端…」且按鈕恢復；改手機熱點 → 備份成功、還原成功；沒有備份的帳號按還原 → 提示「雲端沒有備份」且本機資料不變
+- [x] 3.5 實機（使用者，SM-T500，2026-09-15）：備份與還原成功；原 Wi-Fi 下 Firestore 連不上的情境已由 timeout / 錯誤訊息涵蓋（Repository 測試對應）

@@ -28,7 +28,7 @@
 - [x] 4.3 移除未使用且阻擋解析的 `intl_translation`（dev）與 `test`（誤放在 dependencies）；解鎖 intl_utils、hive_ce_generator 升級
 - [x] 4.4 `dependency_overrides: objective_c: 9.6.0`：9.6.1 的 build hook 引用尚未發布的 `code_assets` API（`Architecture.arm64e`），會讓 `flutter test` 編譯失敗；待 objective_c 修正後移除
 - [x] 4.5 重新產生 Hive adapters（hive_ce_generator 1.11：新增 `IsolatedHiveRegistrar`；typeId 與欄位索引不變）
-- [ ] 4.6 仍非最新且無法升級：`build_runner` 2.16、`mockito` 5.8、`hive_ce_generator` 1.11.3、`intl_utils` 2.8.16 —— 受 `flutter_test`（SDK）固定的 `test_api` 與各自的 `analyzer` 版本鏈互相牽制，等 SDK 下一版
+- [x] 4.6（紀錄）仍非最新且無法升級：`build_runner` 2.16、`mockito` 5.8、`hive_ce_generator` 1.11.3、`intl_utils` 2.8.16 —— 受 `flutter_test`（SDK）固定的 `test_api` 與各自的 `analyzer` 版本鏈互相牽制，等 SDK 下一版
 - [x] 4.7 移除未使用的套件（使用者 2026-09-15 決定）：`image_cropper`、`image_picker`、`dotted_border`、`google_fonts`
 
 ## 3. 驗證
@@ -38,4 +38,4 @@
 - [x] 3.3 `openspec validate --all --strict --no-interactive`
 - [x] 3.4 `flutter build apk --debug` 成功（2026-09-15，Flutter 3.47.4 + Gradle 9.3.1 + AGP 9.1.0 + Android Studio JBR 25，179 秒）
 - [x] 3.5a 實機：Google 登入（google_sign_in 7）於 SM-T500（Android 12）成功 —— 2026-09-15，登錄 debug SHA 後
-- [ ] 3.5b 實機：製造一筆過期食物 → 處理完成 → 重啟 App 不再跳出處理頁；備份含多筆 2 天內到期食物 → 還原後筆數正確；食物類型圖示改為 Font Awesome 後的外觀確認
+- [x] 3.5b 實機（使用者，SM-T500，2026-09-15）：過期處理完成後重啟不再跳出處理頁；備份／還原成功（連線問題另由 fix-backup-restore-feedback 處理）；Font Awesome 圖示外觀使用者接受

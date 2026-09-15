@@ -104,8 +104,8 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 
 ## 已知問題與技術債（開 change 修正，勿默默順手改）
 
-1. ~~`LocaleCubit` 未持久化~~ 已修正（change `persist-locale-selection`，待 archive）。
-2. ~~月趨勢圖跨年疊加~~ 已修正（change `monthly-trend-year-month`，待 archive）；統計頁字串已 l10n。
+1. ~~`LocaleCubit` 未持久化~~ 已修正並 archive（`persist-locale-selection`）。
+2. ~~月趨勢圖跨年疊加~~ 已修正並 archive（`monthly-trend-year-month`）；統計頁字串已 l10n。
 3. 備份使用 `toJsonString`（列舉以 `FoodItemType.x` 字串序列化）；`toJson`／`fromJson`（以 `name` 序列化）已可用，firestore-sync 時整併並提供讀取兩種格式的遷移。
 4. `food_item_list_page.dart` 超過 1000 行、頁面內含商業邏輯與硬編碼中文（「過期食物清單」、「處理完成」、「備份」、「還原」等）；由 design-system-redesign D8 處理。
 5. `.github/workflows/flutter_ci.yml` 已更新到 actions v4／Flutter 3.47.4／build-android 用 JDK 21，但尚未在 GitHub 上實際跑過；本機 `flutter build apk --debug` 已通過。
@@ -114,7 +114,8 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 8. Google 登入已遷移到 google_sign_in 7（`GoogleSignIn.instance.initialize()` → `authenticate()` → 只用 ID token）。Android 依賴 google-services.json 內的 web OAuth client 自動當 serverClientId，**且 Firebase Android app 必須登錄該機器簽章的 SHA-1**（2026-09-15 首次實機測試出現「Sign in was cancelled」就是因為沒有登錄；已用 `firebase apps:android:sha:create` 登錄本機 debug keystore 的 SHA-1／SHA-256，並重新下載 google-services.json，現在含 Android OAuth client）。換電腦、換 keystore 或發 release 時要再登錄對應 SHA：`keytool -list -v -keystore <keystore>`，然後 `firebase apps:android:sha:create 1:376153272412:android:f98c38314b3282de043699 <SHA> --project foodsavior-792ee`，再 `firebase apps:sdkconfig android <appId> --project foodsavior-792ee --out <暫存檔>` 覆蓋 `android/app/google-services.json`。iOS／macOS 設定需在 macOS 上建置驗證。
 9. `image_cropper`、`image_picker`、`dotted_border`、`google_fonts` 已於 2026-09-15 移除（未使用）；未來做頭像上傳時再加回 `image_picker`。
 
-已修正（change `fix-inventory-and-points-consistency`，待 archive）：過期處理後項目未刪除、批次寫入不套用點數上限、`copyWith` 把 id 清成空字串、`==`／`hashCode` 契約、Repository 未 `await` 寫入、列舉擴充 `name()` 遮蔽 `Enum.name` 使 `toJson` 失效、載入未排序、4 個 deprecation。
+已修正並 archive（2026-09-15）：`fix-inventory-and-points-consistency`（過期處理後項目未刪除、批次寫入不套用點數上限、`copyWith` 把 id 清成空字串、`==`／`hashCode` 契約、Repository 未 `await` 寫入、列舉擴充 `name()` 遮蔽 `Enum.name` 使 `toJson` 失效、載入未排序、4 個 deprecation、工具鏈與套件升級）、`fix-backup-restore-feedback`（備份失敗無回饋、還原先清空後讀取的資料遺失風險；Firestore 存取移入 `BackupRepository`）。
+10. 使用者的測試 Wi-Fi 曾讓 Firestore gRPC 連不上後端（Auth 的 HTTPS 正常）；App 現在會在 15 秒內顯示 `errorOffline`。若再遇到，先換網路（手機熱點）排除環境因素。
 
 ## 指令速查
 
