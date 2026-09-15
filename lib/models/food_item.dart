@@ -46,7 +46,7 @@ extension FoodItemTypeExtension on FoodItemType {
     }
   }
 
-  String name(BuildContext context) {
+  String localizedName(BuildContext context) {
     switch (this) {
       case FoodItemType.vegetable:
         return S.of(context).foodItemTypeVegetable;
@@ -116,12 +116,10 @@ extension FoodItemStatusExtension on FoodItemStatus {
         return Colors.blue;
       case FoodItemStatus.wasted:
         return Colors.grey;
-      default:
-        return Colors.red;
     }
   }
 
-  String name(BuildContext context) {
+  String localizedName(BuildContext context) {
     switch (this) {
       case FoodItemStatus.fresh:
         return S.of(context).foodItemStatusFresh;
@@ -133,8 +131,6 @@ extension FoodItemStatusExtension on FoodItemStatus {
         return S.of(context).foodItemStatusConsumed;
       case FoodItemStatus.wasted:
         return S.of(context).foodItemStatusWasted;
-      default:
-        return S.of(context).foodItemStatusUnknown;
     }
   }
 }
@@ -142,7 +138,7 @@ extension FoodItemStatusExtension on FoodItemStatus {
 enum Unit { gram, milliliter, piece }
 
 extension UnitExtension on Unit {
-  String name(BuildContext context) {
+  String localizedName(BuildContext context) {
     switch (this) {
       case Unit.gram:
         return S.of(context).unitGram;
@@ -177,7 +173,7 @@ class FoodItem extends HiveObject {
       required this.expirationDate});
 
   FoodItem copyWith({
-    String? id = '',
+    String? id,
     String? name,
     FoodItemType? type,
     FoodItemStatus? status,
@@ -204,11 +200,11 @@ class FoodItem extends HiveObject {
   String quantityWithUnit(BuildContext context) {
     switch (unit) {
       case Unit.gram:
-        return '$quantity ${unit.name(context)}';
+        return '$quantity ${unit.localizedName(context)}';
       case Unit.milliliter:
-        return '$quantity ${unit.name(context)}';
+        return '$quantity ${unit.localizedName(context)}';
       case Unit.piece:
-        return '$quantity ${unit.name(context)}';
+        return '$quantity ${unit.localizedName(context)}';
     }
   }
 
@@ -294,26 +290,28 @@ class FoodItem extends HiveObject {
     };
   }
 
-  // 複寫 == 運算符，以便在比較 FoodItem 物件時使用
+  // 值相等（food-inventory 規格）：所有欄位相同才相等，hashCode 與 == 一致；
+  // runtimeType 比對讓 FoodItem 與 UsedFoodItem 即使 id 相同也不相等。
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is FoodItem && other.id == id;
+    return other is FoodItem &&
+        other.runtimeType == runtimeType &&
+        other.id == id &&
+        other.name == name &&
+        other.type == type &&
+        other.status == status &&
+        other.quantity == quantity &&
+        other.unit == unit &&
+        other.description == description &&
+        other.storageDate == storageDate &&
+        other.expirationDate == expirationDate;
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      id.hashCode ^
-      name.hashCode ^
-      type.hashCode ^
-      status.hashCode ^
-      quantity.hashCode ^
-      unit.hashCode ^
-      description.hashCode ^
-      storageDate.hashCode ^
-      expirationDate.hashCode;
+  int get hashCode => Object.hash(runtimeType, id, name, type, status, quantity,
+      unit, description, storageDate, expirationDate);
 }
 
 class UsedFoodItem extends FoodItem {
@@ -431,26 +429,17 @@ class UsedFoodItem extends FoodItem {
     );
   }
 
-  // 複寫 == 運算符，以便在比較 UsedFoodItem 物件時使用
+  // 值相等：沿用 FoodItem 的欄位比較，再加上 usedDate 與 affectFoodPoint。
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is UsedFoodItem && other.id == id;
+    return other is UsedFoodItem &&
+        super == other &&
+        other.usedDate == usedDate &&
+        other.affectFoodPoint == affectFoodPoint;
   }
 
   @override
-  int get hashCode =>
-      super.hashCode ^
-      id.hashCode ^
-      name.hashCode ^
-      type.hashCode ^
-      status.hashCode ^
-      quantity.hashCode ^
-      unit.hashCode ^
-      description.hashCode ^
-      storageDate.hashCode ^
-      expirationDate.hashCode ^
-      usedDate.hashCode ^
-      affectFoodPoint.hashCode;
+  int get hashCode => Object.hash(super.hashCode, usedDate, affectFoodPoint);
 }

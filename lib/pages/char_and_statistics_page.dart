@@ -116,7 +116,7 @@ class _ChartAndStatisticsPageState extends State<ChartAndStatisticsPage> {
               (data) => PieChartSectionData(
                 value: data.value.toDouble(),
                 color: data.type.color,
-                title: '${data.type.name(context)}\n(${data.value})',
+                title: '${data.type.localizedName(context)}\n(${data.value})',
                 titleStyle: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,

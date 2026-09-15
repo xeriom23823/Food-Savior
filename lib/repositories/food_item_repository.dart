@@ -16,10 +16,8 @@ class FoodItemRepository {
     return foodItemBox.get(id);
   }
 
-  // 新增或更新食物項目
-  Future<void> saveFoodItem(FoodItem item) async {
-    foodItemBox.put(item.id, item);
-  }
+  // 新增或更新食物項目（local-persistence：寫入必須 await 完成後才回傳）
+  Future<void> saveFoodItem(FoodItem item) => foodItemBox.put(item.id, item);
 
   Future<void> saveFoodItems(List<FoodItem> items) async {
     for (var item in items) {
@@ -28,9 +26,7 @@ class FoodItemRepository {
   }
 
   // 刪除食物項目
-  Future<void> deleteFoodItem(String id) async {
-    foodItemBox.delete(id);
-  }
+  Future<void> deleteFoodItem(String id) => foodItemBox.delete(id);
 
   // 依照名稱篩選食物項目
   List<FoodItem> filterByName(String name) {
@@ -77,7 +73,7 @@ class FoodItemRepository {
 
     // 更新狀態
     for (var item in updatedItems) {
-      foodItemBox.put(item.id, item);
+      await foodItemBox.put(item.id, item);
     }
   }
 
@@ -97,6 +93,6 @@ class FoodItemRepository {
 
   // 清空所有食物項目
   Future<void> clearAll() async {
-    foodItemBox.clear();
+    await foodItemBox.clear();
   }
 }

@@ -92,7 +92,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                     return DropdownMenuItem<FoodItemStatus>(
                       value: value,
                       child: Text(
-                        value.name(context),
+                        value.localizedName(context),
                         style: const TextStyle(color: Colors.white),
                       ),
                     );
@@ -212,7 +212,7 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                               context, usedFoodItem);
                         },
                         title: Text(
-                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)})'),
+                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.localizedName(context)})'),
                         leading: Icon(usedFoodItem.type.icon,
                             color: usedFoodItem.status.color),
                         subtitle: Text(
@@ -273,11 +273,11 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
                     color: usedFoodItem.status.color, size: 50),
                 Text(usedFoodItem.description),
                 Text(
-                  usedFoodItem.type.name(pageContext),
+                  usedFoodItem.type.localizedName(pageContext),
                   style: TextStyle(color: usedFoodItem.status.color),
                 ),
                 Text(
-                    '數量：${usedFoodItem.quantity} ${usedFoodItem.unit.name(context)}'),
+                    '數量：${usedFoodItem.quantity} ${usedFoodItem.unit.localizedName(context)}'),
                 Text('食物點數：${usedFoodItem.affectFoodPoint}'),
                 Text(
                     '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}'),

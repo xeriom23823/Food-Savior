@@ -40,7 +40,7 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
         emit(
           FoodItemListLoaded(
-            foodItems: loadedFoodItems,
+            foodItems: _sortedByExpiration(loadedFoodItems),
           ),
         );
       },
@@ -185,16 +185,29 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
 
     on<FoodItemListProcessComplete>((event, emit) async {
       if (state is FoodItemListNeedProcessing) {
-        List<FoodItem> remainFoodItems =
-            (state as FoodItemListNeedProcessing).remainFoodItems;
+        final List<FoodItem> processedFoodItems =
+            (state as FoodItemListNeedProcessing).tempFoodItems;
 
         emit(const FoodItemListLoading());
 
-        remainFoodItems = foodItemRepository.getNonExpiredFoodItems();
-        emit(FoodItemListLoaded(foodItems: remainFoodItems));
+        // 已處理的過期項目必須離開本機儲存，否則下次啟動會再次要求處理
+        for (final foodItem in processedFoodItems) {
+          await foodItemRepository.deleteFoodItem(foodItem.id);
+        }
+
+        emit(FoodItemListLoaded(
+          foodItems: _sortedByExpiration(
+            foodItemRepository.getNonExpiredFoodItems(),
+          ),
+        ));
       }
     });
 
     add(LoadFoodItemListFromDevice());
   }
+
+  /// food-inventory：清單一律依到期日由近到遠排序（載入、處理完成後亦然）。
+  List<FoodItem> _sortedByExpiration(List<FoodItem> items) =>
+      List<FoodItem>.of(items)
+        ..sort((a, b) => a.expirationDate.compareTo(b.expirationDate));
 }

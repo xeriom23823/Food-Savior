@@ -24,37 +24,33 @@ class UsedFoodItemListBloc
 
     on<UsedFoodItemListAdd>((event, emit) async {
       if (state is UsedFoodItemListLoaded) {
-        final List<UsedFoodItem> currentfoodItems =
-            usedFoodItemRepository.getAllUsedFoodItems();
         emit(const UsedFoodItemListLoading());
 
-        // 確認當日的食物點數是否已經達到上限
-        final consumedDate = event.usedFoodItem.usedDate;
-        int consumedDateFoodPoint = 0;
-        for (var foodItem in currentfoodItems) {
-          if (foodItem.usedDate.year == consumedDate.year &&
-              foodItem.usedDate.month == consumedDate.month &&
-              foodItem.usedDate.day == consumedDate.day) {
-            consumedDateFoodPoint += foodItem.affectFoodPoint;
-          }
-        }
-
+        final existing = usedFoodItemRepository.getAllUsedFoodItems();
         final updatedItem = event.usedFoodItem.copyWith(
-          id: event.usedFoodItem.id,
-          affectFoodPoint: event.usedFoodItem.status == FoodItemStatus.consumed
-              ? consumedDateFoodPoint >= 10
-                  ? 0
-                  : 1
-              : -1,
+          affectFoodPoint: _pointFor(event.usedFoodItem, existing),
         );
 
         await usedFoodItemRepository.saveUsedFoodItem(updatedItem);
-        final updatedUsedFoodItems = usedFoodItemRepository
-            .getAllUsedFoodItems()
-          ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
-
-        emit(UsedFoodItemListLoaded(usedFoodItems: updatedUsedFoodItems));
+        emit(UsedFoodItemListLoaded(usedFoodItems: _allSortedByUsedDate()));
       }
+    });
+
+    // 批次新增（過期處理）：逐筆套用點數規則，前一筆計入後一筆的當日總和。
+    // 還原流程請用 UsedFoodItemListLoad，它保留備份中的點數不重算。
+    on<UsedFoodItemListAddAll>((event, emit) async {
+      emit(const UsedFoodItemListLoading());
+
+      final existing = usedFoodItemRepository.getAllUsedFoodItems();
+      for (final usedFoodItem in event.usedFoodItems) {
+        final updatedItem = usedFoodItem.copyWith(
+          affectFoodPoint: _pointFor(usedFoodItem, existing),
+        );
+        await usedFoodItemRepository.saveUsedFoodItem(updatedItem);
+        existing.add(updatedItem);
+      }
+
+      emit(UsedFoodItemListLoaded(usedFoodItems: _allSortedByUsedDate()));
     });
 
     on<UsedFoodItemListRemove>((event, emit) async {
@@ -99,4 +95,21 @@ class UsedFoodItemListBloc
 
     add(UsedFoodItemListLoadFromDevice());
   }
+
+  /// food-points：食用 +1、浪費 -1；同一日曆日既有點數總和已達 10 時，食用為 0。
+  int _pointFor(UsedFoodItem item, List<UsedFoodItem> existing) {
+    if (item.status != FoodItemStatus.consumed) return -1;
+    final day = item.usedDate;
+    final dailyTotal = existing
+        .where((e) =>
+            e.usedDate.year == day.year &&
+            e.usedDate.month == day.month &&
+            e.usedDate.day == day.day)
+        .fold<int>(0, (sum, e) => sum + e.affectFoodPoint);
+    return dailyTotal >= 10 ? 0 : 1;
+  }
+
+  List<UsedFoodItem> _allSortedByUsedDate() =>
+      usedFoodItemRepository.getAllUsedFoodItems()
+        ..sort((a, b) => a.usedDate.compareTo(b.usedDate));
 }

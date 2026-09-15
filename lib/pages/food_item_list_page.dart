@@ -144,7 +144,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                       }
 
                       context.read<UsedFoodItemListBloc>().add(
-                            UsedFoodItemListLoad(
+                            UsedFoodItemListAddAll(
                               usedFoodItems: usedFoodItems,
                             ),
                           );
@@ -426,12 +426,12 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                 Icon(foodItem.type.icon,
                     color: foodItem.status.color, size: 50),
                 Text(
-                  foodItem.type.name(pageContext),
+                  foodItem.type.localizedName(pageContext),
                   style: TextStyle(color: foodItem.status.color),
                 ),
                 Text(foodItem.description),
                 Text(
-                    '${S.of(context).quantity} : ${foodItem.quantity} ${foodItem.unit.name(context)}'),
+                    '${S.of(context).quantity} : ${foodItem.quantity} ${foodItem.unit.localizedName(context)}'),
                 Text(
                     '${S.of(context).storageDate} : ${DateFormat('yyyy-MM-dd').format(foodItem.storageDate)}'),
                 Text(
@@ -500,7 +500,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               child: Column(
                 children: [
                   DropdownButtonFormField<FoodItemType>(
-                    value: selectedType,
+                    initialValue: selectedType,
                     onChanged: (value) {
                       selectedType = value!;
                     },
@@ -511,7 +511,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           children: [
                             Icon(type.icon),
                             const SizedBox(width: 10),
-                            Text(type.name(context)),
+                            Text(type.localizedName(context)),
                           ],
                         ),
                       );
@@ -556,14 +556,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                   ),
                   DropdownButtonFormField<Unit>(
-                    value: selectedUnit,
+                    initialValue: selectedUnit,
                     onChanged: (value) {
                       selectedUnit = value!;
                     },
                     items: Unit.values.map((unit) {
                       return DropdownMenuItem<Unit>(
                         value: unit,
-                        child: Text(unit.name(context)),
+                        child: Text(unit.localizedName(context)),
                       );
                     }).toList(),
                     decoration: InputDecoration(labelText: S.of(context).unit),
@@ -708,7 +708,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
               child: Column(
                 children: [
                   DropdownButtonFormField<FoodItemType>(
-                    value: selectedType,
+                    initialValue: selectedType,
                     onChanged: (value) {
                       selectedType = value!;
                     },
@@ -719,7 +719,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                           children: [
                             Icon(type.icon),
                             const SizedBox(width: 10),
-                            Text(type.name(context)),
+                            Text(type.localizedName(context)),
                           ],
                         ),
                       );
@@ -765,14 +765,14 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     },
                   ),
                   DropdownButtonFormField<Unit>(
-                    value: selectedUnit,
+                    initialValue: selectedUnit,
                     onChanged: (value) {
                       selectedUnit = value!;
                     },
                     items: Unit.values.map((unit) {
                       return DropdownMenuItem<Unit>(
                         value: unit,
-                        child: Text(unit.name(context)),
+                        child: Text(unit.localizedName(context)),
                       );
                     }).toList(),
                     decoration: InputDecoration(labelText: S.of(context).unit),
@@ -899,7 +899,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                     controller: quantityController,
                     decoration: InputDecoration(
                       labelText: S.of(context).quantity,
-                      suffixText: usingFoodItem.unit.name(context),
+                      suffixText: usingFoodItem.unit.localizedName(context),
                     ),
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
