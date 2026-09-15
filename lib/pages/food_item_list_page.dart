@@ -7,7 +7,7 @@ import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class FoodItemListPage extends StatefulWidget {
@@ -251,7 +251,7 @@ class _FoodItemListPageState extends State<FoodItemListPage>
                         },
                         backgroundColor: FoodItemStatus.wasted.color,
                         foregroundColor: Colors.white,
-                        icon: MdiIcons.deleteEmpty,
+                        icon: FontAwesomeIcons.trashCan.data,
                         label: S.of(context).expire,
                       ),
                       SlidableAction(

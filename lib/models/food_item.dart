@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 
 enum FoodItemType {
@@ -22,27 +22,27 @@ extension FoodItemTypeExtension on FoodItemType {
   IconData get icon {
     switch (this) {
       case FoodItemType.vegetable:
-        return MdiIcons.carrot;
+        return FontAwesomeIcons.carrot.data;
       case FoodItemType.fruit:
-        return MdiIcons.apple;
+        return FontAwesomeIcons.appleWhole.data;
       case FoodItemType.meat:
-        return MdiIcons.foodSteak;
+        return FontAwesomeIcons.drumstickBite.data;
       case FoodItemType.eggAndMilk:
-        return MdiIcons.eggFried;
+        return FontAwesomeIcons.egg.data;
       case FoodItemType.seafood:
-        return MdiIcons.fish;
+        return FontAwesomeIcons.fish.data;
       case FoodItemType.cannedFood:
-        return MdiIcons.zipBox;
+        return FontAwesomeIcons.jar.data;
       case FoodItemType.cookedFood:
-        return MdiIcons.food;
+        return FontAwesomeIcons.bowlFood.data;
       case FoodItemType.drink:
-        return MdiIcons.cup;
+        return FontAwesomeIcons.mugSaucer.data;
       case FoodItemType.snack:
-        return MdiIcons.cookie;
+        return FontAwesomeIcons.cookieBite.data;
       case FoodItemType.bread:
-        return MdiIcons.breadSlice;
+        return FontAwesomeIcons.breadSlice.data;
       case FoodItemType.others:
-        return MdiIcons.foodForkDrink;
+        return FontAwesomeIcons.utensils.data;
     }
   }
 
@@ -201,7 +201,7 @@ class FoodItem extends HiveObject {
   }
 
   // 顯示食物的數量與單位
-  String quantityWithUnit(context) {
+  String quantityWithUnit(BuildContext context) {
     switch (unit) {
       case Unit.gram:
         return '$quantity ${unit.name(context)}';

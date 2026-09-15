@@ -14,3 +14,13 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(UsedFoodItemAdapter());
   }
 }
+
+extension IsolatedHiveRegistrar on IsolatedHiveInterface {
+  void registerAdapters() {
+    registerAdapter(FoodItemAdapter());
+    registerAdapter(FoodItemStatusAdapter());
+    registerAdapter(FoodItemTypeAdapter());
+    registerAdapter(UnitAdapter());
+    registerAdapter(UsedFoodItemAdapter());
+  }
+}

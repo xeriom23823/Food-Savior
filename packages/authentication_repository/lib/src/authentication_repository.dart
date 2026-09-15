@@ -144,6 +144,18 @@ class LogInWithGoogleFailure implements Exception {
     }
   }
 
+  /// Create an authentication message from a google_sign_in exception.
+  factory LogInWithGoogleFailure.fromGoogleSignIn(GoogleSignInException e) {
+    switch (e.code) {
+      case GoogleSignInExceptionCode.canceled:
+        return const LogInWithGoogleFailure('Sign in was cancelled.');
+      default:
+        return const LogInWithGoogleFailure(
+          'Google Sign-In failed. Please try again.',
+        );
+    }
+  }
+
   /// The associated error message.
   final String message;
 }
@@ -162,11 +174,18 @@ class AuthenticationRepository {
     GoogleSignIn? googleSignIn,
   })  : _cache = cache ?? CacheClient(),
         _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+        _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
 
   final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  Future<void>? _googleSignInInitialization;
+
+  /// google_sign_in 7 requires a single [GoogleSignIn.initialize] call before
+  /// any other method. On Android the web OAuth client in google-services.json
+  /// is picked up automatically as the serverClientId (needed for the ID token).
+  Future<void> _ensureGoogleSignInInitialized() =>
+      _googleSignInInitialization ??= _googleSignIn.initialize();
 
   /// Whether or not the current environment is web
   /// Should only be overridden for testing purposes. Otherwise,
@@ -226,17 +245,28 @@ class AuthenticationRepository {
         );
         credential = userCredential.credential!;
       } else {
-        final googleUser = await _googleSignIn.signIn();
-        final googleAuth = await googleUser!.authentication;
+        await _ensureGoogleSignInInitialized();
+        final googleUser = await _googleSignIn.authenticate();
+        final idToken = googleUser.authentication.idToken;
+        if (idToken == null) {
+          throw const LogInWithGoogleFailure(
+            'Google Sign-In did not return an ID token.',
+          );
+        }
+        // google_sign_in 7 no longer exposes an access token here; Firebase only
+        // needs the ID token to build the credential.
         credential = firebase_auth.GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
+          idToken: idToken,
         );
       }
 
       await _firebaseAuth.signInWithCredential(credential);
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw LogInWithGoogleFailure.fromCode(e.code);
+    } on GoogleSignInException catch (e) {
+      throw LogInWithGoogleFailure.fromGoogleSignIn(e);
+    } on LogInWithGoogleFailure {
+      rethrow;
     } catch (_) {
       throw const LogInWithGoogleFailure();
     }
@@ -267,9 +297,11 @@ class AuthenticationRepository {
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {
     try {
+      // Web signs in through the Firebase popup and never touches GoogleSignIn.
+      if (!isWeb) await _ensureGoogleSignInInitialized();
       await Future.wait([
         _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
+        if (!isWeb) _googleSignIn.signOut(),
       ]);
     } catch (_) {
       throw LogOutFailure();

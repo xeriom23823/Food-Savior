@@ -10,6 +10,16 @@
 analyzer:
   errors:
     use_build_context_synchronously: ignore
+  exclude:
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+    - lib/generated/**   # intl_utils 產生物
+    - "**/*.g.dart"      # build_runner 產生物
 include: package:flutter_lints/flutter.yaml
 
 linter:

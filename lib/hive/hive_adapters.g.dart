@@ -8,7 +8,7 @@ part of 'hive_adapters.dart';
 
 class FoodItemAdapter extends TypeAdapter<FoodItem> {
   @override
-  final int typeId = 0;
+  final typeId = 0;
 
   @override
   FoodItem read(BinaryReader reader) {
@@ -66,7 +66,7 @@ class FoodItemAdapter extends TypeAdapter<FoodItem> {
 
 class UsedFoodItemAdapter extends TypeAdapter<UsedFoodItem> {
   @override
-  final int typeId = 1;
+  final typeId = 1;
 
   @override
   UsedFoodItem read(BinaryReader reader) {
@@ -130,7 +130,7 @@ class UsedFoodItemAdapter extends TypeAdapter<UsedFoodItem> {
 
 class FoodItemTypeAdapter extends TypeAdapter<FoodItemType> {
   @override
-  final int typeId = 2;
+  final typeId = 2;
 
   @override
   FoodItemType read(BinaryReader reader) {
@@ -203,7 +203,7 @@ class FoodItemTypeAdapter extends TypeAdapter<FoodItemType> {
 
 class FoodItemStatusAdapter extends TypeAdapter<FoodItemStatus> {
   @override
-  final int typeId = 3;
+  final typeId = 3;
 
   @override
   FoodItemStatus read(BinaryReader reader) {
@@ -252,7 +252,7 @@ class FoodItemStatusAdapter extends TypeAdapter<FoodItemStatus> {
 
 class UnitAdapter extends TypeAdapter<Unit> {
   @override
-  final int typeId = 4;
+  final typeId = 4;
 
   @override
   Unit read(BinaryReader reader) {
