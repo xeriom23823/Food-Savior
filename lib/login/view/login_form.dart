@@ -34,7 +34,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/bloc_logo_small.png',
+                'assets/icons/food_savior_logo.png',
                 height: 120,
               ),
               const SizedBox(height: 16),
