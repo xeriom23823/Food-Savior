@@ -52,6 +52,36 @@ class LoginCubit extends Cubit<LoginState> {
     }
   }
 
+  /// 寄出重設密碼信。Email 欄位無效時不寄，直接把錯誤標在欄位上。
+  Future<void> sendPasswordReset() async {
+    final email = Email.dirty(state.email.value);
+    if (email.isNotValid) {
+      emit(state.copyWith(
+        email: email,
+        resetStatus: PasswordResetStatus.failure,
+        errorMessage: null,
+      ));
+      return;
+    }
+
+    emit(state.copyWith(resetStatus: PasswordResetStatus.sending));
+    try {
+      await _authenticationRepository.sendPasswordResetEmail(email.value);
+      emit(state.copyWith(resetStatus: PasswordResetStatus.sent));
+    } on ResetPasswordFailure catch (e) {
+      emit(state.copyWith(
+        resetStatus: PasswordResetStatus.failure,
+        errorMessage: e.message,
+      ));
+    } catch (_) {
+      emit(state.copyWith(resetStatus: PasswordResetStatus.failure));
+    }
+  }
+
+  /// 使用者看過回饋後把狀態收回，避免重建時又跳一次。
+  void acknowledgePasswordReset() =>
+      emit(state.copyWith(resetStatus: PasswordResetStatus.idle));
+
   Future<void> logInWithGoogle() async {
     emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     try {

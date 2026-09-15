@@ -1,6 +1,5 @@
 {
   "@@locale": "zh",
-  "@@last_modified": "2024-05-05T00:13:17.877682",
   "title": "食物救世主",
   "userNavigationBarTitle": "用戶",
   "chartAndStatisticsNavigationBarTitle": "圖表",
@@ -23,40 +22,136 @@
   "foodItemStatusExpired": "已過期",
   "foodItemStatusConsumed": "已使用",
   "foodItemStatusWasted": "已浪費",
-  "foodItemStatusUnknown": "未知",
+  "foodItemStatusUnknownExpiry": "期限未知",
   "unitGram": "公克",
   "unitMilliliter": "毫升",
   "unitPiece": "個",
+  "unitPack": "包",
+  "unitBox": "盒",
+  "unitBottle": "瓶",
+  "unitBag": "袋",
+  "unitCan": "罐",
+  "unitServing": "份",
+  "remainingFractionFull": "滿的",
+  "remainingFractionMostly": "大部分",
+  "remainingFractionHalf": "約一半",
+  "remainingFractionLow": "不多了",
+  "remainingFractionAlmostGone": "剩一點",
+  "expiryPrecisionExact": "確定日期",
+  "expiryPrecisionRange": "大約區間",
+  "expiryPrecisionMonthOnly": "只到月份",
+  "expiryPrecisionUnknown": "不知道",
   "foodItemListViewTitle": "食物清單",
   "edit": "編輯",
   "expire": "過期",
-  "batchUse": "批量使用",
+  "batchUse": "部分處理",
   "useAll": "全部使用",
   "foodItemListError": "載入失敗，請重試",
   "refresh": "重新整理",
   "addFoodItem": "新增食物",
+  "editFoodItem": "編輯食物",
+  "foodType": "類型",
   "name": "名稱",
   "nameCannotBeEmpty": "名稱不能為空",
-  "quantity": "數量",
-  "quantityCannotBeEmpty": "數量不能為空",
-  "quantityMustBePositive": "數量必須為正數",
-  "quanityMustBeANumber": "數量必須為數字",
+  "amount": "份量",
+  "amountCannotBeEmpty": "請填份量或選剩餘比例",
+  "amountMustBePositive": "份量必須大於 0",
+  "amountMustBeANumber": "份量必須是數字",
+  "amountExceedsAvailable": "超過現有份量",
   "unit": "單位",
   "unitCannotBeEmpty": "請選擇單位",
+  "recordByFraction": "改用剩餘比例",
+  "recordByAmount": "改用數量",
   "description": "描述",
   "storageDate": "存放日期",
-  "expirationDate": "過期日期",
+  "expirationDate": "到期日期",
+  "expiryEarliest": "最早",
+  "expiryLatest": "最晚",
+  "expiryRangeInvalid": "最晚日期不能早於最早日期",
+  "expiryUnknown": "期限未知",
+  "pendingExpiry": "待補期限",
+  "fillExpiry": "補期限",
+  "expireToday": "今日到期",
+  "expired": "已過期",
+  "days": "天",
+  "opened": "已開封",
+  "markOpened": "標記開封",
+  "openedDate": "開封日期",
+  "shelfLifeAfterOpen": "開封後可放（天）",
+  "price": "金額（元）",
+  "priceOptional": "選填",
+  "priceMustBeNonNegative": "金額必須是 0 或正整數",
+  "storageLocation": "存放位置",
+  "storageLocations": "存放位置",
+  "noLocation": "未指定位置",
+  "locationNameCannotBeEmpty": "位置名稱不能為空",
+  "addLocation": "新增位置",
+  "editLocation": "編輯位置",
+  "deleteLocation": "刪除位置",
+  "locationKindRefrigerated": "冷藏",
+  "locationKindFrozen": "冷凍",
+  "locationKindAmbient": "常溫",
+  "locationKindOther": "其他",
+  "defaultLocationRefrigerated": "冷藏",
+  "defaultLocationFrozen": "冷凍",
+  "defaultLocationAmbient": "常溫",
+  "quickAdd": "快速新增",
+  "quickAddHint": "輸入名稱就能存，細節之後再補",
+  "grouping": "分群",
+  "groupByUrgency": "依到期急迫度",
+  "groupByLocation": "依存放位置",
+  "groupByType": "依食物類型",
+  "urgencyExpired": "已過期",
+  "urgencyToday": "今天到期",
+  "urgencyWithinThreeDays": "3 天內",
+  "urgencyWithinWeek": "一週內",
+  "urgencyPlenty": "充裕",
+  "urgencyUnknownExpiry": "期限未知",
   "cancel": "取消",
+  "confirm": "確認",
+  "delete": "刪除",
   "added": "已新增",
   "add": "新增",
-  "editFoodItem": "編輯食物",
   "updated": "已更新",
+  "deleted": "已刪除",
   "save": "儲存",
+  "close": "關閉",
+  "details": "詳細資料",
   "useFoodItem": "使用食物",
   "use": "使用",
+  "waste": "丟棄",
   "usedDate": "使用日期",
-  "userPageTitle": "使用者頁面",
+  "consumedAmount": "食用份量",
+  "wastedAmount": "丟棄份量",
+  "remaining": "剩餘",
+  "disposalMethod": "處理方式",
+  "disposalEaten": "吃掉",
+  "disposalEatenAtRisk": "過期後吃掉",
+  "disposalGivenAway": "送人",
+  "disposalComposted": "堆肥",
+  "disposalDiscarded": "丟棄",
+  "wasteReason": "浪費原因",
+  "wasteReasonForgotten": "忘記吃",
+  "wasteReasonBoughtTooMuch": "買太多",
+  "wasteReasonSpoiled": "壞掉了",
+  "wasteReasonDisliked": "不好吃",
+  "wasteReasonExpiredTooLong": "放到過期太久",
+  "wasteReasonOther": "其他",
+  "noWasteReason": "未填原因",
+  "skip": "略過",
+  "foodPoints": "食物點數",
+  "dailyFoodPointsCapReached": "今天的加分已達上限，休息一下也很好",
+  "pointsRuleChanged": "點數規則自 2026-09-15 起改為依時效加權",
+  "filterAll": "全部",
+  "filterConsumed": "食用",
+  "filterWasted": "浪費",
+  "userPageTitle": "我的",
   "settingsPageTitle": "設定頁面",
+  "settingsSection": "偏好設定",
+  "aboutSection": "關於",
+  "version": "版本",
+  "openSource": "開放原始碼",
+  "viewOnGitHub": "在 GitHub 上查看",
   "language": "語言",
   "darkMode": "黑夜模式",
   "showNotification": "顯示通知",
@@ -74,15 +169,22 @@
   "loginPageTitle": "登入頁面",
   "wasted": "浪費",
   "consumed": "使用",
-  "expireToday": "今日過期",
-  "expired": "已過期",
-  "quantityExceedsAvailable": "數量超過可使用的量",
-  "days": "天",
   "chartAndStatisticsPageTitle": "圖表與統計",
-  "consumedFoodPointsByType": "食物點數消耗統計",
-  "wastedFoodPointsByType": "食物點數浪費統計",
+  "consumedFoodByType": "食用筆數分布",
+  "wastedFoodByType": "浪費筆數分布",
   "monthlyTrend": "每月趨勢",
+  "statisticsWasteRate": "浪費率趨勢",
+  "statisticsTopWasted": "最常浪費的食物",
+  "statisticsWasteReasons": "浪費原因分佈",
+  "statisticsMoney": "金額損益",
+  "moneySaved": "救回",
+  "moneyLost": "浪費",
+  "addPriceHint": "填寫金額後就能看到這裡的統計",
   "noData": "尚無資料",
+  "expiredFoodListTitle": "過期食物清單",
+  "foodInfo": "食物資訊",
+  "isConsumed": "已食用",
+  "processComplete": "處理完成",
   "backup": "備份",
   "restore": "還原",
   "backupSuccess": "資料備份成功",
@@ -93,5 +195,199 @@
   "errorOffline": "目前無法連線到雲端，請確認網路後再試",
   "errorTimeout": "連線逾時，請稍後再試",
   "errorPermissionDenied": "沒有存取雲端資料的權限",
-  "errorUnknown": "發生未知錯誤"
+  "errorUnknown": "發生未知錯誤",
+  "emptyFoodListTitle": "冰箱還空著",
+  "emptyFoodListDescription": "用下面那一行輸入名稱，就能記下第一樣食物",
+  "emptyUsedFoodListTitle": "這天沒有紀錄",
+  "emptyUsedFoodListDescription": "吃掉或丟掉食物後，紀錄會出現在這裡",
+  "emptyLocationsTitle": "還沒有存放位置",
+  "emptyLocationsDescription": "建立「冰箱上層」「儲藏櫃」之類的位置，清單就能依位置分群",
+  "expireInDays": "{days} 天後到期",
+  "@expireInDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "expireApproximatelyInDays": "約 {days} 天後到期",
+  "@expireApproximatelyInDays": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "expiredDaysAgo": "已過期 {days} 天",
+  "@expiredDaysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "itemCount": "{count} 項",
+  "@itemCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "batchCount": "{count} 批",
+  "@batchCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "deleteLocationMessage": "有 {count} 項食物放在這個位置，刪除後它們會歸為「未指定位置」，食物本身不會被刪除。",
+  "@deleteLocationMessage": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "coverageLabel": "涵蓋率 {percent}%",
+  "@coverageLabel": {
+    "placeholders": {
+      "percent": {}
+    }
+  },
+  "afterOpenDaysLabel": "開封後 {days} 天",
+  "@afterOpenDaysLabel": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "pointsLabel": "{points} 點",
+  "@pointsLabel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "priceLabel": "{amount} 元",
+  "@priceLabel": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "wastedCountLabel": "浪費 {count} 次",
+  "@wastedCountLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "myScore": "我的成績",
+  "accountSection": "帳號",
+  "levelNoviceName": "食物見習生",
+  "levelKeeperName": "冰箱管理員",
+  "levelSaverName": "惜食者",
+  "levelGuardianName": "食物守護者",
+  "levelMasterName": "零浪費大師",
+  "totalPoints": "累計點數",
+  "weeklyNet": "本週",
+  "daysSinceLastWaste": "距上次浪費",
+  "maxLevelReached": "已達最高等級",
+  "milestones": "里程碑",
+  "milestoneFirstRecordName": "踏出第一步",
+  "milestoneFirstRecordCondition": "記下第一樣食物",
+  "milestoneTenRescuesName": "即期救援隊",
+  "milestoneTenRescuesCondition": "在到期前 3 天內用掉 10 樣食物",
+  "milestoneHundredPointsName": "百分達成",
+  "milestoneHundredPointsCondition": "累計 100 點",
+  "milestoneWeekWithoutWasteName": "一週零浪費",
+  "milestoneWeekWithoutWasteCondition": "連續 7 天沒有浪費",
+  "milestoneMonthWithoutWasteName": "一個月零浪費",
+  "milestoneMonthWithoutWasteCondition": "連續 30 天沒有浪費",
+  "milestoneFiveHundredPointsName": "五百俱樂部",
+  "milestoneFiveHundredPointsCondition": "累計 500 點",
+  "emptyScoreTitle": "還沒有成績可以看",
+  "emptyScoreDescription": "記下食物、吃掉它，點數就會開始累積",
+  "goToFoodList": "去記第一樣食物",
+  "setName": "設定名稱",
+  "editName": "修改名稱",
+  "nameTooLong": "名稱不能超過 30 個字",
+  "nameUpdated": "名稱已更新",
+  "nameUpdateFailure": "名稱更新失敗",
+  "deleteAccount": "刪除帳號",
+  "deleteAccountMessage": "帳號與雲端備份會被永久刪除，且無法復原。這台裝置上的食物清單與使用紀錄不會被刪除。",
+  "deleteAccountRequiresRecentLogin": "為了安全，請重新登入後再試一次",
+  "deleteAccountFailure": "刪除帳號失敗",
+  "logOut": "登出",
+  "resetPassword": "重設密碼",
+  "forgotPassword": "忘記密碼？",
+  "resetPasswordSent": "重設密碼的信已寄出，請到信箱查看",
+  "resetPasswordFailure": "無法寄出重設信",
+  "email": "電子郵件",
+  "password": "密碼",
+  "loginWelcome": "歡迎回來",
+  "signUpWelcome": "建立你的帳號",
+  "noAccountYet": "還沒有帳號？",
+  "pointsToNextLevel": "距下一級還差 {points} 點",
+  "@pointsToNextLevel": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "daysCount": "{days} 天",
+  "@daysCount": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "signedPoints": "{points} 點",
+  "@signedPoints": {
+    "placeholders": {
+      "points": {}
+    }
+  },
+  "milestoneProgress": "已達成 {achieved} / {total}",
+  "@milestoneProgress": {
+    "placeholders": {
+      "achieved": {},
+      "total": {}
+    }
+  },
+  "einvoiceScanEntry": "掃描發票",
+  "einvoiceScanTitle": "掃描電子發票",
+  "einvoiceScanHint": "對準發票證明聯上的兩個二維條碼",
+  "einvoiceLeftCodePending": "左側條碼：待掃描",
+  "einvoiceLeftCodeDone": "左側條碼：已取得",
+  "einvoiceRightCodePending": "右側條碼：待掃描",
+  "einvoiceRightCodeDone": "右側條碼：已取得",
+  "einvoiceCodeMismatch": "這是另一張發票的條碼，請掃描同一張的另一側",
+  "einvoiceParseFailed": "讀不到發票內容，請再試一次",
+  "einvoiceEncodingUnsupported": "這張發票使用的文字編碼無法解讀，請改為手動新增",
+  "einvoiceItemsIncomplete": "發票上還有品項沒讀到，請自行補齊",
+  "einvoicePermissionDenied": "需要相機權限才能掃描發票",
+  "einvoicePermissionOpenSettings": "前往設定",
+  "einvoiceCameraUnavailable": "這台裝置沒有可用的相機",
+  "einvoiceManualEntry": "改為手動新增",
+  "einvoiceRetry": "重新掃描",
+  "einvoiceAlreadyImported": "這張發票已經匯入過了",
+  "einvoiceImportAnyway": "仍要匯入",
+  "einvoiceDraftsTitle": "確認匯入的食物",
+  "einvoiceDraftsSubtitle": "可以逐項修改或排除，確認後再加入清單",
+  "einvoiceDraftNeedsReview": "待確認",
+  "einvoiceDraftExcluded": "已排除",
+  "einvoiceDraftExclude": "排除這項",
+  "einvoiceDraftInclude": "加回這項",
+  "einvoiceSourceLine": "發票品名：{name}",
+  "@einvoiceSourceLine": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "einvoiceImportAll": "全部加入（{count}）",
+  "@einvoiceImportAll": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "einvoiceImported": "已匯入 {count} 項食物",
+  "@einvoiceImported": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "einvoiceNoDrafts": "這張發票沒有可匯入的品項",
+  "einvoiceScannerNotReady": "掃描功能還在準備中，請稍後再試",
+  "expiryQuickToday": "今天",
+  "expiryQuickTomorrow": "明天",
+  "expiryQuickThreeDays": "3 天後",
+  "expiryQuickOneWeek": "1 週後",
+  "expiryQuickTwoWeeks": "2 週後",
+  "expiryQuickOneMonth": "1 個月後",
+  "einvoiceEditDraft": "修改這一項"
 }

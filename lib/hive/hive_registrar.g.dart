@@ -2,25 +2,37 @@
 // Do not modify
 // Check in to version control
 
-import 'package:hive_ce/hive.dart';
+import 'package:hive_ce/hive_ce.dart';
 import 'package:food_savior/hive/hive_adapters.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
+    registerAdapter(DisposalMethodAdapter());
+    registerAdapter(ExpiryPrecisionAdapter());
     registerAdapter(FoodItemAdapter());
     registerAdapter(FoodItemStatusAdapter());
     registerAdapter(FoodItemTypeAdapter());
+    registerAdapter(LocationKindAdapter());
+    registerAdapter(RemainingFractionAdapter());
+    registerAdapter(StorageLocationAdapter());
     registerAdapter(UnitAdapter());
     registerAdapter(UsedFoodItemAdapter());
+    registerAdapter(WasteReasonAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
+    registerAdapter(DisposalMethodAdapter());
+    registerAdapter(ExpiryPrecisionAdapter());
     registerAdapter(FoodItemAdapter());
     registerAdapter(FoodItemStatusAdapter());
     registerAdapter(FoodItemTypeAdapter());
+    registerAdapter(LocationKindAdapter());
+    registerAdapter(RemainingFractionAdapter());
+    registerAdapter(StorageLocationAdapter());
     registerAdapter(UnitAdapter());
     registerAdapter(UsedFoodItemAdapter());
+    registerAdapter(WasteReasonAdapter());
   }
 }

@@ -10,7 +10,7 @@ void main() {
   UsedFoodItem wasted(String id, DateTime date) => makeUsed(
       id: id,
       usedDate: date,
-      status: FoodItemStatus.wasted,
+      disposalMethod: DisposalMethod.discarded,
       affectFoodPoint: -1);
 
   group('monthlyTrend（statistics-charts：年月粒度）', () {

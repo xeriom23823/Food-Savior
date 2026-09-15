@@ -2,46 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
+import 'package:food_savior/theme/app_tokens.dart';
+import 'package:food_savior/widgets/auth_scaffold.dart';
 import 'package:formz/formz.dart';
 
+/// 註冊頁。與登入頁共用外殼與錯誤區塊，成功後回到登入狀態流程。
 class SignUpForm extends StatelessWidget {
   const SignUpForm({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SignUpCubit, SignUpState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
-        if (state.status.isSuccess) {
-          Navigator.of(context).pop();
-        } else if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.white,
-                content: Text(
-                  state.errorMessage ?? S.of(context).signUpFailure,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-            );
-        }
+        if (state.status.isSuccess) Navigator.of(context).pop();
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _EmailInput(),
-            const SizedBox(height: 8),
-            _PasswordInput(),
-            const SizedBox(height: 8),
-            _ConfirmPasswordInput(),
-            const SizedBox(height: 8),
-            _SignUpButton(),
-          ],
-        ),
+      child: AuthScaffold(
+        title: S.of(context).signUpWelcome,
+        showBack: true,
+        children: [
+          const _ErrorBanner(),
+          _EmailInput(),
+          const SizedBox(height: AppSpacing.md),
+          _PasswordInput(),
+          const SizedBox(height: AppSpacing.md),
+          _ConfirmPasswordInput(),
+          const SizedBox(height: AppSpacing.lg),
+          _SignUpButton(),
+        ],
       ),
+    );
+  }
+}
+
+class _ErrorBanner extends StatelessWidget {
+  const _ErrorBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.errorMessage != current.errorMessage,
+      builder: (context, state) {
+        if (!state.status.isFailure) return const SizedBox.shrink();
+        return AuthErrorBanner(
+          message: state.errorMessage ?? S.of(context).signUpFailure,
+        );
+      },
     );
   }
 }
@@ -56,9 +64,9 @@ class _EmailInput extends StatelessWidget {
           key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
+            labelText: S.of(context).email,
             errorText: state.email.displayError != null
                 ? S.of(context).invalidEmail
                 : null,
@@ -80,9 +88,9 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) =>
               context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
+            labelText: S.of(context).password,
             errorText: state.password.displayError != null
                 ? S.of(context).invalidPassword
                 : null,
@@ -107,9 +115,9 @@ class _ConfirmPasswordInput extends StatelessWidget {
               .read<SignUpCubit>()
               .confirmedPasswordChanged(confirmPassword),
           obscureText: true,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             labelText: S.of(context).confirmPassword,
-            helperText: '',
             errorText: state.confirmedPassword.displayError != null
                 ? S.of(context).passwordsDoNotMatch
                 : null,
@@ -125,21 +133,18 @@ class _SignUpButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
-        return state.status.isInProgress
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                key: const Key('signUpForm_continue_raisedButton'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  backgroundColor: Colors.orangeAccent,
-                ),
-                onPressed: state.isValid
-                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
-                    : null,
-                child: Text(S.of(context).signUp),
-              );
+        return FilledButton(
+          key: const Key('signUpForm_continue_raisedButton'),
+          onPressed: state.isValid && !state.status.isInProgress
+              ? () => context.read<SignUpCubit>().signUpFormSubmitted()
+              : null,
+          child: state.status.isInProgress
+              ? const SizedBox.square(
+                  dimension: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(S.of(context).signUp),
+        );
       },
     );
   }

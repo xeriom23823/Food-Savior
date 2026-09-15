@@ -28,9 +28,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "chartAndStatisticsPageTitle": MessageLookupByLibrary.simpleMessage(
           "圖表與統計",
         ),
-        "consumedFoodPointsByType": MessageLookupByLibrary.simpleMessage(
-          "食物點數消耗統計",
-        ),
         "errorOffline":
             MessageLookupByLibrary.simpleMessage("目前無法連線到雲端，請確認網路後再試"),
         "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
@@ -45,7 +42,5 @@ class MessageLookup extends MessageLookupByLibrary {
         "restoreNoBackup":
             MessageLookupByLibrary.simpleMessage("雲端沒有備份，本機資料未變動"),
         "restoreSuccess": MessageLookupByLibrary.simpleMessage("資料還原成功"),
-        "wastedFoodPointsByType":
-            MessageLookupByLibrary.simpleMessage("食物點數浪費統計"),
       };
 }

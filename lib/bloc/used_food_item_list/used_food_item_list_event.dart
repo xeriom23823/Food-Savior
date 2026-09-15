@@ -1,46 +1,57 @@
 part of 'used_food_item_list_bloc.dart';
 
-abstract class UsedFoodItemListEvent {}
+/// 紀錄頁的篩選：只看食用、只看浪費，或全部。
+enum UsedFoodFilter { all, consumed, wasted }
 
-class UsedFoodItemListLoadFromDevice extends UsedFoodItemListEvent {}
-
-class UsedFoodItemListLoad extends UsedFoodItemListEvent {
-  final List<UsedFoodItem> usedFoodItems;
-
-  UsedFoodItemListLoad({required this.usedFoodItems});
+sealed class UsedFoodItemListEvent {
+  const UsedFoodItemListEvent();
 }
 
-class UsedFoodItemListAdd extends UsedFoodItemListEvent {
-  final UsedFoodItem usedFoodItem;
-
-  UsedFoodItemListAdd({required this.usedFoodItem});
+class UsedFoodItemListStarted extends UsedFoodItemListEvent {
+  const UsedFoodItemListStarted();
 }
 
-/// 批次新增新事件（例如過期處理），逐筆套用食物點數規則。
-class UsedFoodItemListAddAll extends UsedFoodItemListEvent {
-  final List<UsedFoodItem> usedFoodItems;
+/// 有新紀錄寫入時重新讀取當前日期（食物頁操作後會派這個）。
+class UsedFoodItemListRefresh extends UsedFoodItemListEvent {
+  const UsedFoodItemListRefresh();
+}
 
-  UsedFoodItemListAddAll({required this.usedFoodItems});
+class UsedFoodItemListLoadByDate extends UsedFoodItemListEvent {
+  const UsedFoodItemListLoadByDate({required this.date});
+
+  final DateTime date;
+}
+
+class UsedFoodItemListFilterChanged extends UsedFoodItemListEvent {
+  const UsedFoodItemListFilterChanged({required this.filter});
+
+  final UsedFoodFilter filter;
 }
 
 class UsedFoodItemListRemove extends UsedFoodItemListEvent {
-  final UsedFoodItem usedFoodItem;
+  const UsedFoodItemListRemove({required this.id});
 
-  UsedFoodItemListRemove({required this.usedFoodItem});
+  final String id;
 }
 
-class UsedFoodItemListUpdate extends UsedFoodItemListEvent {
-  final UsedFoodItem originalUsedFoodItem;
-  final UsedFoodItem updatedUsedFoodItem;
+/// 事後補浪費原因。不改變該筆的點數。
+class UsedFoodItemListSetWasteReason extends UsedFoodItemListEvent {
+  const UsedFoodItemListSetWasteReason({
+    required this.id,
+    required this.wasteReason,
+  });
 
-  UsedFoodItemListUpdate(
-      {required this.originalUsedFoodItem, required this.updatedUsedFoodItem});
+  final String id;
+  final WasteReason wasteReason;
 }
 
-class UsedFoodItemListClear extends UsedFoodItemListEvent {}
+/// 還原：保留備份中的點數，不重新計算。
+class UsedFoodItemListLoad extends UsedFoodItemListEvent {
+  const UsedFoodItemListLoad({required this.usedFoodItems});
 
-class UsedFoodItemListLoadByDate extends UsedFoodItemListEvent {
-  final DateTime date;
+  final List<UsedFoodItem> usedFoodItems;
+}
 
-  UsedFoodItemListLoadByDate({required this.date});
+class UsedFoodItemListClear extends UsedFoodItemListEvent {
+  const UsedFoodItemListClear();
 }

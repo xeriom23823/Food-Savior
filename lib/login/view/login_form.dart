@@ -3,54 +3,71 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/login/login.dart';
 import 'package:food_savior/sign_up/sign_up.dart';
+import 'package:food_savior/theme/app_tokens.dart';
+import 'package:food_savior/widgets/app_snack_bar.dart';
+import 'package:food_savior/widgets/auth_scaffold.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 
+/// 登入頁。錯誤訊息固定在表單上方，不用會蓋住按鈕的 SnackBar（design D8）。
 class LoginForm extends StatelessWidget {
   const LoginForm({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final strings = S.of(context);
+
     return BlocListener<LoginCubit, LoginState>(
+      listenWhen: (previous, current) =>
+          previous.resetStatus != current.resetStatus &&
+          current.resetStatus == PasswordResetStatus.sent,
       listener: (context, state) {
-        if (state.status.isFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.white,
-                content: Text(
-                  state.errorMessage ?? S.of(context).logInFailure,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-            );
-        }
+        AppSnackBar.show(context, message: strings.resetPasswordSent);
+        context.read<LoginCubit>().acknowledgePasswordReset();
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/icons/food_savior_logo.png',
-                height: 120,
-              ),
-              const SizedBox(height: 16),
-              _EmailInput(),
-              const SizedBox(height: 8),
-              _PasswordInput(),
-              const SizedBox(height: 8),
-              _LoginButton(),
-              const SizedBox(height: 8),
-              _GoogleLoginButton(),
-              const SizedBox(height: 4),
-              _SignUpButton(),
-            ],
-          ),
-        ),
+      child: AuthScaffold(
+        title: strings.loginWelcome,
+        children: [
+          const _ErrorBanner(),
+          _EmailInput(),
+          const SizedBox(height: AppSpacing.md),
+          _PasswordInput(),
+          const SizedBox(height: AppSpacing.xs),
+          const _ForgotPasswordButton(),
+          const SizedBox(height: AppSpacing.md),
+          _LoginButton(),
+          const SizedBox(height: AppSpacing.md),
+          _GoogleLoginButton(),
+          const SizedBox(height: AppSpacing.lg),
+          const _SignUpButton(),
+        ],
       ),
+    );
+  }
+}
+
+class _ErrorBanner extends StatelessWidget {
+  const _ErrorBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.errorMessage != current.errorMessage ||
+          previous.resetStatus != current.resetStatus,
+      builder: (context, state) {
+        final strings = S.of(context);
+        final hasLoginError = state.status.isFailure;
+        final hasResetError = state.resetStatus == PasswordResetStatus.failure;
+        if (!hasLoginError && !hasResetError) return const SizedBox.shrink();
+
+        final message = state.errorMessage ??
+            (hasResetError
+                ? strings.resetPasswordFailure
+                : strings.logInFailure);
+        return AuthErrorBanner(message: message);
+      },
     );
   }
 }
@@ -65,9 +82,9 @@ class _EmailInput extends StatelessWidget {
           key: const Key('loginForm_emailInput_textField'),
           onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
           decoration: InputDecoration(
-            labelText: 'email',
-            helperText: '',
+            labelText: S.of(context).email,
             errorText: state.email.displayError != null
                 ? S.of(context).invalidEmail
                 : null,
@@ -89,12 +106,37 @@ class _PasswordInput extends StatelessWidget {
           onChanged: (password) =>
               context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => context.read<LoginCubit>().logInWithCredentials(),
           decoration: InputDecoration(
-            labelText: 'password',
-            helperText: '',
+            labelText: S.of(context).password,
             errorText: state.password.displayError != null
                 ? S.of(context).invalidPassword
                 : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ForgotPasswordButton extends StatelessWidget {
+  const _ForgotPasswordButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) =>
+          previous.resetStatus != current.resetStatus,
+      builder: (context, state) {
+        final sending = state.resetStatus == PasswordResetStatus.sending;
+        return Align(
+          alignment: AlignmentDirectional.centerEnd,
+          child: TextButton(
+            key: const Key('loginForm_forgotPassword_textButton'),
+            onPressed:
+                sending ? null : context.read<LoginCubit>().sendPasswordReset,
+            child: Text(S.of(context).forgotPassword),
           ),
         );
       },
@@ -107,21 +149,18 @@ class _LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        return state.status.isInProgress
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  backgroundColor: const Color(0xFFFFD600),
-                ),
-                onPressed: state.isValid
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
-                child: Text(S.of(context).logIn),
-              );
+        return FilledButton(
+          key: const Key('loginForm_continue_raisedButton'),
+          onPressed: state.isValid && !state.status.isInProgress
+              ? () => context.read<LoginCubit>().logInWithCredentials()
+              : null,
+          child: state.status.isInProgress
+              ? const SizedBox.square(
+                  dimension: 20,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                )
+              : Text(S.of(context).logIn),
+        );
       },
     );
   }
@@ -130,36 +169,36 @@ class _LoginButton extends StatelessWidget {
 class _GoogleLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ElevatedButton.icon(
+    return FilledButton.tonalIcon(
       key: const Key('loginForm_googleLogin_raisedButton'),
-      label: Text(
-        S.of(context).signInWithGoogle,
-        style: const TextStyle(color: Colors.white),
-      ),
-      style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        backgroundColor: theme.colorScheme.secondary,
-      ),
-      icon: const FaIcon(FontAwesomeIcons.google, color: Colors.white),
       onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
+      icon: const FaIcon(FontAwesomeIcons.google, size: 16),
+      label: Text(S.of(context).signInWithGoogle),
     );
   }
 }
 
 class _SignUpButton extends StatelessWidget {
+  const _SignUpButton();
+
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return TextButton(
-      key: const Key('loginForm_createAccount_flatButton'),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
-      child: Text(
-        S.of(context).createAccount,
-        style: TextStyle(color: theme.primaryColor),
-      ),
+    final strings = S.of(context);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          strings.noAccountYet,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+        ),
+        TextButton(
+          key: const Key('loginForm_createAccount_flatButton'),
+          onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+          child: Text(strings.createAccount),
+        ),
+      ],
     );
   }
 }

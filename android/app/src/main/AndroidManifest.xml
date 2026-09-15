@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 掃描電子發票 QR（einvoice-import 規格）。 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
     <application
         android:label="food_savior"
         android:name="${applicationName}"
@@ -27,6 +30,11 @@
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
+        <!-- 讓 Play Services 在安裝時就下載條碼模型，而不是等第一次掃描
+             （unbundled-scanner-model D1）。 -->
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />

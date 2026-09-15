@@ -1,127 +1,155 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:food_savior/models/expiry.dart';
 import 'package:food_savior/models/food_item.dart';
 
 import '../helpers/hive_test_helper.dart';
 
 void main() {
-  final storage = DateTime(2026, 9, 1);
-  final expiration = DateTime(2026, 9, 10);
+  group('copyWith 保留未指定的欄位', () {
+    test('只改狀態時 id 與其他欄位不變', () {
+      final original = makeFood(id: 'abc', name: '蘋果', amount: 3);
 
-  FoodItem base({int quantity = 2}) => makeFood(
-        id: 'id-1',
-        name: '牛奶',
-        type: FoodItemType.eggAndMilk,
-        quantity: quantity,
-        unit: Unit.milliliter,
-        description: '全脂',
-        storageDate: storage,
-        expirationDate: expiration,
-      );
+      final updated = original.copyWith(status: FoodItemStatus.expired);
 
-  group('相等性（值相等，hashCode 與 == 一致）', () {
-    test('所有欄位相同 → 相等且 hashCode 相同', () {
-      expect(base(), equals(base()));
-      expect(base().hashCode, base().hashCode);
+      expect(updated.id, 'abc');
+      expect(updated.name, '蘋果');
+      expect(updated.amount, 3);
+      expect(updated.status, FoodItemStatus.expired);
     });
 
-    test('數量不同 → 不相等', () {
-      expect(base(quantity: 2), isNot(equals(base(quantity: 3))));
-    });
+    test('clear 旗標才會把欄位清成 null', () {
+      final original = makeFood(storageLocationId: 'fridge', priceTotal: 100);
 
-    test('Set 以值去重', () {
-      expect({base(), base()}.length, 1);
-    });
-
-    test('UsedFoodItem 與同 id 的 FoodItem 不相等', () {
-      final used = base().toUsedFoodItem(
-        id: 'id-1',
-        usedStatus: FoodItemStatus.consumed,
-        usedDate: DateTime(2026, 9, 5),
-        usedQuantity: 1,
-      );
-      expect(used, isNot(equals(base())));
-      expect(base(), isNot(equals(used)));
+      expect(original.copyWith().storageLocationId, 'fridge');
+      expect(original.copyWith(clearStorageLocation: true).storageLocationId,
+          isNull);
+      expect(original.copyWith(clearPrice: true).priceTotal, isNull);
     });
   });
 
-  group('copyWith', () {
-    test('未提供 id 時保留原 id', () {
-      final copy = base().copyWith(status: FoodItemStatus.expired);
-      expect(copy.id, 'id-1');
-      expect(copy.status, FoodItemStatus.expired);
-      expect(copy.name, '牛奶');
+  group('相等性', () {
+    test('欄位全同則相等，hashCode 一致', () {
+      final a = makeFood(id: 'x');
+      final b = makeFood(id: 'x');
+
+      expect(a, b);
+      expect(a.hashCode, b.hashCode);
+      expect({a, b}, hasLength(1));
     });
 
-    test('UsedFoodItem.copyWith 保留 usedDate 與點數', () {
-      final used =
-          makeUsed(id: 'u', affectFoodPoint: 1, usedDate: DateTime(2026, 9, 5));
-      final copy = used.copyWith(quantity: 5);
-      expect(copy.id, 'u');
-      expect(copy.quantity, 5);
-      expect(copy.affectFoodPoint, 1);
-      expect(copy.usedDate, DateTime(2026, 9, 5));
+    test('份量不同則不相等', () {
+      expect(makeFood(id: 'x', amount: 1), isNot(makeFood(id: 'x', amount: 2)));
+    });
+
+    test('UsedFoodItem 與 FoodItem 即使 id 相同也不相等', () {
+      final food = makeFood(id: 'same');
+      final used = makeUsed(id: 'same');
+
+      expect(food, isNot(used));
+      expect(used, isNot(food));
     });
   });
 
-  group('toUsedFoodItem（food-points）', () {
-    test('consumed → affectFoodPoint +1', () {
-      final used = base().toUsedFoodItem(
+  group('轉為使用紀錄', () {
+    test('處理方式決定狀態，浪費類才算浪費', () {
+      final food = makeFood(id: 'f', amount: 5);
+
+      final eaten = food.toUsedFoodItem(
         id: 'u1',
-        usedStatus: FoodItemStatus.consumed,
-        usedDate: DateTime(2026, 9, 5),
-        usedQuantity: 1,
+        disposalMethod: DisposalMethod.eaten,
+        usedDate: testNow,
+        usedAmount: 5,
       );
-      expect(used.affectFoodPoint, 1);
-      expect(used.quantity, 1);
-      expect(used.name, '牛奶');
-    });
-
-    test('wasted → affectFoodPoint -1', () {
-      final used = base().toUsedFoodItem(
+      final given = food.toUsedFoodItem(
         id: 'u2',
-        usedStatus: FoodItemStatus.wasted,
-        usedDate: DateTime(2026, 9, 5),
-        usedQuantity: 2,
+        disposalMethod: DisposalMethod.givenAway,
+        usedDate: testNow,
       );
-      expect(used.affectFoodPoint, -1);
+      final discarded = food.toUsedFoodItem(
+        id: 'u3',
+        disposalMethod: DisposalMethod.discarded,
+        usedDate: testNow,
+      );
+
+      expect(eaten.status, FoodItemStatus.consumed);
+      expect(eaten.isWaste, isFalse);
+      expect(given.status, FoodItemStatus.consumed);
+      expect(given.isWaste, isFalse);
+      expect(discarded.status, FoodItemStatus.wasted);
+      expect(discarded.isWaste, isTrue);
+    });
+
+    test('保留原本的期限，點數才算得對', () {
+      final food = makeFood(id: 'f', daysToExpire: 2);
+
+      final used = food.toUsedFoodItem(
+        id: 'u',
+        disposalMethod: DisposalMethod.eaten,
+        usedDate: testNow,
+      );
+
+      expect(used.effectiveExpiry, daysFromNow(2));
     });
   });
 
-  group('JSON 往返（cloud-backup-restore）', () {
-    test('FoodItem toJson / fromJson', () {
-      final restored = FoodItem.fromJson(base().toJson());
-      expect(restored, equals(base()));
+  group('金額攤提', () {
+    test('依份量比例攤提並四捨五入', () {
+      final food = makeFood(amount: 10, priceTotal: 100);
+
+      expect(food.priceForPortion(3), 30);
+      expect(food.priceForPortion(10), 100);
     });
 
-    test('toJson 的列舉欄位是列舉名稱字串（不可被 localizedName 擴充遮蔽）', () {
-      final json = base().toJson();
-      expect(json['type'], 'eggAndMilk');
-      expect(json['status'], 'fresh');
-      expect(json['unit'], 'milliliter');
-    });
-
-    test('FoodItem toJsonString / fromJsonString（備份格式）', () {
-      final restored = FoodItem.fromJsonString(base().toJsonString());
-      expect(restored, equals(base()));
-    });
-
-    test('UsedFoodItem 往返保留 usedDate 與點數', () {
-      final used = makeUsed(
-          id: 'u', usedDate: DateTime(2026, 9, 5, 12), affectFoodPoint: 0);
-      expect(UsedFoodItem.fromJson(used.toJson()), equals(used));
-      expect(UsedFoodItem.fromJsonString(used.toJsonString()), equals(used));
-    });
-
-    test('備份缺少 affectFoodPoint → 0', () {
-      final json = makeUsed(id: 'u').toJson()..remove('affectFoodPoint');
-      expect(UsedFoodItem.fromJson(json).affectFoodPoint, 0);
+    test('沒有金額時回傳 null', () {
+      expect(makeFood(amount: 10).priceForPortion(3), isNull);
     });
   });
 
-  test('quantityWithUnit 組合數量與單位名稱需要 BuildContext，改由 widget test 覆蓋', () {
-    // 佔位：確保 Unit 列舉順序未被重排（Hive 相容性）。
-    expect(Unit.values, [Unit.gram, Unit.milliliter, Unit.piece]);
-    expect(FoodItemStatus.values.length, 5);
-    expect(FoodItemType.values.length, 11);
+  group('JSON 往返', () {
+    test('FoodItem 四種精度都能還原', () {
+      for (final expiry in [
+        ExpiryValue.exact(daysFromNow(3)),
+        ExpiryValue.range(daysFromNow(3), daysFromNow(6)),
+        ExpiryValue.month(2026, 10),
+        const ExpiryValue.unknown(),
+      ]) {
+        final item = makeFood(id: 'json', expiry: expiry);
+
+        final restored = FoodItem.fromJsonString(item.toJsonString());
+
+        expect(restored, item);
+      }
+    });
+
+    test('UsedFoodItem 保留處理方式、原因與點數', () {
+      final item = makeUsed(
+        id: 'u',
+        disposalMethod: DisposalMethod.composted,
+        wasteReason: WasteReason.forgotten,
+        priceTotal: 45,
+        affectFoodPoint: -1,
+      );
+
+      final restored = UsedFoodItem.fromJsonString(item.toJsonString());
+
+      expect(restored, item);
+      expect(restored.disposalMethod, DisposalMethod.composted);
+      expect(restored.wasteReason, WasteReason.forgotten);
+      expect(restored.affectFoodPoint, -1);
+    });
+
+    test('列舉以 name 序列化（不是 toString）', () {
+      final json = makeFood(type: FoodItemType.meat).toJson();
+
+      expect(json['type'], 'meat');
+      expect(json['expiryPrecision'], 'exact');
+    });
+  });
+
+  group('名稱正規化', () {
+    test('全形、空白、大小寫都會被收斂', () {
+      expect(normalizeFoodName('  Ｍｉｌｋ '), 'milk');
+      expect(normalizeFoodName('雞蛋  '), '雞蛋');
+    });
   });
 }

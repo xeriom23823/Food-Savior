@@ -7,302 +7,171 @@ import 'package:hive_ce/hive.dart';
 
 import '../helpers/hive_test_helper.dart';
 
-Future<void> untilLoaded(UsedFoodItemListBloc bloc) async {
-  if (bloc.state is UsedFoodItemListLoaded) return;
-  await bloc.stream.firstWhere((s) => s is UsedFoodItemListLoaded);
-}
-
-/// 派發事件後等到 Bloc 真正回到穩定狀態（Loaded / NeedProcessing），
-/// 否則 bloc_test 會在 Hive 寫入完成前 close()，遺失最後的 emit。
-extension on UsedFoodItemListBloc {
-  Future<void> settle(void Function() action) {
-    final done = stream.firstWhere((s) => s is UsedFoodItemListLoaded);
-    action();
-    return done;
-  }
-}
+/// Hive 的寫入是真的磁碟 I/O，一個 microtask 等不到；blocTest 要多等一下。
+const Duration _hiveWrite = Duration(milliseconds: 300);
 
 void main() {
   final env = HiveTestEnv();
   late Box<UsedFoodItem> box;
   late UsedFoodItemRepository repo;
-  final today = DateTime.now();
 
   setUpAll(env.setUpAll);
   tearDownAll(env.tearDownAll);
   setUp(() async {
-    box = await env.openBox<UsedFoodItem>('usedFoodItem');
+    box = await env.openBox<UsedFoodItem>('usedFoodItems');
     repo = UsedFoodItemRepository(usedFoodItemBox: box);
   });
   tearDown(() => box.deleteFromDisk());
 
-  UsedFoodItemListBloc build() =>
-      UsedFoodItemListBloc(usedFoodItemRepository: repo);
+  UsedFoodItemListBloc build() => UsedFoodItemListBloc(
+        usedFoodItemRepository: repo,
+        now: () => testNow,
+      );
 
-  Future<void> seedConsumedToday(int count) async {
-    for (var i = 0; i < count; i++) {
-      await box.put('seed$i',
-          makeUsed(id: 'seed$i', usedDate: today, affectFoodPoint: 1));
+  UsedFoodItemListLoaded loadedOf(UsedFoodItemListState state) =>
+      state as UsedFoodItemListLoaded;
+
+  group('依日期瀏覽', () {
+    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
+      '預設顯示今天的紀錄',
+      setUp: () async {
+        await repo.saveUsedFoodItems([
+          makeUsed(id: 'today', usedDate: testNow),
+          makeUsed(id: 'yesterday', usedDate: daysFromNow(-1)),
+        ]);
+      },
+      build: build,
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(const UsedFoodItemListStarted()),
+      verify: (bloc) {
+        expect(ids(loadedOf(bloc.state).usedFoodItems), ['today']);
+      },
+    );
+
+    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
+      '切換到昨天只顯示昨天的紀錄',
+      setUp: () async {
+        await repo.saveUsedFoodItems([
+          makeUsed(id: 'today', usedDate: testNow),
+          makeUsed(id: 'yesterday', usedDate: daysFromNow(-1)),
+        ]);
+      },
+      build: build,
+      wait: _hiveWrite,
+      act: (bloc) =>
+          bloc.add(UsedFoodItemListLoadByDate(date: daysFromNow(-1))),
+      verify: (bloc) {
+        expect(ids(loadedOf(bloc.state).usedFoodItems), ['yesterday']);
+      },
+    );
+  });
+
+  group('篩選', () {
+    Future<void> seed() async {
+      await repo.saveUsedFoodItems([
+        makeUsed(id: 'eaten', disposalMethod: DisposalMethod.eaten),
+        makeUsed(id: 'given', disposalMethod: DisposalMethod.givenAway),
+        makeUsed(id: 'discarded', disposalMethod: DisposalMethod.discarded),
+      ]);
     }
-  }
 
-  List<int> pointsOf(UsedFoodItemListState s, Iterable<String> idList) {
-    final items = (s as UsedFoodItemListLoaded).usedFoodItems;
-    return idList
-        .map((id) => items.firstWhere((u) => u.id == id).affectFoodPoint)
-        .toList();
-  }
-
-  group('載入（usage-history）', () {
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '空 Box → Loading → Loaded([])',
+      '只看浪費時送人不計入',
+      setUp: seed,
       build: build,
-      act: untilLoaded,
-      expect: () => const [
-        UsedFoodItemListLoading(),
-        UsedFoodItemListLoaded(usedFoodItems: []),
-      ],
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(
+        const UsedFoodItemListFilterChanged(filter: UsedFoodFilter.wasted),
+      ),
+      verify: (bloc) {
+        expect(ids(loadedOf(bloc.state).usedFoodItems), ['discarded']);
+      },
     );
 
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      'LoadByDate 只回傳該日（忽略時間）',
-      setUp: () async {
-        await box.put(
-            't1',
-            makeUsed(
-                id: 't1',
-                usedDate: DateTime(today.year, today.month, today.day, 8)));
-        await box.put(
-            't2',
-            makeUsed(
-                id: 't2',
-                usedDate: DateTime(today.year, today.month, today.day, 22)));
-        await box.put('y', makeUsed(id: 'y', usedDate: daysFromNow(-1)));
-      },
+      '切換日期時保持篩選',
+      setUp: seed,
       build: build,
+      wait: _hiveWrite,
       act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc
-            .settle(() => bloc.add(UsedFoodItemListLoadByDate(date: today)));
+        bloc.add(
+          const UsedFoodItemListFilterChanged(filter: UsedFoodFilter.wasted),
+        );
+        await Future<void>.delayed(_hiveWrite);
+        bloc.add(UsedFoodItemListLoadByDate(date: daysFromNow(-1)));
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => ids(s.usedFoodItems).toSet(), 'ids', {'t1', 't2'}),
-      ],
+      verify: (bloc) {
+        expect(loadedOf(bloc.state).filter, UsedFoodFilter.wasted);
+      },
     );
   });
 
-  group('食物點數（food-points）', () {
+  group('刪除與補記', () {
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '食用 → +1',
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAdd(
-            usedFoodItem: makeUsed(id: 'c', status: FoodItemStatus.consumed))));
+      '刪除後本機儲存也不再有該筆',
+      setUp: () async {
+        await repo.saveUsedFoodItem(makeUsed(id: 'x'));
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => s.usedFoodItems.single.affectFoodPoint, 'point', 1),
-      ],
+      build: build,
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(const UsedFoodItemListRemove(id: 'x')),
+      verify: (bloc) {
+        expect(loadedOf(bloc.state).usedFoodItems, isEmpty);
+        expect(repo.getUsedFoodItem('x'), isNull);
+      },
     );
 
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '浪費 → -1',
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAdd(
-            usedFoodItem: makeUsed(id: 'w', status: FoodItemStatus.wasted))));
+      '補記浪費原因不改變點數',
+      setUp: () async {
+        await repo.saveUsedFoodItem(makeUsed(
+          id: 'x',
+          disposalMethod: DisposalMethod.discarded,
+          affectFoodPoint: -2,
+        ));
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => s.usedFoodItems.single.affectFoodPoint, 'point', -1),
-      ],
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '當日已達 10 點 → 新食用紀錄為 0',
-      setUp: () => seedConsumedToday(10),
       build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAdd(
-            usedFoodItem: makeUsed(id: 'c', usedDate: today))));
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(const UsedFoodItemListSetWasteReason(
+        id: 'x',
+        wasteReason: WasteReason.boughtTooMuch,
+      )),
+      verify: (bloc) {
+        final item = repo.getUsedFoodItem('x')!;
+        expect(item.wasteReason, WasteReason.boughtTooMuch);
+        expect(item.affectFoodPoint, -2);
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => pointsOf(s, ['c']), 'point', [0]),
-      ],
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '當日 9 點 → 新食用紀錄為 +1',
-      setUp: () => seedConsumedToday(9),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAdd(
-            usedFoodItem: makeUsed(id: 'c', usedDate: today))));
-      },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => pointsOf(s, ['c']), 'point', [1]),
-      ],
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '上限不影響浪費：當日 12 點仍為 -1',
-      setUp: () => seedConsumedToday(12),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAdd(
-            usedFoodItem: makeUsed(
-                id: 'w', status: FoodItemStatus.wasted, usedDate: today))));
-      },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => pointsOf(s, ['w']), 'point', [-1]),
-      ],
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '批次新增（過期處理）依序套用上限：9 點 + 3 筆食用 → +1, 0, 0；浪費仍 -1',
-      setUp: () => seedConsumedToday(9),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListAddAll(usedFoodItems: [
-              makeUsed(id: 'c1', usedDate: today),
-              makeUsed(id: 'c2', usedDate: today),
-              makeUsed(id: 'c3', usedDate: today),
-              makeUsed(
-                  id: 'w1', status: FoodItemStatus.wasted, usedDate: today),
-            ])));
-      },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => s.usedFoodItems.length, 'count', 13)
-            .having((s) => pointsOf(s, ['c1', 'c2', 'c3', 'w1']), 'points',
-                [1, 0, 0, -1]),
-      ],
-      verify: (_) => expect(box.get('c2')!.affectFoodPoint, 0),
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '還原載入整批取代既有紀錄',
-      setUp: () => seedConsumedToday(3),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListLoad(usedFoodItems: [
-              makeUsed(id: 'r1', usedDate: today),
-              makeUsed(id: 'r2', usedDate: today),
-            ])));
-      },
-      skip: 2,
-      expect: () => [
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => ids(s.usedFoodItems).toSet(), 'ids', {'r1', 'r2'}),
-      ],
-      verify: (_) => expect(box.keys.toSet(), {'r1', 'r2'}),
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '還原載入保留備份中的點數，不重算',
-      setUp: () => seedConsumedToday(10),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListLoad(usedFoodItems: [
-              makeUsed(id: 'r', usedDate: today, affectFoodPoint: 5),
-            ])));
-      },
-      skip: 2,
-      expect: () => [
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => pointsOf(s, ['r']), 'point', [5]),
-      ],
-      verify: (_) => expect(box.get('r')!.affectFoodPoint, 5),
     );
   });
 
-  group('移除 / 更新 / 清空（usage-history）', () {
+  group('還原', () {
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '移除 → 清單與 Box 都不再有該 id',
+      '保留備份中的點數，不重新計算',
       setUp: () async {
-        await box.put('a', makeUsed(id: 'a'));
-        await box.put('b', makeUsed(id: 'b'));
+        await repo.saveUsedFoodItem(makeUsed(id: 'old'));
       },
       build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() =>
-            bloc.add(UsedFoodItemListRemove(usedFoodItem: box.get('a')!)));
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(UsedFoodItemListLoad(usedFoodItems: [
+        makeUsed(id: 'restored', affectFoodPoint: 5),
+      ])),
+      verify: (bloc) {
+        expect(repo.getUsedFoodItem('old'), isNull);
+        expect(repo.getUsedFoodItem('restored')!.affectFoodPoint, 5);
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => ids(s.usedFoodItems), 'ids', ['b']),
-      ],
-      verify: (_) => expect(box.containsKey('a'), isFalse),
     );
 
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '更新 → 寫入 Box 並依使用日期排序',
+      '清空',
       setUp: () async {
-        await box.put('a', makeUsed(id: 'a', usedDate: daysFromNow(-1)));
-        await box.put('b', makeUsed(id: 'b', usedDate: daysFromNow(-3)));
+        await repo.saveUsedFoodItem(makeUsed(id: 'x'));
       },
       build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        final a = box.get('a')!;
-        await bloc.settle(() => bloc.add(UsedFoodItemListUpdate(
-              originalUsedFoodItem: a,
-              updatedUsedFoodItem: a.copyWith(quantity: 9),
-            )));
+      wait: _hiveWrite,
+      act: (bloc) => bloc.add(const UsedFoodItemListClear()),
+      verify: (bloc) {
+        expect(repo.getAllUsedFoodItems(), isEmpty);
       },
-      skip: 2,
-      expect: () => [
-        const UsedFoodItemListLoading(),
-        isA<UsedFoodItemListLoaded>()
-            .having((s) => ids(s.usedFoodItems), 'order', ['b', 'a']).having(
-                (s) => s.usedFoodItems.last.quantity, 'quantity', 9),
-      ],
-      verify: (_) => expect(box.get('a')!.quantity, 9),
-    );
-
-    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
-      '清空 → Loaded([]) 且 Box 為空',
-      setUp: () => box.put('a', makeUsed(id: 'a')),
-      build: build,
-      act: (bloc) async {
-        await untilLoaded(bloc);
-        await bloc.settle(() => bloc.add(UsedFoodItemListClear()));
-      },
-      skip: 2,
-      expect: () => const [
-        UsedFoodItemListLoading(),
-        UsedFoodItemListLoaded(usedFoodItems: []),
-      ],
-      verify: (_) => expect(box.isEmpty, isTrue),
     );
   });
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:food_savior/models/expiry.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/repositories/backup_repository.dart';
 
@@ -22,7 +23,7 @@ void main() {
         id: id,
         name: '牛奶 $id',
         storageDate: DateTime(2026, 9, 1),
-        expirationDate: DateTime(2026, 9, 10),
+        expiry: ExpiryValue.exact(DateTime(2026, 9, 10)),
       );
   UsedFoodItem used(String id) => makeUsed(
         id: id,

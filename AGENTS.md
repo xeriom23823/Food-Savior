@@ -8,7 +8,7 @@
 - 平台：Android 優先，iOS 次之；macOS / Windows / Linux / Web 只需維持可編譯，不需驗證 UX。
 - 技術棧：Flutter 3.47 / Dart 3.13、flutter_bloc 9、Equatable、Hive CE 2.20、firebase_core 4 / firebase_auth 6 / cloud_firestore 6、google_sign_in 7、intl + intl_utils（zh-TW 預設、en）、fl_chart、flutter_slidable、Lottie、Font Awesome 11、Material 3、flutter_lints 6。2026-09-15 全部升到最新可解析版本；`build_runner`／`mockito`／`hive_ce_generator`／`intl_utils` 受 SDK 的 `test_api` 與 analyzer 版本鏈牽制，非最新。
 - `pubspec.yaml` 的 `dependency_overrides: objective_c: 9.6.0` 是暫時的：9.6.1 的 build hook 引用尚未發布的 `code_assets` API，會讓 `flutter test` 編譯失敗。objective_c 出新版時先移除 override 試試。
-- Android 工具鏈：Gradle 9.3.1、AGP 9.1.0、Kotlin 2.4.0、google-services 4.5.0（對齊 Flutter 3.47 範本）；`android/gradle.properties` 的 `android.newDsl=false`、`android.builtInKotlin=false` 是 Flutter migrator 為 AGP 9 加的，不要移除。App 以 Java 21 為目標，本機用 Android Studio 附帶 JBR（Java 25）建置即可；CI 用 Temurin 21。Flutter 3.47 拒絕 Gradle < 8.14。
+- Android 工具鏈：Gradle 9.3.1、AGP 9.1.0、Kotlin 2.4.0、google-services 4.5.0（對齊 Flutter 3.47 範本）；`android/gradle.properties` 的 `android.newDsl=false` 是 Flutter migrator 為 AGP 9 加的，不要移除；`android.builtInKotlin` 已於 2026-09-15 改為 `true`（AGP 內建 Kotlin 編譯），`app/build.gradle` 因此不再套用 `kotlin-android`，jvmTarget 改由頂層 `kotlin { compilerOptions { … } }` 指定，`android/build.gradle` 的舊 `buildscript` classpath（AGP 8.6.1／KGP 2.1.10／google-services 4.3.10）已刪除，版本一律由 `settings.gradle` 的 `plugins` 區塊決定。App 以 Java 21 為目標，本機用 Android Studio 附帶 JBR（Java 25）建置即可；CI 用 Temurin 21。Flutter 3.47 拒絕 Gradle < 8.14。
 - 規格：OpenSpec（`openspec/`）。`openspec/specs/` 是系統現況的唯一真相；行為變更必須經由 change 的 delta spec。
 - 文件語言：AGENTS、specs、skills 一律繁體中文。
 
@@ -116,6 +116,8 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 
 已修正並 archive（2026-09-15）：`fix-inventory-and-points-consistency`（過期處理後項目未刪除、批次寫入不套用點數上限、`copyWith` 把 id 清成空字串、`==`／`hashCode` 契約、Repository 未 `await` 寫入、列舉擴充 `name()` 遮蔽 `Enum.name` 使 `toJson` 失效、載入未排序、4 個 deprecation、工具鏈與套件升級）、`fix-backup-restore-feedback`（備份失敗無回饋、還原先清空後讀取的資料遺失風險；Firestore 存取移入 `BackupRepository`）。
 10. 使用者的測試 Wi-Fi 曾讓 Firestore gRPC 連不上後端（Auth 的 HTTPS 正常）；App 現在會在 15 秒內顯示 `errorOffline`。若再遇到，先換網路（手機熱點）排除環境因素。
+11. `flutter build`／`flutter run` 仍會印出「Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): firebase_auth, firebase_core」。這是 Flutter 工具的誤判：firebase_core 4.15.0／firebase_auth 6.7.0 的 `android/build.gradle` 只有在 `android.builtInKotlin=false` 時才會套用 KGP，但 Flutter 是用正規表示式掃描檔案文字（`FlutterPluginUtils.kt` 的 `kgpRegexGroovy`），看不出那行在 `if` 裡面。本機無解，要等 FlutterFire 移除該行；不要為此修改 pub cache。
+12. `android/gradlew`、`android/gradlew.bat` 被 `android/.gitignore` 排除，兩者的 `DEFAULT_JVM_OPTS` 已加上 `--enable-native-access=ALL-UNNAMED`，用來消掉 JDK 24+（本機 JBR 25）對 Gradle native-platform 的 restricted-method 警告。因為未進版控，換電腦或 Flutter 重新產生 wrapper 後要重加；或改設使用者層級環境變數 `GRADLE_OPTS`。CI 用 JDK 21，本來就不會出現該警告。
 
 ## 指令速查
 

@@ -1,10 +1,10 @@
 part of 'used_food_item_list_bloc.dart';
 
-abstract class UsedFoodItemListState extends Equatable {
+sealed class UsedFoodItemListState extends Equatable {
   const UsedFoodItemListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class UsedFoodItemListInitial extends UsedFoodItemListState {
@@ -16,17 +16,26 @@ final class UsedFoodItemListLoading extends UsedFoodItemListState {
 }
 
 final class UsedFoodItemListLoaded extends UsedFoodItemListState {
+  const UsedFoodItemListLoaded({
+    required this.usedFoodItems,
+    required this.selectedDate,
+    this.filter = UsedFoodFilter.all,
+  });
+
+  /// 已套用篩選、依使用時間排序的當日紀錄。
   final List<UsedFoodItem> usedFoodItems;
-  const UsedFoodItemListLoaded({required this.usedFoodItems});
+  final DateTime selectedDate;
+  final UsedFoodFilter filter;
 
   @override
-  List<Object> get props => [usedFoodItems];
+  List<Object?> get props => [usedFoodItems, selectedDate, filter];
 }
 
 final class UsedFoodItemListError extends UsedFoodItemListState {
-  final String message;
   const UsedFoodItemListError({required this.message});
 
+  final String message;
+
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }

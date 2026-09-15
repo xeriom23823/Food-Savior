@@ -1,35 +1,35 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:food_savior/cubits/theme_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences.setMockInitialValues({});
-  group('ThemeCubit', () {
-    late ThemeCubit themeCubit;
+  setUp(() => SharedPreferences.setMockInitialValues({}));
 
-    setUp(() {
-      themeCubit = ThemeCubit();
-    });
+  test('預設是淺色', () async {
+    final cubit = ThemeCubit();
+    await Future<void>.delayed(Duration.zero);
 
-    tearDown(() {
-      themeCubit.close();
-    });
+    expect(cubit.state, ThemeMode.light);
+  });
 
-    test('initial state is light theme', () {
-      expect(themeCubit.state, equals(ThemeCubit.lightTheme));
-    });
+  test('切換後變成深色並持久化', () async {
+    final cubit = ThemeCubit();
+    await Future<void>.delayed(Duration.zero);
 
-    test('switchTheme changes the theme from light to dark', () async {
-      await themeCubit.switchTheme();
+    await cubit.switchTheme();
 
-      expect(themeCubit.state, equals(ThemeCubit.darkTheme));
-    });
+    expect(cubit.state, ThemeMode.dark);
+    final prefs = await SharedPreferences.getInstance();
+    expect(prefs.getBool('isDark'), isTrue);
+  });
 
-    test('switchTheme changes the theme from dark to light', () async {
-      await themeCubit.switchTheme();
+  test('重新建立時讀回已保存的深色設定', () async {
+    SharedPreferences.setMockInitialValues({'isDark': true});
 
-      expect(themeCubit.state, equals(ThemeCubit.lightTheme));
-    });
+    final cubit = ThemeCubit();
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state, ThemeMode.dark);
   });
 }

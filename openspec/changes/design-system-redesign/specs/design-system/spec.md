@@ -34,7 +34,9 @@ App 的顏色、字級、間距、圓角、動畫時長 SHALL 由集中定義的
 
 ### Requirement: 元件庫是唯一的 UI 積木
 
-系統 SHALL 提供並在所有分頁重用以下元件：`AppScaffold`、`FoodItemTile`、`StatusChip`、`ExpiryCountdown`、`QuantityWithUnit`、`EmptyState`、`SectionHeader`、`AppSnackBar`（success／warning／error）、`ConfirmSheet`、`DatePickerField`。同一種資訊在不同分頁 SHALL 以同一元件呈現。
+系統 SHALL 提供並在所有分頁重用以下元件：`AppScaffold`、`FoodItemTile`、`FoodItemGroupCard`、`StatusChip`、`PendingExpiryBadge`、`ExpiryCountdown`、`AmountLabel`、`EmptyState`、`SectionHeader`、`AppSnackBar`（success／warning／error）、`ConfirmSheet`、`ExpiryField`、`ExpirySheet`、`LocationPicker`。同一種資訊在不同分頁 SHALL 以同一元件呈現。
+
+`AmountLabel` 同時負責數量加單位與剩餘比例兩種呈現（份量有兩種記法，見 food-inventory）；期限輸入由 `ExpiryField` 統一處理四種精度，因此沒有通用的日期欄位元件。
 
 #### Scenario: 食物列在清單與過期處理頁
 
@@ -57,7 +59,7 @@ App 的顏色、字級、間距、圓角、動畫時長 SHALL 由集中定義的
 #### Scenario: 新增食物
 
 - **WHEN** 使用者點擊新增
-- **THEN** SHALL 開啟全螢幕表單頁（或 sheet），欄位順序：名稱、類型、數量與單位、存放日、到期日、描述
+- **THEN** SHALL 開啟全螢幕表單頁（或 sheet），欄位順序：名稱、類型、份量與單位、存放位置、存放日、期限、開封資訊、金額、描述
 
 ### Requirement: 觸控目標與版面節律
 

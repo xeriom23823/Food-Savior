@@ -7,6 +7,8 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  # StreamGroup：user 串流要把 authStateChanges 與 profile 更新合流（design D5）。
+  async: ^2.13.0
   cache:
     path: ../cache
   equatable: ^2.1.0

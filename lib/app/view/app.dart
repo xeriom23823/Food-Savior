@@ -7,6 +7,7 @@ import 'package:food_savior/app/app.dart';
 import 'package:food_savior/cubits/locale_cubit.dart';
 import 'package:food_savior/cubits/theme_cubit.dart';
 import 'package:food_savior/generated/l10n.dart';
+import 'package:food_savior/theme/app_theme.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -42,8 +43,8 @@ class AppView extends StatelessWidget {
       ],
       child: BlocBuilder<LocaleCubit, Locale>(
         builder: (context, locale) {
-          return BlocBuilder<ThemeCubit, ThemeData>(
-            builder: (context, theme) {
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 locale: locale,
@@ -54,7 +55,9 @@ class AppView extends StatelessWidget {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: S.delegate.supportedLocales,
-                theme: theme,
+                theme: AppTheme.light,
+                darkTheme: AppTheme.dark,
+                themeMode: themeMode,
                 home: FlowBuilder<AppStatus>(
                   state: context.select((AppBloc bloc) => bloc.state.status),
                   onGeneratePages: onGenerateAppViewPages,

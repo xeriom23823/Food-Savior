@@ -1,286 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
+import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
+import 'package:food_savior/theme/app_tokens.dart';
+import 'package:food_savior/theme/app_assets.dart';
+import 'package:food_savior/theme/food_item_visuals.dart';
+import 'package:food_savior/theme/food_status_colors.dart';
+import 'package:food_savior/theme/localized_labels.dart';
+import 'package:food_savior/widgets/amount_label.dart';
+import 'package:food_savior/widgets/confirm_sheet.dart';
+import 'package:food_savior/widgets/empty_state.dart';
 import 'package:intl/intl.dart';
 
-class UsedFoodItemListPage extends StatefulWidget {
+/// 使用紀錄：依日期瀏覽，可只看食用或只看浪費，並能事後補記浪費原因。
+class UsedFoodItemListPage extends StatelessWidget {
   const UsedFoodItemListPage({super.key});
 
-  @override
-  State<UsedFoodItemListPage> createState() => _UsedFoodItemListPageState();
-}
-
-class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
-  FoodItemStatus dropdownValue = FoodItemStatus.consumed;
-  DateTime selectedDate = DateTime.now();
-  List<DateTime> selectedWeek = [];
-
-  @override
-  void initState() {
-    super.initState();
-    updateSelectedWeek();
-    _loadUsedFoodItems();
-  }
-
-  void _loadUsedFoodItems() {
-    context.read<UsedFoodItemListBloc>().add(
-          UsedFoodItemListLoadByDate(date: selectedDate),
-        );
-  }
-
-  // 當日期改變時重新載入資料
-  void onDateChanged(DateTime newDate) {
-    setState(() {
-      selectedDate = newDate;
-      updateSelectedWeek();
-    });
-    _loadUsedFoodItems();
-  }
+  static final DateFormat _dayFormat = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width * 0.6,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    DateFormat('yyyy-MM-dd').format(selectedDate),
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      Icons.calendar_today,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      size: 24,
-                    ),
-                    onPressed: () {
-                      _showSelectDateDialog(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Center(
-                child: DropdownButton<FoodItemStatus>(
-                  dropdownColor: Theme.of(context).primaryColor,
-                  value: dropdownValue,
-                  onChanged: (FoodItemStatus? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items: <FoodItemStatus>[
-                    FoodItemStatus.consumed,
-                    FoodItemStatus.wasted
-                  ].map<DropdownMenuItem<FoodItemStatus>>(
-                      (FoodItemStatus value) {
-                    return DropdownMenuItem<FoodItemStatus>(
-                      value: value,
-                      child: Text(
-                        value.localizedName(context),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: BlocConsumer<UsedFoodItemListBloc, UsedFoodItemListState>(
-        listener: (context, state) {
-          if (state is UsedFoodItemListError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: Colors.white,
-                content: Text(
-                  state.message,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              ),
-            );
-          }
-        },
-        builder: (context, state) {
-          if (state is UsedFoodItemListLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is UsedFoodItemListLoaded) {
-            return Column(
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width,
-                  color: Theme.of(context).appBarTheme.backgroundColor,
-                  child: Row(
-                    children: [
-                      for (final day in selectedWeek) ...[
-                        SizedBox(
-                          width: MediaQuery.sizeOf(context).width / 7,
-                          child: Column(
-                            children: [
-                              Text(
-                                DateFormat('E').format(day),
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedDate = day;
-                                    onDateChanged(day);
-                                  });
-                                },
-                                child: Container(
-                                  width: MediaQuery.sizeOf(context).width / 7,
-                                  height: MediaQuery.sizeOf(context).width /
-                                      7 *
-                                      0.8,
-                                  margin:
-                                      const EdgeInsets.only(top: 5, bottom: 5),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: (DateTime.now().day == day.day &&
-                                            DateTime.now().month == day.month &&
-                                            DateTime.now().year == day.year)
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary
-                                            .withAlpha(100)
-                                        : Colors.transparent,
-                                    border: Border.all(
-                                      color: day == selectedDate
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .onPrimary
-                                          : Colors.transparent,
-                                      width: 2,
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      DateFormat('dd').format(day),
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: day == selectedDate
-                                            ? FontWeight.bold
-                                            : FontWeight.normal,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: state.usedFoodItems.length,
-                    itemBuilder: (context, index) {
-                      final usedFoodItem = state.usedFoodItems[index];
-                      if (usedFoodItem.status != dropdownValue) {
-                        return const SizedBox.shrink();
-                      }
-                      return ListTile(
-                        onTap: () {
-                          _showUsedFoodItemInformationDialog(
-                              context, usedFoodItem);
-                        },
-                        title: Text(
-                            '${usedFoodItem.name} (${usedFoodItem.quantity} ${usedFoodItem.unit.localizedName(context)})'),
-                        leading: Icon(usedFoodItem.type.icon,
-                            color: usedFoodItem.status.color),
-                        subtitle: Text(
-                          '${usedFoodItem.affectFoodPoint >= 0 ? '+' : ''} ${usedFoodItem.affectFoodPoint} 食物點數',
-                          style: TextStyle(color: usedFoodItem.status.color),
-                        ),
-                        trailing: Text(
-                          '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}',
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return const Center(
-              child: Text('No data'),
-            );
-          }
-        },
-      ),
-    );
-  }
+    final strings = S.of(context);
 
-  void _showUsedFoodItemInformationDialog(
-      BuildContext pageContext, UsedFoodItem usedFoodItem) {
-    showDialog(
-      context: pageContext,
-      builder: (context) {
-        return AlertDialog(
-          title: Row(
-            children: [
-              Expanded(
-                child: Text(usedFoodItem.name),
+    return BlocBuilder<UsedFoodItemListBloc, UsedFoodItemListState>(
+      builder: (context, state) {
+        if (state is UsedFoodItemListError) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(strings.usedFoodItemListNavigationBarTitle),
+            ),
+            body: EmptyState(
+              icon: Icons.cloud_off,
+              title: strings.foodItemListError,
+              action: FilledButton(
+                onPressed: () => context
+                    .read<UsedFoodItemListBloc>()
+                    .add(const UsedFoodItemListRefresh()),
+                child: Text(strings.refresh),
               ),
+            ),
+          );
+        }
+        if (state is! UsedFoodItemListLoaded) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(strings.usedFoodItemListNavigationBarTitle),
+            ),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(strings.usedFoodItemListNavigationBarTitle),
+            actions: [
               IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: () {
-                  BlocProvider.of<UsedFoodItemListBloc>(pageContext).add(
-                    UsedFoodItemListRemove(usedFoodItem: usedFoodItem),
-                  );
-                  Navigator.of(context).pop();
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                icon: const Icon(Icons.calendar_month),
+                onPressed: () => _pickDate(context, state.selectedDate),
               ),
             ],
           ),
-          content: SingleChildScrollView(
+          body: SafeArea(
             child: Column(
               children: [
-                Icon(usedFoodItem.type.icon,
-                    color: usedFoodItem.status.color, size: 50),
-                Text(usedFoodItem.description),
-                Text(
-                  usedFoodItem.type.localizedName(pageContext),
-                  style: TextStyle(color: usedFoodItem.status.color),
+                _WeekStrip(selectedDate: state.selectedDate),
+                _FilterBar(filter: state.filter),
+                Expanded(
+                  child: state.usedFoodItems.isEmpty
+                      ? EmptyState(
+                          icon: Icons.receipt_long_outlined,
+                          illustrationAsset: state.filter == UsedFoodFilter.all
+                              ? AppAssets.emptyUsedHistory
+                              : AppAssets.emptyFilterNoResults,
+                          title: state.filter == UsedFoodFilter.all
+                              ? strings.emptyUsedFoodListTitle
+                              : strings.noData,
+                          description: state.filter == UsedFoodFilter.all
+                              ? strings.emptyUsedFoodListDescription
+                              : null,
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            AppSpacing.sm,
+                            AppSpacing.lg,
+                            AppSpacing.xl,
+                          ),
+                          itemCount: state.usedFoodItems.length,
+                          itemBuilder: (context, index) => _UsedFoodTile(
+                            item: state.usedFoodItems[index],
+                          ),
+                        ),
                 ),
-                Text(
-                    '數量：${usedFoodItem.quantity} ${usedFoodItem.unit.localizedName(context)}'),
-                Text('食物點數：${usedFoodItem.affectFoodPoint}'),
-                Text(
-                    '使用日期：${DateFormat('yyyy-MM-dd').format(usedFoodItem.usedDate)}'),
               ],
             ),
           ),
@@ -289,23 +101,255 @@ class _UsedFoodItemListPageState extends State<UsedFoodItemListPage> {
     );
   }
 
-  void _showSelectDateDialog(BuildContext context) {
-    showDatePicker(
+  Future<void> _pickDate(BuildContext context, DateTime selected) async {
+    final bloc = context.read<UsedFoodItemListBloc>();
+    final picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selected,
       firstDate: DateTime(2021),
       lastDate: DateTime(2101),
-    ).then((value) {
-      if (value != null) {
-        onDateChanged(value);
-      }
-    });
+    );
+    if (picked != null) {
+      bloc.add(UsedFoodItemListLoadByDate(date: picked));
+    }
   }
 
-  void updateSelectedWeek() {
-    final dayOfWeek = selectedDate.weekday;
-    final firstDayOfWeek = selectedDate.subtract(Duration(days: dayOfWeek - 1));
-    selectedWeek =
-        List.generate(7, (index) => firstDayOfWeek.add(Duration(days: index)));
+  static String formatDay(DateTime date) => _dayFormat.format(date);
+}
+
+class _WeekStrip extends StatelessWidget {
+  const _WeekStrip({required this.selectedDate});
+
+  final DateTime selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final now = DateTime.now();
+    final monday = selectedDate.subtract(
+      Duration(days: selectedDate.weekday - DateTime.monday),
+    );
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.sm,
+      ),
+      child: Row(
+        children: List.generate(7, (index) {
+          final day = monday.add(Duration(days: index));
+          final isSelected = _isSameDay(day, selectedDate);
+          final isToday = _isSameDay(day, now);
+
+          return Expanded(
+            child: InkWell(
+              borderRadius: AppRadius.card,
+              onTap: () => context
+                  .read<UsedFoodItemListBloc>()
+                  .add(UsedFoodItemListLoadByDate(date: day)),
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primaryContainer
+                      : Colors.transparent,
+                  borderRadius: AppRadius.card,
+                  border: isToday && !isSelected
+                      ? Border.all(color: theme.colorScheme.primary)
+                      : null,
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      DateFormat.E(Localizations.localeOf(context).toString())
+                          .format(day),
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: isSelected
+                            ? theme.colorScheme.onPrimaryContainer
+                            : theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${day.day}',
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: isSelected
+                            ? theme.colorScheme.onPrimaryContainer
+                            : theme.colorScheme.onSurface,
+                        fontWeight: isToday ? FontWeight.w700 : FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  static bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+}
+
+class _FilterBar extends StatelessWidget {
+  const _FilterBar({required this.filter});
+
+  final UsedFoodFilter filter;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = S.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      child: Row(
+        children: [
+          for (final entry in <(UsedFoodFilter, String)>[
+            (UsedFoodFilter.all, strings.filterAll),
+            (UsedFoodFilter.consumed, strings.filterConsumed),
+            (UsedFoodFilter.wasted, strings.filterWasted),
+          ])
+            Padding(
+              padding: const EdgeInsets.only(right: AppSpacing.sm),
+              child: ChoiceChip(
+                label: Text(entry.$2),
+                selected: filter == entry.$1,
+                onSelected: (_) => context
+                    .read<UsedFoodItemListBloc>()
+                    .add(UsedFoodItemListFilterChanged(filter: entry.$1)),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _UsedFoodTile extends StatelessWidget {
+  const _UsedFoodTile({required this.item});
+
+  final UsedFoodItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = S.of(context);
+    final theme = Theme.of(context);
+    final colors = context.foodStatusColors;
+    final status =
+        item.isWaste ? FoodItemStatus.wasted : FoodItemStatus.consumed;
+
+    final details = <String>[
+      AmountLabel.format(
+        context,
+        amount: item.amount,
+        unit: item.unit,
+        remainingFraction: item.remainingFraction,
+      ),
+      item.disposalMethod.localizedName(context),
+      if (item.wasteReason != null) item.wasteReason!.localizedName(context),
+      if (item.priceTotal != null) strings.priceLabel(item.priceTotal!),
+    ].where((text) => text.isNotEmpty).toList();
+
+    return Card(
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: colors.containerOf(status),
+          child: Icon(
+            FoodItemVisuals.iconOf(item.type),
+            color: colors.of(status),
+            size: 20,
+          ),
+        ),
+        title: Text(item.name),
+        subtitle: Text(details.join(' · ')),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              strings.pointsLabel(item.affectFoodPoint),
+              style: theme.textTheme.labelMedium?.copyWith(
+                color:
+                    item.affectFoodPoint >= 0 ? colors.fresh : colors.expired,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              UsedFoodItemListPage.formatDay(item.usedDate),
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        onTap: () => _showActions(context),
+      ),
+    );
+  }
+
+  Future<void> _showActions(BuildContext context) async {
+    final bloc = context.read<UsedFoodItemListBloc>();
+    final strings = S.of(context);
+
+    await showModalBottomSheet<bool>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (item.isWaste) ...[
+              Padding(
+                padding: const EdgeInsets.all(AppSpacing.lg),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      strings.wasteReason,
+                      style: Theme.of(sheetContext).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Wrap(
+                      spacing: AppSpacing.sm,
+                      runSpacing: AppSpacing.xs,
+                      children: WasteReason.values
+                          .map((reason) => ChoiceChip(
+                                label: Text(reason.localizedName(sheetContext)),
+                                selected: item.wasteReason == reason,
+                                onSelected: (_) {
+                                  bloc.add(UsedFoodItemListSetWasteReason(
+                                    id: item.id,
+                                    wasteReason: reason,
+                                  ));
+                                  Navigator.of(sheetContext).pop();
+                                },
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+            ],
+            ListTile(
+              leading: const Icon(Icons.delete_outline),
+              title: Text(strings.delete),
+              onTap: () => Navigator.of(sheetContext).pop(true),
+            ),
+          ],
+        ),
+      ),
+    ).then((shouldDelete) async {
+      if (shouldDelete != true || !context.mounted) return;
+      final confirmed = await ConfirmSheet.show(
+        context,
+        title: strings.delete,
+        message: item.name,
+        confirmLabel: strings.delete,
+      );
+      if (confirmed) bloc.add(UsedFoodItemListRemove(id: item.id));
+    });
   }
 }

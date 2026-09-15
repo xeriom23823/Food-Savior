@@ -1,0 +1,2462 @@
+[
+  {
+    "keywords": [
+      "高麗菜",
+      "包心菜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "大白菜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "青江菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 4,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "菠菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "地瓜葉"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "空心菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "A菜",
+      "萵苣",
+      "生菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 4,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "青花菜",
+      "花椰菜",
+      "白花菜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "紅蘿蔔",
+      "胡蘿蔔"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 90,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "白蘿蔔",
+      "菜頭"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 60,
+      "ambient": 5
+    }
+  },
+  {
+    "keywords": [
+      "馬鈴薯",
+      "洋芋"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 21
+    }
+  },
+  {
+    "keywords": [
+      "地瓜",
+      "番薯"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 90,
+      "ambient": 14
+    }
+  },
+  {
+    "keywords": [
+      "洋蔥"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 21
+    }
+  },
+  {
+    "keywords": [
+      "青蔥",
+      "蔥"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "薑",
+      "老薑",
+      "嫩薑"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 90,
+      "ambient": 10
+    }
+  },
+  {
+    "keywords": [
+      "蒜頭",
+      "大蒜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 21
+    }
+  },
+  {
+    "keywords": [
+      "小黃瓜",
+      "黃瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "大黃瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 30,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "冬瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 30,
+      "ambient": 5
+    }
+  },
+  {
+    "keywords": [
+      "絲瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "苦瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "南瓜"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 14
+    }
+  },
+  {
+    "keywords": [
+      "茄子"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "青椒",
+      "甜椒",
+      "彩椒"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 60,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "番茄",
+      "蕃茄"
+    ],
+    "type": "vegetable",
+    "unit": "box",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "玉米"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 90,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "四季豆",
+      "敏豆"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "豆芽"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 14,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "金針菇"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "香菇"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "杏鮑菇"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "鴻喜菇",
+      "雪白菇"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "木耳"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "秋葵"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "芹菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "韭菜"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 30,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "九層塔",
+      "羅勒"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "香菜",
+      "芫荽"
+    ],
+    "type": "vegetable",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "竹筍"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "山藥"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 60,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "蓮藕"
+    ],
+    "type": "vegetable",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 60,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "蘋果"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "香蕉"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "橘子",
+      "柑橘"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 60,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "柳丁",
+      "柳橙"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 60,
+      "ambient": 10
+    }
+  },
+  {
+    "keywords": [
+      "葡萄"
+    ],
+    "type": "fruit",
+    "unit": "box",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "草莓"
+    ],
+    "type": "fruit",
+    "unit": "box",
+    "days": {
+      "refrigerated": 4,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "西瓜"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "鳳梨",
+      "菠蘿"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "芭樂",
+      "番石榴"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 30,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "奇異果"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 30,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "水梨"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 30,
+      "ambient": 5
+    }
+  },
+  {
+    "keywords": [
+      "芒果"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "木瓜"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "火龍果"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 30,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "蓮霧"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "棗子",
+      "蜜棗"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 10,
+      "frozen": 30,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "櫻桃"
+    ],
+    "type": "fruit",
+    "unit": "box",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "藍莓"
+    ],
+    "type": "fruit",
+    "unit": "box",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "酪梨"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 4
+    }
+  },
+  {
+    "keywords": [
+      "檸檬"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 60,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "柚子",
+      "文旦"
+    ],
+    "type": "fruit",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 60,
+      "ambient": 14
+    }
+  },
+  {
+    "keywords": [
+      "豬肉",
+      "梅花豬",
+      "五花",
+      "里肌",
+      "絞肉",
+      "豬排"
+    ],
+    "type": "meat",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "雞肉",
+      "雞胸",
+      "雞腿",
+      "雞翅",
+      "棒棒腿"
+    ],
+    "type": "meat",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "牛肉",
+      "牛排",
+      "雪花牛",
+      "板腱"
+    ],
+    "type": "meat",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 120,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "羊肉"
+    ],
+    "type": "meat",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 120,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "培根"
+    ],
+    "type": "meat",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "香腸"
+    ],
+    "type": "meat",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 90,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "火腿"
+    ],
+    "type": "meat",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "熱狗"
+    ],
+    "type": "meat",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "雞肝",
+      "豬肝"
+    ],
+    "type": "meat",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 1,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "鮭魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "鯖魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "鱸魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "虱目魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "吳郭魚",
+      "台灣鯛"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "鮪魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "白帶魚"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "蝦仁",
+      "白蝦",
+      "草蝦",
+      "蝦"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "花枝",
+      "透抽",
+      "魷魚",
+      "小卷"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "蛤蜊"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "牡蠣",
+      "蚵仔"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "干貝"
+    ],
+    "type": "seafood",
+    "unit": "gram",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "魚丸"
+    ],
+    "type": "seafood",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "牛奶",
+      "鮮奶",
+      "milk"
+    ],
+    "type": "eggAndMilk",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "優酪乳"
+    ],
+    "type": "eggAndMilk",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "優格",
+      "yogurt"
+    ],
+    "type": "eggAndMilk",
+    "unit": "box",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "起司",
+      "乳酪",
+      "cheese"
+    ],
+    "type": "eggAndMilk",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 180,
+      "ambient": 1
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "雞蛋",
+      "蛋",
+      "egg"
+    ],
+    "type": "eggAndMilk",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 21,
+      "frozen": 21,
+      "ambient": 7
+    }
+  },
+  {
+    "keywords": [
+      "皮蛋",
+      "鹹蛋"
+    ],
+    "type": "eggAndMilk",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 30,
+      "ambient": 30
+    }
+  },
+  {
+    "keywords": [
+      "奶油",
+      "butter"
+    ],
+    "type": "eggAndMilk",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 60,
+      "frozen": 180,
+      "ambient": 2
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "鮮奶油"
+    ],
+    "type": "eggAndMilk",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "煉乳"
+    ],
+    "type": "eggAndMilk",
+    "unit": "can",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 60,
+      "ambient": 180
+    },
+    "afterOpenDays": 14
+  },
+  {
+    "keywords": [
+      "奶粉"
+    ],
+    "type": "eggAndMilk",
+    "unit": "can",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 180,
+      "ambient": 365
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "豆漿"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "米漿"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "果汁",
+      "柳橙汁",
+      "蘋果汁",
+      "葡萄汁"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 90
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "綠茶",
+      "紅茶",
+      "烏龍茶",
+      "麥茶"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 180
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "可樂",
+      "汽水",
+      "沙士",
+      "雪碧"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 180,
+      "ambient": 270
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "咖啡",
+      "拿鐵"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 90
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "運動飲料",
+      "寶礦力"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 180,
+      "ambient": 270
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "礦泉水"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "啤酒"
+    ],
+    "type": "drink",
+    "unit": "can",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 180,
+      "ambient": 270
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "冬瓜茶"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 60,
+      "ambient": 180
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "吐司",
+      "土司"
+    ],
+    "type": "bread",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "麵包",
+      "餐包"
+    ],
+    "type": "bread",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 4,
+      "frozen": 30,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "貝果"
+    ],
+    "type": "bread",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 3
+    }
+  },
+  {
+    "keywords": [
+      "蛋糕"
+    ],
+    "type": "bread",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 4,
+      "frozen": 30,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "可頌",
+      "牛角"
+    ],
+    "type": "bread",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "饅頭"
+    ],
+    "type": "bread",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 90,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "蔥抓餅",
+      "蛋餅皮"
+    ],
+    "type": "bread",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "便當"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 7,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "飯糰"
+    ],
+    "type": "cookedFood",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 7,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "三明治"
+    ],
+    "type": "cookedFood",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 7,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "水餃",
+      "餃子",
+      "鍋貼"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "湯包",
+      "小籠包"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "包子"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "滷味"
+    ],
+    "type": "cookedFood",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 14,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "炸雞",
+      "鹹酥雞"
+    ],
+    "type": "cookedFood",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 14,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "壽司"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 1,
+      "frozen": 7,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "豆腐"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 14,
+      "ambient": 1
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "雞蛋豆腐"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 14,
+      "ambient": 1
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "豆干",
+      "豆乾"
+    ],
+    "type": "cookedFood",
+    "unit": "pack",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 30,
+      "ambient": 1
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "麵條",
+      "拉麵",
+      "烏龍麵"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 90,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "火鍋料",
+      "丸子"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "罐頭"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "鮪魚罐"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "玉米罐",
+      "玉米粒"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 2
+  },
+  {
+    "keywords": [
+      "番茄罐",
+      "蕃茄罐"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "肉醬"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 5
+  },
+  {
+    "keywords": [
+      "麵筋"
+    ],
+    "type": "cannedFood",
+    "unit": "can",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "洋芋片",
+      "薯片"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 90,
+      "frozen": 90,
+      "ambient": 120
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "餅乾",
+      "蘇打餅"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 120,
+      "frozen": 120,
+      "ambient": 180
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "巧克力"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 120
+    },
+    "afterOpenDays": 14
+  },
+  {
+    "keywords": [
+      "糖果"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 180
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "牛奶糖"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 180
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "口香糖"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "花生"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 90,
+      "frozen": 180,
+      "ambient": 90
+    },
+    "afterOpenDays": 14
+  },
+  {
+    "keywords": [
+      "堅果",
+      "杏仁",
+      "腰果",
+      "核桃"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 90,
+      "frozen": 180,
+      "ambient": 90
+    },
+    "afterOpenDays": 14
+  },
+  {
+    "keywords": [
+      "果凍",
+      "布丁"
+    ],
+    "type": "snack",
+    "unit": "box",
+    "days": {
+      "refrigerated": 14,
+      "frozen": 30,
+      "ambient": 30
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "冰淇淋",
+      "雪糕"
+    ],
+    "type": "snack",
+    "unit": "box",
+    "days": {
+      "refrigerated": 7,
+      "frozen": 180,
+      "ambient": 1
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "乖乖",
+      "蝦味先",
+      "科學麵"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 120,
+      "frozen": 120,
+      "ambient": 180
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "泡麵",
+      "王子麵"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 180,
+      "ambient": 180
+    },
+    "afterOpenDays": 3
+  },
+  {
+    "keywords": [
+      "肉乾",
+      "肉鬆"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 60,
+      "frozen": 180,
+      "ambient": 90
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "魷魚絲"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 60,
+      "frozen": 180,
+      "ambient": 90
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "白米",
+      "糙米",
+      "米"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 180
+    }
+  },
+  {
+    "keywords": [
+      "米粉"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    }
+  },
+  {
+    "keywords": [
+      "米酒"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "麵粉"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 180
+    }
+  },
+  {
+    "keywords": [
+      "沙拉油",
+      "食用油",
+      "橄欖油",
+      "葵花油"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "麻油",
+      "香油"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "醬油"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "白醋",
+      "烏醋"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 180
+  },
+  {
+    "keywords": [
+      "砂糖",
+      "黑糖"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    }
+  },
+  {
+    "keywords": [
+      "胡椒"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 180
+  },
+  {
+    "keywords": [
+      "雞粉",
+      "高湯塊"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "番茄醬",
+      "蕃茄醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "美乃滋",
+      "沙拉醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 90,
+      "frozen": 180,
+      "ambient": 180
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "花生醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 180
+    },
+    "afterOpenDays": 60
+  },
+  {
+    "keywords": [
+      "果醬",
+      "草莓醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 90,
+      "frozen": 180,
+      "ambient": 180
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "辣椒醬",
+      "辣醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 60
+  },
+  {
+    "keywords": [
+      "豆瓣醬"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 60
+  },
+  {
+    "keywords": [
+      "蠔油"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 60
+  },
+  {
+    "keywords": [
+      "味噌"
+    ],
+    "type": "others",
+    "unit": "box",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 90
+    },
+    "afterOpenDays": 90
+  },
+  {
+    "keywords": [
+      "咖哩"
+    ],
+    "type": "others",
+    "unit": "box",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "蜂蜜"
+    ],
+    "type": "others",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    },
+    "afterOpenDays": 365
+  },
+  {
+    "keywords": [
+      "海苔"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 180
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "乾香菇",
+      "金針"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 180
+    }
+  },
+  {
+    "keywords": [
+      "紅豆",
+      "綠豆"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 180
+    }
+  },
+  {
+    "keywords": [
+      "薏仁",
+      "燕麥"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 180
+    }
+  },
+  {
+    "keywords": [
+      "冬粉",
+      "粉絲"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    }
+  },
+  {
+    "keywords": [
+      "義大利麵",
+      "通心粉"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 365,
+      "frozen": 365,
+      "ambient": 365
+    }
+  },
+  {
+    "keywords": [
+      "濃湯",
+      "湯"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "炒飯",
+      "飯"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "麵"
+    ],
+    "type": "cookedFood",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "粥"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 14,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "酥"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 30,
+      "frozen": 90,
+      "ambient": 30
+    },
+    "afterOpenDays": 7
+  },
+  {
+    "keywords": [
+      "油餅",
+      "蔥油餅"
+    ],
+    "type": "bread",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 90,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "糕"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 5,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "奶茶"
+    ],
+    "type": "drink",
+    "unit": "bottle",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 14
+    },
+    "afterOpenDays": 1
+  },
+  {
+    "keywords": [
+      "雞蛋糕"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 2
+    }
+  },
+  {
+    "keywords": [
+      "地瓜球"
+    ],
+    "type": "snack",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "麻油雞"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "三杯雞"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "滷肉"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 60,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "菜脯"
+    ],
+    "type": "others",
+    "unit": "bag",
+    "days": {
+      "refrigerated": 180,
+      "frozen": 365,
+      "ambient": 180
+    },
+    "afterOpenDays": 30
+  },
+  {
+    "keywords": [
+      "雞排"
+    ],
+    "type": "cookedFood",
+    "unit": "piece",
+    "days": {
+      "refrigerated": 2,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "臭豆腐"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 14,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "米糕"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 3,
+      "frozen": 30,
+      "ambient": 1
+    }
+  },
+  {
+    "keywords": [
+      "蚵仔煎"
+    ],
+    "type": "cookedFood",
+    "unit": "box",
+    "days": {
+      "refrigerated": 1,
+      "frozen": 7,
+      "ambient": 1
+    }
+  }
+]

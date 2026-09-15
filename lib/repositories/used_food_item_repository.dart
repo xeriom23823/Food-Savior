@@ -1,66 +1,52 @@
 import 'package:food_savior/models/food_item.dart';
 import 'package:hive_ce/hive.dart';
 
+/// 唯一觸碰 `usedFoodItems` Box 的層（local-persistence 規格）。
 class UsedFoodItemRepository {
-  final Box<UsedFoodItem> usedFoodItemBox;
-
   UsedFoodItemRepository({required this.usedFoodItemBox});
 
-  // 取得所有已使用的食物項目
-  List<UsedFoodItem> getAllUsedFoodItems() {
-    return usedFoodItemBox.values.toList();
-  }
+  final Box<UsedFoodItem> usedFoodItemBox;
 
-  // 依照 ID 取得已使用的食物項目
-  UsedFoodItem? getUsedFoodItem(String id) {
-    return usedFoodItemBox.get(id);
-  }
+  List<UsedFoodItem> getAllUsedFoodItems() => usedFoodItemBox.values.toList();
 
-  // 新增或更新已使用的食物項目（local-persistence：寫入必須 await 完成後才回傳）
+  UsedFoodItem? getUsedFoodItem(String id) => usedFoodItemBox.get(id);
+
+  /// 寫入必須 await 完成後才回傳（local-persistence 規格）。
   Future<void> saveUsedFoodItem(UsedFoodItem item) =>
       usedFoodItemBox.put(item.id, item);
 
   Future<void> saveUsedFoodItems(List<UsedFoodItem> items) async {
-    for (var item in items) {
+    for (final item in items) {
       await saveUsedFoodItem(item);
     }
   }
 
-  // 刪除已使用的食物項目
   Future<void> deleteUsedFoodItem(String id) => usedFoodItemBox.delete(id);
 
-  // 依名稱篩選已使用的食物項目
   List<UsedFoodItem> filterByName(String name) {
-    return usedFoodItemBox.values.where((item) {
-      return item.name.contains(name);
-    }).toList();
+    final normalized = normalizeFoodName(name);
+    return usedFoodItemBox.values
+        .where((item) => normalizeFoodName(item.name).contains(normalized))
+        .toList();
   }
 
-  // 依類型篩選已使用的食物項目
-  List<UsedFoodItem> filterByType(FoodItemType type) {
-    return usedFoodItemBox.values.where((item) {
-      return item.type == type;
-    }).toList();
-  }
+  List<UsedFoodItem> filterByType(FoodItemType type) =>
+      usedFoodItemBox.values.where((item) => item.type == type).toList();
 
-  // 依狀態篩選已使用的食物項目
-  List<UsedFoodItem> filterByStatus(FoodItemStatus status) {
-    return usedFoodItemBox.values.where((item) {
-      return item.status == status;
-    }).toList();
-  }
+  List<UsedFoodItem> filterByStatus(FoodItemStatus status) =>
+      usedFoodItemBox.values.where((item) => item.status == status).toList();
 
-  // 依日期篩選已使用的食物項目
-  List<UsedFoodItem> filterByDate(DateTime date) {
-    return usedFoodItemBox.values.where((item) {
-      return item.usedDate.year == date.year &&
-          item.usedDate.month == date.month &&
-          item.usedDate.day == date.day;
-    }).toList();
-  }
+  List<UsedFoodItem> filterByDisposal(DisposalMethod method) =>
+      usedFoodItemBox.values
+          .where((item) => item.disposalMethod == method)
+          .toList();
 
-  // 清空所有已使用的食物項目
-  Future<void> clearAll() async {
-    await usedFoodItemBox.clear();
-  }
+  List<UsedFoodItem> filterByDate(DateTime date) =>
+      usedFoodItemBox.values.where((item) {
+        return item.usedDate.year == date.year &&
+            item.usedDate.month == date.month &&
+            item.usedDate.day == date.day;
+      }).toList();
+
+  Future<void> clearAll() => usedFoodItemBox.clear();
 }

@@ -13,47 +13,47 @@ void main() {
   setUpAll(env.setUpAll);
   tearDownAll(env.tearDownAll);
   setUp(() async {
-    box = await env.openBox<UsedFoodItem>('usedFoodItem');
+    box = await env.openBox<UsedFoodItem>('usedFoodItems');
     repo = UsedFoodItemRepository(usedFoodItemBox: box);
   });
   tearDown(() => box.deleteFromDisk());
 
-  test('filterByDate 以日曆日比對，忽略時間', () async {
-    final day = DateTime(2026, 3, 10);
+  test('依日期篩選只回傳同一天的紀錄', () async {
     await repo.saveUsedFoodItems([
-      makeUsed(id: 'morning', usedDate: DateTime(2026, 3, 10, 7)),
-      makeUsed(id: 'night', usedDate: DateTime(2026, 3, 10, 23, 59)),
-      makeUsed(id: 'nextDay', usedDate: DateTime(2026, 3, 11)),
+      makeUsed(id: 'today', usedDate: testNow),
+      makeUsed(id: 'yesterday', usedDate: daysFromNow(-1)),
     ]);
 
-    expect(ids(repo.filterByDate(day)).toSet(), {'morning', 'night'});
+    expect(ids(repo.filterByDate(testNow)), ['today']);
+    expect(ids(repo.filterByDate(daysFromNow(-1))), ['yesterday']);
   });
 
-  test('filterByStatus / filterByType / filterByName', () async {
+  test('依處理方式篩選', () async {
     await repo.saveUsedFoodItems([
-      makeUsed(id: 'c', name: '牛奶', type: FoodItemType.eggAndMilk),
-      makeUsed(
-          id: 'w',
-          name: '牛肉',
-          type: FoodItemType.meat,
-          status: FoodItemStatus.wasted),
+      makeUsed(id: 'eaten', disposalMethod: DisposalMethod.eaten),
+      makeUsed(id: 'composted', disposalMethod: DisposalMethod.composted),
     ]);
 
-    expect(ids(repo.filterByStatus(FoodItemStatus.wasted)), ['w']);
-    expect(ids(repo.filterByType(FoodItemType.eggAndMilk)), ['c']);
-    expect(ids(repo.filterByName('牛')).toSet(), {'c', 'w'});
+    expect(ids(repo.filterByDisposal(DisposalMethod.composted)), ['composted']);
   });
 
-  test('save 覆寫同 id；delete 與 clearAll', () async {
-    await repo.saveUsedFoodItem(makeUsed(id: 'a', quantity: 1));
-    await repo.saveUsedFoodItem(makeUsed(id: 'a', quantity: 2));
-    expect(box.length, 1);
-    expect(repo.getUsedFoodItem('a')!.quantity, 2);
+  test('送人不算浪費', () async {
+    await repo.saveUsedFoodItem(
+      makeUsed(id: 'given', disposalMethod: DisposalMethod.givenAway),
+    );
 
-    await repo.deleteUsedFoodItem('a');
-    expect(repo.getUsedFoodItem('a'), isNull);
+    expect(repo.getUsedFoodItem('given')!.isWaste, isFalse);
+    expect(repo.filterByStatus(FoodItemStatus.wasted), isEmpty);
+  });
 
-    await repo.saveUsedFoodItem(makeUsed(id: 'b'));
+  test('寫入、刪除、清空', () async {
+    await repo.saveUsedFoodItem(makeUsed(id: 'x'));
+    expect(repo.getUsedFoodItem('x'), isNotNull);
+
+    await repo.deleteUsedFoodItem('x');
+    expect(repo.getUsedFoodItem('x'), isNull);
+
+    await repo.saveUsedFoodItems([makeUsed(id: 'a'), makeUsed(id: 'b')]);
     await repo.clearAll();
     expect(repo.getAllUsedFoodItems(), isEmpty);
   });

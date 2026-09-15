@@ -1,0 +1,318 @@
+[
+  {
+    "name": "光泉牛奶936ML",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "森永牛奶糖",
+    "type": "snack"
+  },
+  {
+    "name": "雞蛋10入",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "巧克力蛋糕",
+    "type": "bread"
+  },
+  {
+    "name": "雞蛋豆腐",
+    "type": "cookedFood"
+  },
+  {
+    "name": "生菜沙拉",
+    "type": "vegetable"
+  },
+  {
+    "name": "得意的一天沙拉油2L",
+    "type": "others"
+  },
+  {
+    "name": "花生",
+    "type": "snack"
+  },
+  {
+    "name": "花生醬340g",
+    "type": "others"
+  },
+  {
+    "name": "安佳奶油227g",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "鮮奶油200ml",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "池上米2kg",
+    "type": "others"
+  },
+  {
+    "name": "米酒600ml",
+    "type": "others"
+  },
+  {
+    "name": "新竹米粉",
+    "type": "others"
+  },
+  {
+    "name": "高麗菜/顆",
+    "type": "vegetable"
+  },
+  {
+    "name": "【冷藏】青花菜",
+    "type": "vegetable"
+  },
+  {
+    "name": "紅蘿蔔300g",
+    "type": "vegetable"
+  },
+  {
+    "name": "特價 菠菜",
+    "type": "vegetable"
+  },
+  {
+    "name": "全聯-小黃瓜",
+    "type": "vegetable"
+  },
+  {
+    "name": "洋蔥3入",
+    "type": "vegetable"
+  },
+  {
+    "name": "馬鈴薯",
+    "type": "vegetable"
+  },
+  {
+    "name": "番茄1盒",
+    "type": "vegetable"
+  },
+  {
+    "name": "金針菇",
+    "type": "vegetable"
+  },
+  {
+    "name": "青蔥",
+    "type": "vegetable"
+  },
+  {
+    "name": "香蕉",
+    "type": "fruit"
+  },
+  {
+    "name": "蘋果4入",
+    "type": "fruit"
+  },
+  {
+    "name": "特價-芭樂",
+    "type": "fruit"
+  },
+  {
+    "name": "葡萄1盒",
+    "type": "fruit"
+  },
+  {
+    "name": "鳳梨",
+    "type": "fruit"
+  },
+  {
+    "name": "西瓜",
+    "type": "fruit"
+  },
+  {
+    "name": "進口奇異果",
+    "type": "fruit"
+  },
+  {
+    "name": "草莓1盒",
+    "type": "fruit"
+  },
+  {
+    "name": "【冷藏】梅花豬肉片(約300g)",
+    "type": "meat"
+  },
+  {
+    "name": "雞胸肉2片",
+    "type": "meat"
+  },
+  {
+    "name": "牛肉片200g",
+    "type": "meat"
+  },
+  {
+    "name": "量販-豬絞肉",
+    "type": "meat"
+  },
+  {
+    "name": "【冷凍】雞腿",
+    "type": "meat"
+  },
+  {
+    "name": "培根",
+    "type": "meat"
+  },
+  {
+    "name": "鮭魚排",
+    "type": "seafood"
+  },
+  {
+    "name": "冷凍蝦仁200g",
+    "type": "seafood"
+  },
+  {
+    "name": "鯖魚",
+    "type": "seafood"
+  },
+  {
+    "name": "蛤蜊",
+    "type": "seafood"
+  },
+  {
+    "name": "統一AB優酪乳400ML特價",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "林鳳營鮮奶1L",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "起司片",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "優格",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "豆漿450ml",
+    "type": "drink"
+  },
+  {
+    "name": "御茶園綠茶",
+    "type": "drink"
+  },
+  {
+    "name": "可樂600ml",
+    "type": "drink"
+  },
+  {
+    "name": "柳橙汁",
+    "type": "drink"
+  },
+  {
+    "name": "吐司",
+    "type": "bread"
+  },
+  {
+    "name": "全麥麵包",
+    "type": "bread"
+  },
+  {
+    "name": "貝果2入",
+    "type": "bread"
+  },
+  {
+    "name": "統一超商飯糰",
+    "type": "cookedFood"
+  },
+  {
+    "name": "水餃20顆",
+    "type": "cookedFood"
+  },
+  {
+    "name": "滷味",
+    "type": "cookedFood"
+  },
+  {
+    "name": "鮪魚罐頭3罐",
+    "type": "cannedFood"
+  },
+  {
+    "name": "玉米罐頭",
+    "type": "cannedFood"
+  },
+  {
+    "name": "洋芋片",
+    "type": "snack"
+  },
+  {
+    "name": "乖乖",
+    "type": "snack"
+  },
+  {
+    "name": "巧克力",
+    "type": "snack"
+  },
+  {
+    "name": "珍珠奶茶",
+    "type": "drink"
+  },
+  {
+    "name": "雞蛋糕",
+    "type": "snack"
+  },
+  {
+    "name": "蘿蔔糕",
+    "type": "cookedFood"
+  },
+  {
+    "name": "菜脯蛋",
+    "type": "cookedFood"
+  },
+  {
+    "name": "牛肉麵",
+    "type": "cookedFood"
+  },
+  {
+    "name": "豬血糕",
+    "type": "cookedFood"
+  },
+  {
+    "name": "南瓜濃湯",
+    "type": "cookedFood"
+  },
+  {
+    "name": "玉米濃湯",
+    "type": "cookedFood"
+  },
+  {
+    "name": "蛋黃酥",
+    "type": "snack"
+  },
+  {
+    "name": "鳳梨酥",
+    "type": "snack"
+  },
+  {
+    "name": "麻油雞",
+    "type": "cookedFood"
+  },
+  {
+    "name": "三杯雞",
+    "type": "cookedFood"
+  },
+  {
+    "name": "乳酪蛋糕",
+    "type": "bread"
+  },
+  {
+    "name": "地瓜球",
+    "type": "snack"
+  },
+  {
+    "name": "香蕉牛奶",
+    "type": "eggAndMilk"
+  },
+  {
+    "name": "紅豆湯",
+    "type": "cookedFood"
+  },
+  {
+    "name": "蔥油餅",
+    "type": "bread"
+  },
+  {
+    "name": "滷肉飯",
+    "type": "cookedFood"
+  }
+]

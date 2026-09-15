@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:async/async.dart';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cache/cache.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -190,6 +192,59 @@ class LogInWithGoogleFailure implements Exception {
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
 
+/// Thrown when updating the display name fails.
+class UpdateDisplayNameFailure implements Exception {
+  const UpdateDisplayNameFailure([
+    this.message = 'An unknown error occurred.',
+  ]);
+
+  final String message;
+}
+
+/// Thrown when sending a password reset email fails.
+class ResetPasswordFailure implements Exception {
+  const ResetPasswordFailure([
+    this.message = 'An unknown error occurred.',
+  ]);
+
+  /// Maps a Firebase error code onto a message the UI can show.
+  factory ResetPasswordFailure.fromCode(String code) {
+    switch (code) {
+      case 'invalid-email':
+        return const ResetPasswordFailure(
+            'Email is not valid or badly formatted.');
+      case 'user-not-found':
+        return const ResetPasswordFailure('No user found for that email.');
+      default:
+        return const ResetPasswordFailure();
+    }
+  }
+
+  final String message;
+}
+
+/// Why deleting the account failed. [requiresRecentLogin] is the one the UI
+/// must handle specially: Firebase refuses to delete a long-lived session.
+enum DeleteAccountFailureReason { requiresRecentLogin, unknown }
+
+/// Thrown when deleting the account fails.
+class DeleteAccountFailure implements Exception {
+  const DeleteAccountFailure([
+    this.reason = DeleteAccountFailureReason.unknown,
+    this.message,
+  ]);
+
+  factory DeleteAccountFailure.fromCode(String code, [String? message]) {
+    return code == 'requires-recent-login'
+        ? DeleteAccountFailure(
+            DeleteAccountFailureReason.requiresRecentLogin, message)
+        : DeleteAccountFailure(DeleteAccountFailureReason.unknown, message);
+  }
+
+  final DeleteAccountFailureReason reason;
+  final String? message;
+}
+
 /// {@template authentication_repository}
 /// Repository which manages user authentication.
 /// {@endtemplate}
@@ -225,17 +280,27 @@ class AuthenticationRepository {
   @visibleForTesting
   static const userCacheKey = '__user_cache_key__';
 
+  /// Profile updates (display name) do not trigger [authStateChanges], so the
+  /// repository pushes the reloaded user onto this controller itself.
+  final StreamController<User> _profileUpdates =
+      StreamController<User>.broadcast();
+
   /// Stream of [User] which will emit the current user when
-  /// the authentication state changes.
+  /// the authentication state changes, or when the profile is updated.
   ///
   /// Emits [User.empty] if the user is not authenticated.
   Stream<User> get user {
-    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+    final authChanges = _firebaseAuth.authStateChanges().map((firebaseUser) {
       final user = firebaseUser == null ? User.empty : firebaseUser.toUser;
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
+    return StreamGroup.merge([authChanges, _profileUpdates.stream]);
   }
+
+  /// Releases the profile update controller. Only needed in tests; the app
+  /// keeps a single repository for its whole lifetime.
+  Future<void> dispose() => _profileUpdates.close();
 
   /// Returns the current cached user.
   /// Defaults to [User.empty] if there is no cached user.
@@ -315,6 +380,56 @@ class AuthenticationRepository {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailure();
+    }
+  }
+
+  /// Updates the display name and re-emits the user so the UI can show the
+  /// new name without a new sign-in.
+  ///
+  /// Throws an [UpdateDisplayNameFailure] if an exception occurs.
+  Future<void> updateDisplayName(String name) async {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) throw const UpdateDisplayNameFailure();
+    try {
+      await firebaseUser.updateDisplayName(name);
+      await firebaseUser.reload();
+      final updated = _firebaseAuth.currentUser?.toUser ?? User.empty;
+      _cache.write(key: userCacheKey, value: updated);
+      _profileUpdates.add(updated);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw UpdateDisplayNameFailure(e.message ?? 'An unknown error occurred.');
+    } catch (_) {
+      throw const UpdateDisplayNameFailure();
+    }
+  }
+
+  /// Sends a password reset email to [email].
+  ///
+  /// Throws a [ResetPasswordFailure] if an exception occurs.
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw ResetPasswordFailure.fromCode(e.code);
+    } catch (_) {
+      throw const ResetPasswordFailure();
+    }
+  }
+
+  /// Deletes the current Firebase account. Local food data is untouched.
+  ///
+  /// Throws a [DeleteAccountFailure] if an exception occurs; the
+  /// [DeleteAccountFailureReason.requiresRecentLogin] case must be surfaced to
+  /// the user as "sign in again and retry".
+  Future<void> deleteAccount() async {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) throw const DeleteAccountFailure();
+    try {
+      await firebaseUser.delete();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw DeleteAccountFailure.fromCode(e.code, e.message);
+    } catch (_) {
+      throw const DeleteAccountFailure();
     }
   }
 

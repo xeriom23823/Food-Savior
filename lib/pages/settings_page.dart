@@ -1,122 +1,104 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/cubits/locale_cubit.dart';
+import 'package:food_savior/cubits/storage_location_cubit.dart';
 import 'package:food_savior/cubits/theme_cubit.dart';
 import 'package:food_savior/generated/l10n.dart';
+import 'package:food_savior/pages/storage_location_page.dart';
+import 'package:food_savior/theme/app_tokens.dart';
+import 'package:food_savior/widgets/app_scaffold.dart';
+import 'package:food_savior/widgets/section_header.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).settingsPageTitle),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '設定',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
+    final strings = S.of(context);
+
+    return AppScaffold(
+      title: strings.settingsPageTitle,
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: AppSpacing.xl),
+        children: [
+          SectionHeader(title: strings.settingsSection),
+          _card([
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(strings.language),
+              trailing: DropdownButton<Locale>(
+                value: context.watch<LocaleCubit>().state,
+                underline: const SizedBox.shrink(),
+                // 語言名稱刻意用母語寫（endonym），不隨介面語系翻譯。
+                items: const [
+                  DropdownMenuItem(
+                    value: Locale('en', 'US'),
+                    child: Text('English'),
                   ),
+                  DropdownMenuItem(
+                    value: Locale('zh', 'TW'),
+                    child: Text('中文'),
+                  ),
+                ],
+                onChanged: (locale) {
+                  if (locale != null) {
+                    context.read<LocaleCubit>().setLocale(locale);
+                  }
+                },
+              ),
             ),
-            const SizedBox(height: 24),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.language),
-                      title: Text(S.of(context).language),
-                      trailing: DropdownButton<Locale>(
-                        value: context.watch<LocaleCubit>().state,
-                        items: const [
-                          DropdownMenuItem(
-                            value: Locale('en', 'US'),
-                            child: Text('English'),
-                          ),
-                          DropdownMenuItem(
-                            value: Locale('zh', 'TW'),
-                            child: Text('中文'),
-                          ),
-                        ],
-                        onChanged: (locale) {
-                          context.read<LocaleCubit>().setLocale(locale!);
-                        },
-                      ),
-                    ),
-                    const Divider(),
-                    BlocBuilder<ThemeCubit, ThemeData>(
-                      builder: (context, state) {
-                        return ListTile(
-                          leading: Icon(
-                            state.brightness == Brightness.dark
-                                ? Icons.dark_mode
-                                : Icons.light_mode,
-                          ),
-                          title: Text(S.of(context).darkMode),
-                          trailing: Switch(
-                            value: state.brightness == Brightness.dark,
-                            onChanged: (bool value) {
-                              context.read<ThemeCubit>().switchTheme();
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    const Divider(),
-                    ListTile(
-                      leading: const Icon(Icons.notifications),
-                      title: Text(S.of(context).showNotification),
-                      trailing: Switch(
-                        value: false,
-                        onChanged: (bool value) {
-                          // TODO: 實現通知功能
-                        },
-                      ),
-                    ),
-                  ],
+            const Divider(height: 1),
+            BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (context, themeMode) {
+                final isDark = themeMode == ThemeMode.dark;
+                return SwitchListTile(
+                  secondary: Icon(isDark ? Icons.dark_mode : Icons.light_mode),
+                  title: Text(strings.darkMode),
+                  value: isDark,
+                  onChanged: (_) => context.read<ThemeCubit>().switchTheme(),
+                );
+              },
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.shelves),
+              title: Text(strings.storageLocations),
+              trailing: const Icon(Icons.chevron_right),
+              // 同上：推出去的路由拿不到這個子樹的 Provider，要手動帶過去。
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<StorageLocationCubit>(),
+                    child: const StorageLocationPage(),
+                  ),
                 ),
               ),
             ),
-            const SizedBox(height: 24),
-            Text(
-              '關於',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+          ]),
+          SectionHeader(title: strings.aboutSection),
+          _card([
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: Text(strings.version),
+              subtitle: const Text('1.0.0'),
             ),
-            const SizedBox(height: 16),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.info),
-                      title: const Text('版本'),
-                      subtitle: const Text('1.0.0'),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.code),
-                      title: const Text('開源專案'),
-                      subtitle: const Text('在 GitHub 上查看'),
-                      onTap: () {
-                        // TODO: 打開 GitHub 連結
-                      },
-                    ),
-                  ],
-                ),
-              ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.code),
+              title: Text(strings.openSource),
+              subtitle: Text(strings.viewOnGitHub),
             ),
-          ],
-        ),
+          ]),
+        ],
       ),
     );
   }
+
+  Widget _card(List<Widget> children) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+        child: Card(
+          clipBehavior: Clip.antiAlias,
+          child: Column(children: children),
+        ),
+      );
 }
