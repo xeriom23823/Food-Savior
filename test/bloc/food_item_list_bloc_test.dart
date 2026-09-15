@@ -293,6 +293,25 @@ void main() {
     );
 
     blocTest<FoodItemListBloc, FoodItemListState>(
+      '還原整批取代既有本機資料（先清空再寫入）',
+      setUp: () => box.put('old', makeFood(id: 'old', daysToExpire: 30)),
+      build: build,
+      act: (bloc) async {
+        await untilLoaded(bloc);
+        await bloc.settle(() => bloc.add(FoodItemListLoad(foodItems: [
+              makeFood(id: 'fromCloud', daysToExpire: 8),
+            ])));
+      },
+      skip: 2,
+      expect: () => [
+        const FoodItemListLoading(),
+        isA<FoodItemListLoaded>()
+            .having((s) => ids(s.foodItems), 'ids', ['fromCloud']),
+      ],
+      verify: (_) => expect(box.keys.toSet(), {'fromCloud'}),
+    );
+
+    blocTest<FoodItemListBloc, FoodItemListState>(
       '全部未過期 → Loaded 且全部寫入 Box',
       build: build,
       act: (bloc) async {

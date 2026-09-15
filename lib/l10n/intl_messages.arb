@@ -5,5 +5,16 @@
   "consumedFoodPointsByType": "食物點數消耗統計",
   "wastedFoodPointsByType": "食物點數浪費統計",
   "monthlyTrend": "每月趨勢",
-  "noData": "尚無資料"
+  "noData": "尚無資料",
+  "backup": "備份",
+  "restore": "還原",
+  "backupSuccess": "資料備份成功",
+  "backupFailure": "備份失敗",
+  "restoreSuccess": "資料還原成功",
+  "restoreFailure": "還原失敗",
+  "restoreNoBackup": "雲端沒有備份，本機資料未變動",
+  "errorOffline": "目前無法連線到雲端，請確認網路後再試",
+  "errorTimeout": "連線逾時，請稍後再試",
+  "errorPermissionDenied": "沒有存取雲端資料的權限",
+  "errorUnknown": "發生未知錯誤"
 }

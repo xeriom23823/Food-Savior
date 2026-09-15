@@ -25,6 +25,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("Add"),
         "addFoodItem": MessageLookupByLibrary.simpleMessage("Add Food"),
         "added": MessageLookupByLibrary.simpleMessage("Added"),
+        "backup": MessageLookupByLibrary.simpleMessage("Back up"),
+        "backupFailure": MessageLookupByLibrary.simpleMessage("Backup failed"),
+        "backupSuccess":
+            MessageLookupByLibrary.simpleMessage("Backup completed"),
         "batchUse": MessageLookupByLibrary.simpleMessage("Batch Use"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "chartAndStatisticsNavigationBarTitle":
@@ -44,6 +48,18 @@ class MessageLookup extends MessageLookupByLibrary {
         "description": MessageLookupByLibrary.simpleMessage("Description"),
         "edit": MessageLookupByLibrary.simpleMessage("Edit"),
         "editFoodItem": MessageLookupByLibrary.simpleMessage("Edit Food"),
+        "errorOffline": MessageLookupByLibrary.simpleMessage(
+          "Cannot reach the cloud right now. Check your connection and try again.",
+        ),
+        "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
+          "You do not have permission to access cloud data.",
+        ),
+        "errorTimeout": MessageLookupByLibrary.simpleMessage(
+          "The connection timed out. Please try again later.",
+        ),
+        "errorUnknown": MessageLookupByLibrary.simpleMessage(
+          "An unknown error occurred.",
+        ),
         "expirationDate":
             MessageLookupByLibrary.simpleMessage("Expiration Date"),
         "expire": MessageLookupByLibrary.simpleMessage("Expire"),
@@ -116,6 +132,14 @@ class MessageLookup extends MessageLookupByLibrary {
           "Quantity must be positive",
         ),
         "refresh": MessageLookupByLibrary.simpleMessage("Refresh"),
+        "restore": MessageLookupByLibrary.simpleMessage("Restore"),
+        "restoreFailure":
+            MessageLookupByLibrary.simpleMessage("Restore failed"),
+        "restoreNoBackup": MessageLookupByLibrary.simpleMessage(
+          "No cloud backup found; local data left unchanged",
+        ),
+        "restoreSuccess":
+            MessageLookupByLibrary.simpleMessage("Restore completed"),
         "save": MessageLookupByLibrary.simpleMessage("Save"),
         "settingsNavigationBarTitle": MessageLookupByLibrary.simpleMessage(
           "Settings",

@@ -593,6 +593,76 @@ class S {
   String get noData {
     return Intl.message('尚無資料', name: 'noData', desc: '', args: []);
   }
+
+  /// `備份`
+  String get backup {
+    return Intl.message('備份', name: 'backup', desc: '', args: []);
+  }
+
+  /// `還原`
+  String get restore {
+    return Intl.message('還原', name: 'restore', desc: '', args: []);
+  }
+
+  /// `資料備份成功`
+  String get backupSuccess {
+    return Intl.message('資料備份成功', name: 'backupSuccess', desc: '', args: []);
+  }
+
+  /// `備份失敗`
+  String get backupFailure {
+    return Intl.message('備份失敗', name: 'backupFailure', desc: '', args: []);
+  }
+
+  /// `資料還原成功`
+  String get restoreSuccess {
+    return Intl.message('資料還原成功', name: 'restoreSuccess', desc: '', args: []);
+  }
+
+  /// `還原失敗`
+  String get restoreFailure {
+    return Intl.message('還原失敗', name: 'restoreFailure', desc: '', args: []);
+  }
+
+  /// `雲端沒有備份，本機資料未變動`
+  String get restoreNoBackup {
+    return Intl.message(
+      '雲端沒有備份，本機資料未變動',
+      name: 'restoreNoBackup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `目前無法連線到雲端，請確認網路後再試`
+  String get errorOffline {
+    return Intl.message(
+      '目前無法連線到雲端，請確認網路後再試',
+      name: 'errorOffline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `連線逾時，請稍後再試`
+  String get errorTimeout {
+    return Intl.message('連線逾時，請稍後再試', name: 'errorTimeout', desc: '', args: []);
+  }
+
+  /// `沒有存取雲端資料的權限`
+  String get errorPermissionDenied {
+    return Intl.message(
+      '沒有存取雲端資料的權限',
+      name: 'errorPermissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `發生未知錯誤`
+  String get errorUnknown {
+    return Intl.message('發生未知錯誤', name: 'errorUnknown', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -18,7 +18,9 @@ class UsedFoodItemListBloc
     });
 
     on<UsedFoodItemListLoad>((event, emit) async {
-      usedFoodItemRepository.saveUsedFoodItems(event.usedFoodItems);
+      // 還原：以雲端資料整批取代本機；保留備份中的點數，不重算
+      await usedFoodItemRepository.clearAll();
+      await usedFoodItemRepository.saveUsedFoodItems(event.usedFoodItems);
       emit(UsedFoodItemListLoaded(usedFoodItems: event.usedFoodItems));
     });
 

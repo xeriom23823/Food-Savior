@@ -17,6 +17,7 @@ import 'package:food_savior/pages/food_item_list_page.dart';
 import 'package:food_savior/pages/settings_page.dart';
 import 'package:food_savior/pages/used_food_item_list_page.dart';
 import 'package:food_savior/pages/user_page.dart';
+import 'package:food_savior/repositories/backup_repository.dart';
 import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:food_savior/repositories/used_food_item_repository.dart';
 import 'package:hive_ce/hive.dart';
@@ -51,6 +52,9 @@ void main() async {
           RepositoryProvider(
             create: (context) =>
                 UsedFoodItemRepository(usedFoodItemBox: usedFoodItemBox),
+          ),
+          RepositoryProvider(
+            create: (context) => BackupRepository(),
           ),
         ],
         child: App(

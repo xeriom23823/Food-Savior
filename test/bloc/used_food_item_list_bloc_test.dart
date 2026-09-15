@@ -205,6 +205,25 @@ void main() {
     );
 
     blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
+      '還原載入整批取代既有紀錄',
+      setUp: () => seedConsumedToday(3),
+      build: build,
+      act: (bloc) async {
+        await untilLoaded(bloc);
+        await bloc.settle(() => bloc.add(UsedFoodItemListLoad(usedFoodItems: [
+              makeUsed(id: 'r1', usedDate: today),
+              makeUsed(id: 'r2', usedDate: today),
+            ])));
+      },
+      skip: 2,
+      expect: () => [
+        isA<UsedFoodItemListLoaded>()
+            .having((s) => ids(s.usedFoodItems).toSet(), 'ids', {'r1', 'r2'}),
+      ],
+      verify: (_) => expect(box.keys.toSet(), {'r1', 'r2'}),
+    );
+
+    blocTest<UsedFoodItemListBloc, UsedFoodItemListState>(
       '還原載入保留備份中的點數，不重算',
       setUp: () => seedConsumedToday(10),
       build: build,

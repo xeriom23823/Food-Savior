@@ -50,6 +50,9 @@ class FoodItemListBloc extends Bloc<FoodItemListEvent, FoodItemListState> {
       List<FoodItem> loadedFoodItems = event.foodItems;
       emit(const FoodItemListLoading());
 
+      // 還原：以雲端資料整批取代本機，先清空再寫入（避免 Clear 與 Load 兩個事件競態）
+      await foodItemRepository.clearAll();
+
       // 標記 expirationDate 小於今天的食物為 expired
       final List<FoodItem> expiredFoodItems = loadedFoodItems
           .where((foodItem) => foodItem.expirationDate.isBefore(DateTime.now()))

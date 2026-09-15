@@ -82,5 +82,16 @@
   "consumedFoodPointsByType": "Consumed food points by type",
   "wastedFoodPointsByType": "Wasted food points by type",
   "monthlyTrend": "Monthly trend",
-  "noData": "No data yet"
+  "noData": "No data yet",
+  "backup": "Back up",
+  "restore": "Restore",
+  "backupSuccess": "Backup completed",
+  "backupFailure": "Backup failed",
+  "restoreSuccess": "Restore completed",
+  "restoreFailure": "Restore failed",
+  "restoreNoBackup": "No cloud backup found; local data left unchanged",
+  "errorOffline": "Cannot reach the cloud right now. Check your connection and try again.",
+  "errorTimeout": "The connection timed out. Please try again later.",
+  "errorPermissionDenied": "You do not have permission to access cloud data.",
+  "errorUnknown": "An unknown error occurred."
 }

@@ -25,6 +25,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "add": MessageLookupByLibrary.simpleMessage("新增"),
         "addFoodItem": MessageLookupByLibrary.simpleMessage("新增食物"),
         "added": MessageLookupByLibrary.simpleMessage("已新增"),
+        "backup": MessageLookupByLibrary.simpleMessage("備份"),
+        "backupFailure": MessageLookupByLibrary.simpleMessage("備份失敗"),
+        "backupSuccess": MessageLookupByLibrary.simpleMessage("資料備份成功"),
         "batchUse": MessageLookupByLibrary.simpleMessage("批量使用"),
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "chartAndStatisticsNavigationBarTitle":
@@ -43,6 +46,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "description": MessageLookupByLibrary.simpleMessage("描述"),
         "edit": MessageLookupByLibrary.simpleMessage("編輯"),
         "editFoodItem": MessageLookupByLibrary.simpleMessage("編輯食物"),
+        "errorOffline":
+            MessageLookupByLibrary.simpleMessage("目前無法連線到雲端，請確認網路後再試"),
+        "errorPermissionDenied": MessageLookupByLibrary.simpleMessage(
+          "沒有存取雲端資料的權限",
+        ),
+        "errorTimeout": MessageLookupByLibrary.simpleMessage("連線逾時，請稍後再試"),
+        "errorUnknown": MessageLookupByLibrary.simpleMessage("發生未知錯誤"),
         "expirationDate": MessageLookupByLibrary.simpleMessage("過期日期"),
         "expire": MessageLookupByLibrary.simpleMessage("過期"),
         "expireToday": MessageLookupByLibrary.simpleMessage("今日過期"),
@@ -90,6 +100,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantityMustBePositive":
             MessageLookupByLibrary.simpleMessage("數量必須為正數"),
         "refresh": MessageLookupByLibrary.simpleMessage("重新整理"),
+        "restore": MessageLookupByLibrary.simpleMessage("還原"),
+        "restoreFailure": MessageLookupByLibrary.simpleMessage("還原失敗"),
+        "restoreNoBackup":
+            MessageLookupByLibrary.simpleMessage("雲端沒有備份，本機資料未變動"),
+        "restoreSuccess": MessageLookupByLibrary.simpleMessage("資料還原成功"),
         "save": MessageLookupByLibrary.simpleMessage("儲存"),
         "settingsNavigationBarTitle":
             MessageLookupByLibrary.simpleMessage("設定"),
