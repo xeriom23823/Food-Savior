@@ -389,5 +389,22 @@
   "expiryQuickOneWeek": "In 1 week",
   "expiryQuickTwoWeeks": "In 2 weeks",
   "expiryQuickOneMonth": "In 1 month",
-  "einvoiceEditDraft": "Edit this item"
+  "einvoiceEditDraft": "Edit this item",
+  "importSourceTitle": "What are you importing?",
+  "importSourceEinvoice": "Scan an e-invoice",
+  "importSourceEinvoiceHint": "The receipt has two QR codes on it",
+  "importSourceReceipt": "Photograph a paper receipt",
+  "importSourceReceiptHint": "Receipts without QR codes. You will review every item after recognition.",
+  "receiptScanTitle": "Photograph receipt",
+  "receiptTips": "Fit the whole receipt in frame, use good light, and avoid glare and creases.",
+  "receiptTakePhoto": "Take photo",
+  "receiptPickFromGallery": "Choose from gallery",
+  "receiptRecognizing": "Recognizing…",
+  "receiptRecognizerNotReady": "Text recognition is still getting ready. Try again in a moment.",
+  "receiptPhotoPermissionDenied": "Camera or photo access is needed to recognize receipts",
+  "receiptNoTextFound": "No text was found in the photo. Try again.",
+  "receiptNoItemsFound": "Could not find any items on this receipt. Retake it or add items manually.",
+  "receiptRetake": "Retake",
+  "receiptDraftsHint": "Recognition can misread characters — check every item before adding.",
+  "receiptRetry": "Try again"
 }

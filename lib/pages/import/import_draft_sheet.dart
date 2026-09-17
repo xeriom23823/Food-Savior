@@ -4,9 +4,9 @@ import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/models/storage_location.dart';
 import 'package:food_savior/theme/app_tokens.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/theme/localized_labels.dart';
 import 'package:food_savior/widgets/expiry_field.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:food_savior/widgets/location_picker.dart';
 
 /// 草稿列的編輯（design D4）。
@@ -110,7 +110,7 @@ class _ImportDraftSheetState extends State<ImportDraftSheet> {
                           value: type,
                           child: Row(
                             children: [
-                              Icon(FoodItemVisuals.iconOf(type), size: 18),
+                              FoodTypeIcon(type: type, size: 18),
                               const SizedBox(width: AppSpacing.sm),
                               Flexible(
                                 child: Text(

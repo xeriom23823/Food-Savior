@@ -118,6 +118,7 @@ Skills 的來源目錄是 `.claude/skills/`；修改後執行 `node tool/sync_sk
 10. 使用者的測試 Wi-Fi 曾讓 Firestore gRPC 連不上後端（Auth 的 HTTPS 正常）；App 現在會在 15 秒內顯示 `errorOffline`。若再遇到，先換網路（手機熱點）排除環境因素。
 11. `flutter build`／`flutter run` 仍會印出「Your app uses the following plugins that apply Kotlin Gradle Plugin (KGP): firebase_auth, firebase_core」。這是 Flutter 工具的誤判：firebase_core 4.15.0／firebase_auth 6.7.0 的 `android/build.gradle` 只有在 `android.builtInKotlin=false` 時才會套用 KGP，但 Flutter 是用正規表示式掃描檔案文字（`FlutterPluginUtils.kt` 的 `kgpRegexGroovy`），看不出那行在 `if` 裡面。本機無解，要等 FlutterFire 移除該行；不要為此修改 pub cache。
 12. `android/gradlew`、`android/gradlew.bat` 被 `android/.gitignore` 排除，兩者的 `DEFAULT_JVM_OPTS` 已加上 `--enable-native-access=ALL-UNNAMED`，用來消掉 JDK 24+（本機 JBR 25）對 Gradle native-platform 的 restricted-method 警告。因為未進版控，換電腦或 Flutter 重新產生 wrapper 後要重加；或改設使用者層級環境變數 `GRADLE_OPTS`。CI 用 JDK 21，本來就不會出現該警告。
+13. 紙本收據 OCR（`paper-receipt-ocr`，2026-09-17 archive）的版面解析基準只有人手轉錄的版面 fixture，尚無實機 ML Kit 輸出的樣本；實測時 logcat 未保留。下次在 SM-T500 拍完收據立刻執行 `node tool/dump_receipt_fixture.cjs <name>` 產生 fixture、補 `expected`、重跑 `test/domain/receipt_parser_benchmark_test.dart` 並記錄前後對照（design D6）。另：`google_mlkit_text_recognition` 的中文模型是 `compileOnly`，中文相依在 `android/app/build.gradle`（動態下載版）與 `ios/Podfile`；iOS 端尚未在 macOS 上建置驗證。
 
 ## 指令速查
 

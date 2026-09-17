@@ -1,0 +1,343 @@
+{
+  "name": "真實：麥當勞交易明細（單價 數量 金額TX）",
+  "elements": [
+    {
+      "text": "McDonald's",
+      "left": 150,
+      "top": 20,
+      "right": 640,
+      "bottom": 80
+    },
+    {
+      "text": "交 易 明 細",
+      "left": 300,
+      "top": 140,
+      "right": 640,
+      "bottom": 174
+    },
+    {
+      "text": "（銷售）",
+      "left": 780,
+      "top": 140,
+      "right": 990,
+      "bottom": 174
+    },
+    {
+      "text": "餐廳0046",
+      "left": 50,
+      "top": 220,
+      "right": 300,
+      "bottom": 254
+    },
+    {
+      "text": "新莊中正",
+      "left": 320,
+      "top": 220,
+      "right": 560,
+      "bottom": 254
+    },
+    {
+      "text": "03-27",
+      "left": 580,
+      "top": 220,
+      "right": 720,
+      "bottom": 254
+    },
+    {
+      "text": "餐廳電話店:02-2276",
+      "left": 50,
+      "top": 290,
+      "right": 590,
+      "bottom": 324
+    },
+    {
+      "text": "8295",
+      "left": 610,
+      "top": 290,
+      "right": 730,
+      "bottom": 324
+    },
+    {
+      "text": "機046003",
+      "left": 50,
+      "top": 360,
+      "right": 300,
+      "bottom": 394
+    },
+    {
+      "text": "序484420",
+      "left": 320,
+      "top": 360,
+      "right": 560,
+      "bottom": 394
+    },
+    {
+      "text": "-27",
+      "left": 580,
+      "top": 360,
+      "right": 680,
+      "bottom": 394
+    },
+    {
+      "text": "2020/08/10",
+      "left": 50,
+      "top": 430,
+      "right": 300,
+      "bottom": 464
+    },
+    {
+      "text": "07:40",
+      "left": 320,
+      "top": 430,
+      "right": 450,
+      "bottom": 464
+    },
+    {
+      "text": "0810",
+      "left": 640,
+      "top": 430,
+      "right": 760,
+      "bottom": 464
+    },
+    {
+      "text": "0428",
+      "left": 790,
+      "top": 430,
+      "right": 910,
+      "bottom": 464
+    },
+    {
+      "text": "玉米濃-大",
+      "left": 55,
+      "top": 510,
+      "right": 310,
+      "bottom": 544
+    },
+    {
+      "text": "52",
+      "left": 555,
+      "top": 510,
+      "right": 605,
+      "bottom": 544
+    },
+    {
+      "text": "1",
+      "left": 660,
+      "top": 510,
+      "right": 690,
+      "bottom": 544
+    },
+    {
+      "text": "52TX",
+      "left": 880,
+      "top": 510,
+      "right": 1000,
+      "bottom": 544
+    },
+    {
+      "text": "馬鈴薯餅",
+      "left": 55,
+      "top": 580,
+      "right": 290,
+      "bottom": 614
+    },
+    {
+      "text": "32",
+      "left": 555,
+      "top": 580,
+      "right": 605,
+      "bottom": 614
+    },
+    {
+      "text": "1",
+      "left": 660,
+      "top": 580,
+      "right": 690,
+      "bottom": 614
+    },
+    {
+      "text": "1P",
+      "left": 730,
+      "top": 580,
+      "right": 790,
+      "bottom": 614
+    },
+    {
+      "text": "0TX",
+      "left": 900,
+      "top": 580,
+      "right": 1000,
+      "bottom": 614
+    },
+    {
+      "text": "共 2 項 內 用:",
+      "left": 130,
+      "top": 650,
+      "right": 590,
+      "bottom": 684
+    },
+    {
+      "text": "52",
+      "left": 880,
+      "top": 650,
+      "right": 950,
+      "bottom": 684
+    },
+    {
+      "text": "總 計:",
+      "left": 390,
+      "top": 720,
+      "right": 590,
+      "bottom": 754
+    },
+    {
+      "text": "52",
+      "left": 880,
+      "top": 720,
+      "right": 950,
+      "bottom": 754
+    },
+    {
+      "text": "發票金額",
+      "left": 130,
+      "top": 790,
+      "right": 380,
+      "bottom": 824
+    },
+    {
+      "text": "52",
+      "left": 880,
+      "top": 790,
+      "right": 950,
+      "bottom": 824
+    },
+    {
+      "text": "MCard金額",
+      "left": 130,
+      "top": 860,
+      "right": 400,
+      "bottom": 894
+    },
+    {
+      "text": "52",
+      "left": 880,
+      "top": 860,
+      "right": 950,
+      "bottom": 894
+    },
+    {
+      "text": "卡號 :",
+      "left": 145,
+      "top": 930,
+      "right": 290,
+      "bottom": 964
+    },
+    {
+      "text": "序號 :",
+      "left": 145,
+      "top": 1000,
+      "right": 290,
+      "bottom": 1034
+    },
+    {
+      "text": "交易後餘額",
+      "left": 160,
+      "top": 1070,
+      "right": 440,
+      "bottom": 1104
+    },
+    {
+      "text": ":18元",
+      "left": 530,
+      "top": 1070,
+      "right": 660,
+      "bottom": 1104
+    },
+    {
+      "text": "本次新增點數",
+      "left": 160,
+      "top": 1140,
+      "right": 500,
+      "bottom": 1174
+    },
+    {
+      "text": ":10點",
+      "left": 530,
+      "top": 1140,
+      "right": 660,
+      "bottom": 1174
+    },
+    {
+      "text": "本次兌換點數",
+      "left": 160,
+      "top": 1210,
+      "right": 500,
+      "bottom": 1244
+    },
+    {
+      "text": ":0點",
+      "left": 530,
+      "top": 1210,
+      "right": 640,
+      "bottom": 1244
+    },
+    {
+      "text": "累計點數",
+      "left": 160,
+      "top": 1280,
+      "right": 440,
+      "bottom": 1314
+    },
+    {
+      "text": ":17點",
+      "left": 530,
+      "top": 1280,
+      "right": 660,
+      "bottom": 1314
+    },
+    {
+      "text": "此次消費所獲贈之點數",
+      "left": 100,
+      "top": 1350,
+      "right": 660,
+      "bottom": 1384
+    },
+    {
+      "text": "可至麥當勞報報APP查詢",
+      "left": 100,
+      "top": 1420,
+      "right": 690,
+      "bottom": 1454
+    },
+    {
+      "text": "載具",
+      "left": 100,
+      "top": 1490,
+      "right": 210,
+      "bottom": 1524
+    },
+    {
+      "text": "（手機條碼）",
+      "left": 480,
+      "top": 1490,
+      "right": 740,
+      "bottom": 1524
+    }
+  ],
+  "expectedDate": "2020-08-10",
+  "expected": [
+    {
+      "rawName": "玉米濃-大",
+      "quantity": 1,
+      "unitPrice": 52,
+      "amount": 52
+    },
+    {
+      "rawName": "馬鈴薯餅",
+      "quantity": 1,
+      "unitPrice": 32,
+      "amount": 0
+    }
+  ],
+  "note": "破壞的假設：最右欄帶稅別後綴 TX；欄位順序是單價在前、數量在後；中文之間有空格讓「總 計」對不上雜訊詞。"
+}

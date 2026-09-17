@@ -1,5 +1,12 @@
 # Food Savior 美術資源盤點與製作建議
 
+## 2026-09-16 原生 Splash 入庫（目前狀態）
+
+- 已依黑褐 Chihuahua 品牌方向產出 `splash_illustration`：透明 RGBA 交付母檔位於 `AgentAudit/genart/optimize-native-splash-screen-20260916/masters/splash_illustration_master.png`，角色主體約佔 58%，保留跨平台安全留白。
+- Flutter 盤點輸出：`assets/images/splash_illustration.png`、`assets/images/2.0x/splash_illustration.png`、`assets/images/3.0x/splash_illustration.png`；原生 consuming resources 分別為 Android `res/drawable/splash_illustration.png` 與 iOS `LaunchImage.imageset` 的 1x／2x／3x。
+- Android 已改為品牌綠 `#3E8E5A`、夜間深綠 `#1F4D31`，以 AndroidX `Theme.SplashScreen`／`windowSplashScreenAnimatedIcon` 接通 Android 12+，並由 Flutter `BootstrapSplash` 銜接長初始化；iOS storyboard 已改為品牌綠並使用同一主圖系列。
+- 原生預覽保存於 `AgentAudit/genart/optimize-native-splash-screen-20260916/previews/`；實機與 build 驗收以 `openspec/changes/optimize-native-splash-screen/` 的任務及證據為準。
+
 ## 交接狀態：黑褐吉娃娃已接受，後續美術待開發完成再盤點
 
 - 使用者已接受 v4 黑褐吉娃娃：保留黑褐毛色、兩塊獨立眉斑、金黃披風、抱麵包姿態與溫暖繪本風格。
@@ -32,7 +39,7 @@
 | Android launcher | `android/app/src/main/res/mipmap-*` | 5 個密度的 `launcher_icon.png`，Manifest 實際引用此名稱；另有 5 個 `ic_launcher.png`。抽看實際 launcher 為犬形角色。未見 adaptive foreground/background 或 monochrome 資源。 |
 | iOS AppIcon | `ios/Runner/Assets.xcassets/AppIcon.appiconset`，21 個 PNG | 抽看 1024 圖為同一犬形角色；這是尺寸衍生檔，不是 21 件獨立創作。未逐尺寸驗收。 |
 | Web／macOS 圖示 | Web 4 個 icon 加 favicon；macOS 7 個 PNG | 抽看 Web 192 與 macOS 128 仍是 Flutter 標誌；平台不是 UX 優先，但可由同一品牌母檔統一產生。 |
-| 啟動畫面 | Android `launch_background.xml`；iOS `LaunchScreen.storyboard` / `LaunchImage.imageset` | Android XML 為白底，圖片節點仍在註解內；iOS 有 LaunchImage 引用。尚未做實機啟動檢查，不能據此斷言所有 OS 的實際 splash 外觀。 |
+| 啟動畫面 | Android `launch_background.xml`、AndroidX `Theme.SplashScreen`／Flutter `BootstrapSplash`；iOS `LaunchScreen.storyboard` / `LaunchImage.imageset` | 已綁定 `splash_illustration` 與品牌綠／夜間深綠背景；Android 實機冷啟動與 iOS runtime 仍依本 change 的驗證結果記錄。 |
 | 食用動畫 | `assets/animations/eating.json` | 280 × 280、60 fps、3 秒、約 16.4 KiB；食物頁有引用。可先沿用，需另驗動畫風格、明暗背景與減少動態時的替代圖示。 |
 | 丟棄動畫 | `assets/animations/dumping.json` | 720 × 792、60 fps、約 4.98 秒、約 56.2 KiB；食物頁有引用。需檢查縮小後可讀性與情緒是否過度責備；本次未播放。 |
 | 食物類型圖示 | `lib/models/food_item.dart`，11 種 Font Awesome | 已完整對應固定類型；重製 design 明確暫時接受，不需本輪重畫。 |

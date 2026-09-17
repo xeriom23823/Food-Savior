@@ -13,6 +13,7 @@ abstract final class AppSpacing {
 /// 插畫尺寸 token，讓空狀態在各頁保持一致。
 abstract final class AppIllustrationSize {
   static const double emptyState = 192;
+  static const double splash = 220;
 }
 
 /// 圓角 token。

@@ -1,0 +1,182 @@
+{
+  "name": "真實：電子發票交易明細（單價*數量 擠在一格、TX 空格分離）",
+  "elements": [
+    {
+      "text": "交易明細",
+      "left": 250,
+      "top": 20,
+      "right": 450,
+      "bottom": 54
+    },
+    {
+      "text": "買受人統編 97025978",
+      "left": 60,
+      "top": 80,
+      "right": 420,
+      "bottom": 114
+    },
+    {
+      "text": "買受人名稱 徐美莉",
+      "left": 60,
+      "top": 130,
+      "right": 400,
+      "bottom": 164
+    },
+    {
+      "text": "2017-07-04 18:06:16",
+      "left": 60,
+      "top": 180,
+      "right": 420,
+      "bottom": 214
+    },
+    {
+      "text": "品名",
+      "left": 90,
+      "top": 240,
+      "right": 170,
+      "bottom": 274
+    },
+    {
+      "text": "單價*數量",
+      "left": 300,
+      "top": 240,
+      "right": 480,
+      "bottom": 274
+    },
+    {
+      "text": "金額",
+      "left": 560,
+      "top": 240,
+      "right": 640,
+      "bottom": 274
+    },
+    {
+      "text": "香氛蠟燭S(海洋)",
+      "left": 60,
+      "top": 300,
+      "right": 380,
+      "bottom": 334
+    },
+    {
+      "text": "20*2",
+      "left": 320,
+      "top": 350,
+      "right": 420,
+      "bottom": 384
+    },
+    {
+      "text": "40",
+      "left": 560,
+      "top": 350,
+      "right": 610,
+      "bottom": 384
+    },
+    {
+      "text": "TX",
+      "left": 625,
+      "top": 350,
+      "right": 675,
+      "bottom": 384
+    },
+    {
+      "text": "香氛蠟燭L(海洋)",
+      "left": 60,
+      "top": 410,
+      "right": 380,
+      "bottom": 444
+    },
+    {
+      "text": "60*1",
+      "left": 320,
+      "top": 460,
+      "right": 420,
+      "bottom": 494
+    },
+    {
+      "text": "60",
+      "left": 560,
+      "top": 460,
+      "right": 610,
+      "bottom": 494
+    },
+    {
+      "text": "TX",
+      "left": 625,
+      "top": 460,
+      "right": 675,
+      "bottom": 494
+    },
+    {
+      "text": "合計 2項",
+      "left": 60,
+      "top": 520,
+      "right": 230,
+      "bottom": 554
+    },
+    {
+      "text": "銷售額(應稅)",
+      "left": 60,
+      "top": 570,
+      "right": 300,
+      "bottom": 604
+    },
+    {
+      "text": "$95",
+      "left": 560,
+      "top": 570,
+      "right": 640,
+      "bottom": 604
+    },
+    {
+      "text": "稅額",
+      "left": 60,
+      "top": 620,
+      "right": 150,
+      "bottom": 654
+    },
+    {
+      "text": "$5",
+      "left": 570,
+      "top": 620,
+      "right": 630,
+      "bottom": 654
+    },
+    {
+      "text": "總計",
+      "left": 60,
+      "top": 670,
+      "right": 150,
+      "bottom": 704
+    },
+    {
+      "text": "$100",
+      "left": 550,
+      "top": 670,
+      "right": 650,
+      "bottom": 704
+    },
+    {
+      "text": "備註 信用卡末四碼：2222",
+      "left": 60,
+      "top": 720,
+      "right": 500,
+      "bottom": 754
+    }
+  ],
+  "expectedDate": "2017-07-04",
+  "expected": [
+    {
+      "rawName": "香氛蠟燭S(海洋)",
+      "quantity": 2,
+      "unitPrice": 20,
+      "amount": 40
+    },
+    {
+      "rawName": "香氛蠟燭L(海洋)",
+      "quantity": 1,
+      "unitPrice": 60,
+      "amount": 60
+    }
+  ],
+  "note": "破壞的假設：單價與數量擠在同一個元素（20*2）；稅別後綴與金額之間有空格，成為獨立元素。"
+}

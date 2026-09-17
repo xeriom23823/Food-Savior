@@ -1,27 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_savior/bloc/import/import_bloc.dart';
 import 'package:food_savior/domain/import/food_item_draft.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/storage_location.dart';
 import 'package:food_savior/pages/import/import_draft_sheet.dart';
 import 'package:food_savior/theme/app_tokens.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/theme/localized_labels.dart';
 import 'package:food_savior/widgets/empty_state.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 
 /// 草稿確認。**沒有任何一列在使用者按下匯入前寫入**（einvoice-import 規格）。
+///
+/// 不綁任何 Bloc：發票匯入（`ImportBloc`）與收據匯入（`ReceiptImportBloc`）
+/// 共用這一頁，各自把事件接到自己的 Bloc（paper-receipt-ocr 任務 5.3）。
 class ImportDraftsPage extends StatelessWidget {
-  const ImportDraftsPage({super.key, required this.state});
+  const ImportDraftsPage({
+    super.key,
+    required this.drafts,
+    required this.locations,
+    required this.now,
+    required this.onToggle,
+    required this.onChanged,
+    required this.onSubmit,
+    this.itemsIncomplete = false,
+    this.subtitle,
+  });
 
-  final ImportDrafts state;
+  final List<FoodItemDraft> drafts;
+  final List<StorageLocation> locations;
+  final DateTime now;
+
+  /// 實際解析到的品項少於宣告的筆數，提醒使用者自行補齊。
+  final bool itemsIncomplete;
+
+  /// 頁首說明。預設是發票匯入的版本；收據匯入要提醒「辨識可能認錯字」。
+  final String? subtitle;
+
+  final ValueChanged<int> onToggle;
+  final void Function(int index, FoodItemDraft draft) onChanged;
+  final VoidCallback onSubmit;
+
+  List<FoodItemDraft> get _importable =>
+      drafts.where((draft) => draft.isImportable).toList();
 
   @override
   Widget build(BuildContext context) {
     final strings = S.of(context);
     final theme = Theme.of(context);
 
-    if (state.drafts.isEmpty) {
+    if (drafts.isEmpty) {
       return EmptyState(
         icon: Icons.receipt_long_outlined,
         title: strings.einvoiceNoDrafts,
@@ -31,6 +57,8 @@ class ImportDraftsPage extends StatelessWidget {
         ),
       );
     }
+
+    final importable = _importable;
 
     return Column(
       children: [
@@ -45,12 +73,12 @@ class ImportDraftsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                strings.einvoiceDraftsSubtitle,
+                subtitle ?? strings.einvoiceDraftsSubtitle,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
-              if (state.itemsIncomplete) ...[
+              if (itemsIncomplete) ...[
                 const SizedBox(height: AppSpacing.sm),
                 Text(
                   strings.einvoiceItemsIncomplete,
@@ -65,17 +93,13 @@ class ImportDraftsPage extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-            itemCount: state.drafts.length,
+            itemCount: drafts.length,
             itemBuilder: (context, index) => _DraftTile(
-              draft: state.drafts[index],
-              locations: state.locations,
-              now: state.now ?? DateTime.now(),
-              onToggle: () => context
-                  .read<ImportBloc>()
-                  .add(ImportDraftToggled(index: index)),
-              onChanged: (draft) => context
-                  .read<ImportBloc>()
-                  .add(ImportDraftChanged(index: index, draft: draft)),
+              draft: drafts[index],
+              locations: locations,
+              now: now,
+              onToggle: () => onToggle(index),
+              onChanged: (draft) => onChanged(index, draft),
             ),
           ),
         ),
@@ -84,12 +108,9 @@ class ImportDraftsPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: FilledButton.icon(
-              onPressed: state.canSubmit
-                  ? () =>
-                      context.read<ImportBloc>().add(const ImportSubmitted())
-                  : null,
+              onPressed: importable.isEmpty ? null : onSubmit,
               icon: const Icon(Icons.playlist_add_check),
-              label: Text(strings.einvoiceImportAll(state.importable.length)),
+              label: Text(strings.einvoiceImportAll(importable.length)),
             ),
           ),
         ),
@@ -122,8 +143,9 @@ class _DraftTile extends StatelessWidget {
     return Opacity(
       opacity: muted ? 0.5 : 1,
       child: ListTile(
-        leading: Icon(
-          FoodItemVisuals.iconOf(draft.type),
+        leading: FoodTypeIcon(
+          type: draft.type,
+          size: 24,
           color: muted
               ? theme.colorScheme.onSurfaceVariant
               : theme.colorScheme.primary,
@@ -141,7 +163,7 @@ class _DraftTile extends StatelessWidget {
               _subtitle(context, strings),
               style: theme.textTheme.bodySmall,
             ),
-            // 原始品名一定要看得到，使用者才能對照發票確認我們沒改錯東西。
+            // 原始品名一定要看得到，使用者才能對照單據確認我們沒改錯東西。
             Text(
               strings.einvoiceSourceLine(draft.sourceLine),
               style: theme.textTheme.bodySmall?.copyWith(

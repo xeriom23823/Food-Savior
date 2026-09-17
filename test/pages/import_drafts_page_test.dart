@@ -1,6 +1,5 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:food_savior/bloc/import/import_bloc.dart';
 import 'package:food_savior/domain/import/food_item_draft.dart';
@@ -58,10 +57,19 @@ void main() {
   }) async {
     when(() => bloc.state).thenReturn(state);
 
+    // 這一頁不綁 Bloc；把 callback 接回 mock，既有的 verify(bloc.add(...)) 照舊成立。
     await tester.pumpWidget(wrapForTest(
-      BlocProvider<ImportBloc>.value(
-        value: bloc,
-        child: Scaffold(body: ImportDraftsPage(state: state)),
+      Scaffold(
+        body: ImportDraftsPage(
+          drafts: state.drafts,
+          locations: state.locations,
+          now: state.now!,
+          itemsIncomplete: state.itemsIncomplete,
+          onToggle: (index) => bloc.add(ImportDraftToggled(index: index)),
+          onChanged: (index, draft) =>
+              bloc.add(ImportDraftChanged(index: index, draft: draft)),
+          onSubmit: () => bloc.add(const ImportSubmitted()),
+        ),
       ),
       locale: locale,
       brightness: brightness,

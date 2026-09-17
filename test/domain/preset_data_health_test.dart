@@ -15,6 +15,7 @@ void main() {
   late List<Map<String, dynamic>> raw;
   late List<FoodPreset> presets;
   late List<String> noiseTerms;
+  late List<String> receiptNoiseTerms;
 
   setUpAll(() {
     raw = (json.decode(
@@ -28,6 +29,14 @@ void main() {
     ) as Map;
     noiseTerms = [
       for (final group in noise.values) ...(group as List).cast<String>(),
+    ];
+
+    final receiptNoise = json.decode(
+      File('assets/data/receipt_noise_terms.json').readAsStringSync(),
+    ) as Map;
+    receiptNoiseTerms = [
+      for (final group in receiptNoise.values)
+        ...(group as List).cast<String>(),
     ];
   });
 
@@ -134,5 +143,48 @@ void main() {
     for (final type in FoodItemType.values) {
       expect(covered, contains(type), reason: '$type 在對照表裡沒有任何條目');
     }
+  });
+
+  group('收據雜訊詞表', () {
+    test('不得包含任何對照表關鍵字，否則會把整列真食物濾掉', () {
+      // 收據雜訊詞是拿去跟**整列品名**做 contains 比對的，
+      // 一旦某個詞含有食物關鍵字，那一整列就會被當成表頭表尾丟掉。
+      final keywords = <String>{
+        for (final entry in raw)
+          ...(entry['keywords'] as List).cast<String>().map(normalizeFoodName),
+      };
+      final clashes = <String>[];
+
+      for (final term in receiptNoiseTerms) {
+        final normalized = normalizeFoodName(term);
+        for (final keyword in keywords) {
+          if (normalized.contains(keyword)) {
+            clashes.add('收據雜訊詞「$term」包含對照表關鍵字「$keyword」');
+          }
+        }
+      }
+
+      expect(clashes, isEmpty, reason: clashes.join('\n'));
+    });
+
+    test('沒有前後空白、沒有空字串', () {
+      for (final term in receiptNoiseTerms) {
+        expect(term.trim(), term, reason: '「$term」有多餘的前後空白');
+        expect(term, isNotEmpty);
+      }
+    });
+
+    test('詞不重複', () {
+      expect(receiptNoiseTerms.toSet(), hasLength(receiptNoiseTerms.length));
+    });
+
+    test('涵蓋表頭、結帳與客套三類', () {
+      final receiptNoise = json.decode(
+        File('assets/data/receipt_noise_terms.json').readAsStringSync(),
+      ) as Map;
+
+      expect(receiptNoise.keys, containsAll(['header', 'checkout', 'misc']));
+      expect(receiptNoiseTerms.length, greaterThanOrEqualTo(40));
+    });
   });
 }

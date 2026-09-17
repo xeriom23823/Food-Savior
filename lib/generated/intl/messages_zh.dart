@@ -272,6 +272,15 @@ class MessageLookup extends MessageLookupByLibrary {
         "groupByType": MessageLookupByLibrary.simpleMessage("依食物類型"),
         "groupByUrgency": MessageLookupByLibrary.simpleMessage("依到期急迫度"),
         "grouping": MessageLookupByLibrary.simpleMessage("分群"),
+        "importSourceEinvoice": MessageLookupByLibrary.simpleMessage("掃描電子發票"),
+        "importSourceEinvoiceHint": MessageLookupByLibrary.simpleMessage(
+          "發票證明聯上有兩個二維條碼",
+        ),
+        "importSourceReceipt": MessageLookupByLibrary.simpleMessage("拍攝紙本收據"),
+        "importSourceReceiptHint": MessageLookupByLibrary.simpleMessage(
+          "沒有二維條碼的收據或交易明細，辨識後需要你逐項確認",
+        ),
+        "importSourceTitle": MessageLookupByLibrary.simpleMessage("要匯入哪一種單據？"),
         "invalidEmail": MessageLookupByLibrary.simpleMessage("無效的電子郵件"),
         "invalidPassword": MessageLookupByLibrary.simpleMessage("無效的密碼"),
         "isConsumed": MessageLookupByLibrary.simpleMessage("已食用"),
@@ -367,6 +376,30 @@ class MessageLookup extends MessageLookupByLibrary {
         "processComplete": MessageLookupByLibrary.simpleMessage("處理完成"),
         "quickAdd": MessageLookupByLibrary.simpleMessage("快速新增"),
         "quickAddHint": MessageLookupByLibrary.simpleMessage("輸入名稱就能存，細節之後再補"),
+        "receiptDraftsHint": MessageLookupByLibrary.simpleMessage(
+          "收據辨識可能認錯字，每一項都請看一眼再加入",
+        ),
+        "receiptNoItemsFound": MessageLookupByLibrary.simpleMessage(
+          "看不出這張收據上有哪些品項，請重拍或改為手動新增",
+        ),
+        "receiptNoTextFound": MessageLookupByLibrary.simpleMessage(
+          "照片裡找不到任何文字，請重拍",
+        ),
+        "receiptPhotoPermissionDenied": MessageLookupByLibrary.simpleMessage(
+          "需要相機或相簿的存取權限才能辨識收據",
+        ),
+        "receiptPickFromGallery": MessageLookupByLibrary.simpleMessage("從相簿選擇"),
+        "receiptRecognizerNotReady": MessageLookupByLibrary.simpleMessage(
+          "文字辨識功能還在準備中，請稍後再試",
+        ),
+        "receiptRecognizing": MessageLookupByLibrary.simpleMessage("辨識中…"),
+        "receiptRetake": MessageLookupByLibrary.simpleMessage("重拍"),
+        "receiptRetry": MessageLookupByLibrary.simpleMessage("重試"),
+        "receiptScanTitle": MessageLookupByLibrary.simpleMessage("拍攝收據"),
+        "receiptTakePhoto": MessageLookupByLibrary.simpleMessage("拍照"),
+        "receiptTips": MessageLookupByLibrary.simpleMessage(
+          "整張入鏡、光線充足、避免反光與皺摺，結果會好很多",
+        ),
         "recordByAmount": MessageLookupByLibrary.simpleMessage("改用數量"),
         "recordByFraction": MessageLookupByLibrary.simpleMessage("改用剩餘比例"),
         "refresh": MessageLookupByLibrary.simpleMessage("重新整理"),

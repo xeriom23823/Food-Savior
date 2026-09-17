@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/app/view/app.dart';
+import 'package:food_savior/app/view/bootstrap_splash.dart';
 import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
 import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.dart';
 import 'package:food_savior/cubits/storage_location_cubit.dart';
@@ -22,6 +23,7 @@ import 'package:food_savior/repositories/food_item_repository.dart';
 import 'package:food_savior/repositories/food_preset_repository.dart';
 import 'package:food_savior/repositories/preferences_repository.dart';
 import 'package:food_savior/repositories/product_noise_terms_repository.dart';
+import 'package:food_savior/repositories/receipt_noise_terms_repository.dart';
 import 'package:food_savior/repositories/storage_location_repository.dart';
 import 'package:food_savior/repositories/used_food_item_repository.dart';
 import 'package:hive_ce/hive.dart';
@@ -30,6 +32,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  runApp(const BootstrapSplash());
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final authenticationRepository = AuthenticationRepository();
@@ -66,6 +69,9 @@ void main() async {
   final noiseTermsRepository = ProductNoiseTermsRepository();
   await noiseTermsRepository.load();
 
+  final receiptNoiseTermsRepository = ReceiptNoiseTermsRepository();
+  await receiptNoiseTermsRepository.load();
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   runApp(
@@ -82,6 +88,7 @@ void main() async {
         RepositoryProvider.value(value: preferencesRepository),
         RepositoryProvider.value(value: presetRepository),
         RepositoryProvider.value(value: noiseTermsRepository),
+        RepositoryProvider.value(value: receiptNoiseTermsRepository),
         RepositoryProvider(create: (context) => BackupRepository()),
       ],
       child: App(authenticationRepository: authenticationRepository),

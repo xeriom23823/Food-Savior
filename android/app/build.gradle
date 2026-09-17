@@ -63,8 +63,21 @@ flutter {
     source '../..'
 }
 
+// google_mlkit_text_recognition 只把 Latin 模型「內建」進 APK，中文是 compileOnly——
+// App 不自己加中文相依的話，TextRecognizer(script: chinese) 在實機會直接失敗。
+// 這裡一律改用 Play Services 動態下載版（play-services-mlkit-*），與條碌模型同一套
+// 策略（unbundled-scanner-model）：APK 不帶模型，安裝時由 manifest 的
+// com.google.mlkit.vision.DEPENDENCIES=barcode,ocr 預抓。
+configurations.all {
+    exclude group: 'com.google.mlkit', module: 'text-recognition'
+}
+
 dependencies {
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation platform('com.google.firebase:firebase-bom:32.8.1')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.multidex:multidex:2.0.1'
+    // plugin 的 Kotlin 端會 import Latin 的 TextRecognizerOptions，所以 Latin 也要有一份（動態版）。
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.1'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition-chinese:16.0.1'
 }

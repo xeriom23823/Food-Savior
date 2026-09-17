@@ -9,6 +9,7 @@ class SectionHeader extends StatelessWidget {
     this.count,
     this.color,
     this.icon,
+    this.leading,
     this.trailing,
   });
 
@@ -16,6 +17,7 @@ class SectionHeader extends StatelessWidget {
   final String? count;
   final Color? color;
   final IconData? icon;
+  final Widget? leading;
   final Widget? trailing;
 
   @override
@@ -31,8 +33,14 @@ class SectionHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          if (icon != null) ...[
-            Icon(icon, size: 16, color: foreground),
+          if (icon != null || leading != null) ...[
+            if (leading != null)
+              IconTheme.merge(
+                data: IconThemeData(color: foreground, size: 16),
+                child: leading!,
+              )
+            else
+              Icon(icon, size: 16, color: foreground),
             const SizedBox(width: AppSpacing.sm),
           ],
           Expanded(

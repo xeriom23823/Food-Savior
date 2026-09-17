@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_savior/bloc/food_item_list/food_item_list_bloc.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/theme/app_tokens.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/theme/food_status_colors.dart';
 import 'package:food_savior/theme/localized_labels.dart';
 import 'package:food_savior/widgets/amount_label.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:intl/intl.dart';
 
 /// 啟動時的過期處理：逐筆說明「吃掉了」還是「丟掉了」。
@@ -62,8 +62,8 @@ class _ExpiredProcessingViewState extends State<ExpiredProcessingView> {
                           )),
                       secondary: CircleAvatar(
                         backgroundColor: colors.expiredContainer,
-                        child: Icon(
-                          FoodItemVisuals.iconOf(item.type),
+                        child: FoodTypeIcon(
+                          type: item.type,
                           color: colors.expired,
                           size: 20,
                         ),

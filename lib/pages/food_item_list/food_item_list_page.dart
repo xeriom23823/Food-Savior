@@ -6,6 +6,8 @@ import 'package:food_savior/bloc/used_food_item_list/used_food_item_list_bloc.da
 import 'package:food_savior/cubits/storage_location_cubit.dart';
 import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/pages/import/import_route.dart';
+import 'package:food_savior/pages/import/import_source_sheet.dart';
+import 'package:food_savior/pages/import/receipt_import_route.dart';
 import 'package:food_savior/models/expiry.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/models/food_item_group.dart';
@@ -27,6 +29,7 @@ import 'package:food_savior/widgets/confirm_sheet.dart';
 import 'package:food_savior/widgets/empty_state.dart';
 import 'package:food_savior/widgets/expiry_sheet.dart';
 import 'package:food_savior/widgets/food_item_group_card.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:food_savior/widgets/section_header.dart';
 
 /// 現存食物清單：分群、合併卡片、滑動操作，底部一行快速新增。
@@ -219,7 +222,7 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
       return SectionHeader(
         title: section.type!.localizedName(context),
         count: strings.itemCount(section.itemCount),
-        icon: FoodItemVisuals.iconOf(section.type!),
+        leading: FoodTypeIcon(type: section.type!, size: 16),
       );
     }
     final location = state.locationOf(section.locationId);
@@ -446,19 +449,32 @@ class _FoodItemListPageState extends State<FoodItemListPage> {
     ));
   }
 
-  /// 掃描發票匯入。預設把匯入的東西放進第一個冷藏位置——大部分生鮮都進冰箱，
+  /// 掃描單據匯入：先選是電子發票還是紙本收據（einvoice-import 規格「掃描入口」）。
+  ///
+  /// 預設把匯入的東西放進第一個冷藏位置——大部分生鮮都進冰箱，
   /// 猜錯了使用者在草稿頁改一下就好，總比每一列都要自己選位置好。
   Future<void> _scanInvoice(FoodItemListLoaded state) async {
+    final source = await ImportSourceSheet.show(context);
+    if (source == null || !mounted) return;
+
     final defaultLocation = state.locations
         .where((location) => location.kind == LocationKind.refrigerated)
         .firstOrNull;
 
-    final imported = await ImportRoute.open(
-      context,
-      locationKind: defaultLocation?.kind,
-      defaultLocationId: defaultLocation?.id,
-      locations: state.locations,
-    );
+    final imported = await switch (source) {
+      ImportSource.einvoice => ImportRoute.open(
+          context,
+          locationKind: defaultLocation?.kind,
+          defaultLocationId: defaultLocation?.id,
+          locations: state.locations,
+        ),
+      ImportSource.receipt => ReceiptImportRoute.open(
+          context,
+          locationKind: defaultLocation?.kind,
+          defaultLocationId: defaultLocation?.id,
+          locations: state.locations,
+        ),
+    };
     if (!mounted || imported == null || imported == 0) return;
     AppSnackBar.show(
       context,

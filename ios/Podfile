@@ -27,6 +27,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  # google_mlkit_text_recognition 只帶 Latin；中文要自己加（paper-receipt-ocr design D2）。
+  pod 'GoogleMLKit/TextRecognitionChinese', '~> 9.0.0'
   use_frameworks!
   use_modular_headers!
 

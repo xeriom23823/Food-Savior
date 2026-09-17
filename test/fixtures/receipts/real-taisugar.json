@@ -1,0 +1,422 @@
+{
+  "name": "真實：台糖量販銷貨明細表（1 X 單價 = 金額TX）",
+  "elements": [
+    {
+      "text": "銷貨明細表",
+      "left": 250,
+      "top": 20,
+      "right": 520,
+      "bottom": 54
+    },
+    {
+      "text": "營業人統編:14162928",
+      "left": 40,
+      "top": 70,
+      "right": 420,
+      "bottom": 104
+    },
+    {
+      "text": "門市:",
+      "left": 40,
+      "top": 120,
+      "right": 140,
+      "bottom": 154
+    },
+    {
+      "text": "北港量販店",
+      "left": 160,
+      "top": 120,
+      "right": 400,
+      "bottom": 154
+    },
+    {
+      "text": "交易日期:2014-03-22",
+      "left": 40,
+      "top": 170,
+      "right": 420,
+      "bottom": 204
+    },
+    {
+      "text": "機台:",
+      "left": 40,
+      "top": 220,
+      "right": 140,
+      "bottom": 254
+    },
+    {
+      "text": "107",
+      "left": 150,
+      "top": 220,
+      "right": 220,
+      "bottom": 254
+    },
+    {
+      "text": "序號:",
+      "left": 240,
+      "top": 220,
+      "right": 350,
+      "bottom": 254
+    },
+    {
+      "text": "128",
+      "left": 360,
+      "top": 220,
+      "right": 430,
+      "bottom": 254
+    },
+    {
+      "text": "收銀員:",
+      "left": 450,
+      "top": 220,
+      "right": 600,
+      "bottom": 254
+    },
+    {
+      "text": "1453",
+      "left": 610,
+      "top": 220,
+      "right": 700,
+      "bottom": 254
+    },
+    {
+      "text": "巧克力清潔袋超大(黑)3KG 促銷",
+      "left": 40,
+      "top": 290,
+      "right": 312,
+      "bottom": 324
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 336,
+      "right": 80,
+      "bottom": 370
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 336,
+      "right": 160,
+      "bottom": 370
+    },
+    {
+      "text": "189",
+      "left": 230,
+      "top": 336,
+      "right": 284,
+      "bottom": 370
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 336,
+      "right": 380,
+      "bottom": 370
+    },
+    {
+      "text": "189TX",
+      "left": 560,
+      "top": 336,
+      "right": 700,
+      "bottom": 370
+    },
+    {
+      "text": "大成敢卡雞腿排(原味) 432g",
+      "left": 40,
+      "top": 390,
+      "right": 296,
+      "bottom": 424
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 436,
+      "right": 80,
+      "bottom": 470
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 436,
+      "right": 160,
+      "bottom": 470
+    },
+    {
+      "text": "105",
+      "left": 230,
+      "top": 436,
+      "right": 284,
+      "bottom": 470
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 436,
+      "right": 380,
+      "bottom": 470
+    },
+    {
+      "text": "105TX",
+      "left": 560,
+      "top": 436,
+      "right": 700,
+      "bottom": 470
+    },
+    {
+      "text": "華元玉条叔-分起司 25G*10",
+      "left": 40,
+      "top": 490,
+      "right": 296,
+      "bottom": 524
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 536,
+      "right": 80,
+      "bottom": 570
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 536,
+      "right": 160,
+      "bottom": 570
+    },
+    {
+      "text": "69",
+      "left": 230,
+      "top": 536,
+      "right": 266,
+      "bottom": 570
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 536,
+      "right": 380,
+      "bottom": 570
+    },
+    {
+      "text": "69TX",
+      "left": 560,
+      "top": 536,
+      "right": 700,
+      "bottom": 570
+    },
+    {
+      "text": "華元休閒綜合包 262g",
+      "left": 40,
+      "top": 590,
+      "right": 232,
+      "bottom": 624
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 636,
+      "right": 80,
+      "bottom": 670
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 636,
+      "right": 160,
+      "bottom": 670
+    },
+    {
+      "text": "69",
+      "left": 230,
+      "top": 636,
+      "right": 266,
+      "bottom": 670
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 636,
+      "right": 380,
+      "bottom": 670
+    },
+    {
+      "text": "69TX",
+      "left": 560,
+      "top": 636,
+      "right": 700,
+      "bottom": 670
+    },
+    {
+      "text": "蜜蘭諾黑巧酥 200g",
+      "left": 40,
+      "top": 690,
+      "right": 216,
+      "bottom": 724
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 736,
+      "right": 80,
+      "bottom": 770
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 736,
+      "right": 160,
+      "bottom": 770
+    },
+    {
+      "text": "66",
+      "left": 230,
+      "top": 736,
+      "right": 266,
+      "bottom": 770
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 736,
+      "right": 380,
+      "bottom": 770
+    },
+    {
+      "text": "66TX",
+      "left": 560,
+      "top": 736,
+      "right": 700,
+      "bottom": 770
+    },
+    {
+      "text": "味味A-排骨雞麵 90g*5",
+      "left": 40,
+      "top": 790,
+      "right": 264,
+      "bottom": 824
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 836,
+      "right": 80,
+      "bottom": 870
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 836,
+      "right": 160,
+      "bottom": 870
+    },
+    {
+      "text": "65",
+      "left": 230,
+      "top": 836,
+      "right": 266,
+      "bottom": 870
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 836,
+      "right": 380,
+      "bottom": 870
+    },
+    {
+      "text": "65TX",
+      "left": 560,
+      "top": 836,
+      "right": 700,
+      "bottom": 870
+    },
+    {
+      "text": "寶卡卡量販包 132g",
+      "left": 40,
+      "top": 890,
+      "right": 216,
+      "bottom": 924
+    },
+    {
+      "text": "1",
+      "left": 60,
+      "top": 936,
+      "right": 80,
+      "bottom": 970
+    },
+    {
+      "text": "X",
+      "left": 130,
+      "top": 936,
+      "right": 160,
+      "bottom": 970
+    },
+    {
+      "text": "65",
+      "left": 230,
+      "top": 936,
+      "right": 266,
+      "bottom": 970
+    },
+    {
+      "text": "=",
+      "left": 350,
+      "top": 936,
+      "right": 380,
+      "bottom": 970
+    },
+    {
+      "text": "65TX",
+      "left": 560,
+      "top": 936,
+      "right": 700,
+      "bottom": 970
+    }
+  ],
+  "expectedDate": "2014-03-22",
+  "expected": [
+    {
+      "rawName": "巧克力清潔袋超大(黑)3KG 促銷",
+      "quantity": 1,
+      "unitPrice": 189,
+      "amount": 189
+    },
+    {
+      "rawName": "大成敢卡雞腿排(原味) 432g",
+      "quantity": 1,
+      "unitPrice": 105,
+      "amount": 105
+    },
+    {
+      "rawName": "華元玉条叔-分起司 25G*10",
+      "quantity": 1,
+      "unitPrice": 69,
+      "amount": 69
+    },
+    {
+      "rawName": "華元休閒綜合包 262g",
+      "quantity": 1,
+      "unitPrice": 69,
+      "amount": 69
+    },
+    {
+      "rawName": "蜜蘭諾黑巧酥 200g",
+      "quantity": 1,
+      "unitPrice": 66,
+      "amount": 66
+    },
+    {
+      "rawName": "味味A-排骨雞麵 90g*5",
+      "quantity": 1,
+      "unitPrice": 65,
+      "amount": 65
+    },
+    {
+      "rawName": "寶卡卡量販包 132g",
+      "quantity": 1,
+      "unitPrice": 65,
+      "amount": 65
+    }
+  ],
+  "note": "破壞的假設：數值列夾著 X 與 = 分隔符，不是純數字，落單數字併回上一列的規則接不上。"
+}

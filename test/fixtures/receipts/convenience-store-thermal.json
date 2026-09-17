@@ -1,0 +1,194 @@
+{
+  "name": "超商熱感應紙：三欄同列",
+  "elements": [
+    {
+      "text": "全家便利商店",
+      "left": 40,
+      "top": 40,
+      "right": 340,
+      "bottom": 74
+    },
+    {
+      "text": "統一編號",
+      "left": 40,
+      "top": 84,
+      "right": 180,
+      "bottom": 118
+    },
+    {
+      "text": "12345678",
+      "left": 200,
+      "top": 84,
+      "right": 340,
+      "bottom": 118
+    },
+    {
+      "text": "2026/09/15",
+      "left": 40,
+      "top": 128,
+      "right": 220,
+      "bottom": 162
+    },
+    {
+      "text": "14:32",
+      "left": 250,
+      "top": 128,
+      "right": 340,
+      "bottom": 162
+    },
+    {
+      "text": "鮮奶",
+      "left": 40,
+      "top": 200,
+      "right": 140,
+      "bottom": 234
+    },
+    {
+      "text": "2",
+      "left": 420,
+      "top": 200,
+      "right": 448,
+      "bottom": 234
+    },
+    {
+      "text": "65",
+      "left": 500,
+      "top": 200,
+      "right": 556,
+      "bottom": 234
+    },
+    {
+      "text": "130",
+      "left": 620,
+      "top": 200,
+      "right": 700,
+      "bottom": 234
+    },
+    {
+      "text": "御飯糰",
+      "left": 40,
+      "top": 244,
+      "right": 190,
+      "bottom": 278
+    },
+    {
+      "text": "1",
+      "left": 420,
+      "top": 244,
+      "right": 448,
+      "bottom": 278
+    },
+    {
+      "text": "45",
+      "left": 500,
+      "top": 244,
+      "right": 556,
+      "bottom": 278
+    },
+    {
+      "text": "45",
+      "left": 620,
+      "top": 244,
+      "right": 700,
+      "bottom": 278
+    },
+    {
+      "text": "香蕉",
+      "left": 40,
+      "top": 288,
+      "right": 140,
+      "bottom": 322
+    },
+    {
+      "text": "1",
+      "left": 420,
+      "top": 288,
+      "right": 448,
+      "bottom": 322
+    },
+    {
+      "text": "39",
+      "left": 500,
+      "top": 288,
+      "right": 556,
+      "bottom": 322
+    },
+    {
+      "text": "39",
+      "left": 620,
+      "top": 288,
+      "right": 700,
+      "bottom": 322
+    },
+    {
+      "text": "總計",
+      "left": 40,
+      "top": 360,
+      "right": 140,
+      "bottom": 394
+    },
+    {
+      "text": "214",
+      "left": 620,
+      "top": 360,
+      "right": 700,
+      "bottom": 394
+    },
+    {
+      "text": "現金",
+      "left": 40,
+      "top": 404,
+      "right": 140,
+      "bottom": 438
+    },
+    {
+      "text": "500",
+      "left": 620,
+      "top": 404,
+      "right": 700,
+      "bottom": 438
+    },
+    {
+      "text": "找零",
+      "left": 40,
+      "top": 448,
+      "right": 140,
+      "bottom": 482
+    },
+    {
+      "text": "286",
+      "left": 620,
+      "top": 448,
+      "right": 700,
+      "bottom": 482
+    },
+    {
+      "text": "謝謝光臨",
+      "left": 40,
+      "top": 520,
+      "right": 220,
+      "bottom": 554
+    }
+  ],
+  "expectedDate": "2026-09-15",
+  "expected": [
+    {
+      "rawName": "鮮奶",
+      "quantity": 2,
+      "unitPrice": 65,
+      "amount": 130
+    },
+    {
+      "rawName": "御飯糰",
+      "quantity": 1,
+      "unitPrice": 45,
+      "amount": 45
+    },
+    {
+      "rawName": "香蕉",
+      "quantity": 1,
+      "unitPrice": 39,
+      "amount": 39
+    }
+  ]
+}

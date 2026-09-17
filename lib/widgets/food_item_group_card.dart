@@ -3,11 +3,11 @@ import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/models/food_item_group.dart';
 import 'package:food_savior/theme/app_tokens.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/theme/food_status_colors.dart';
 import 'package:food_savior/widgets/amount_label.dart';
 import 'package:food_savior/widgets/expiry_countdown.dart';
 import 'package:food_savior/widgets/food_item_tile.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:food_savior/widgets/status_chip.dart';
 
 /// 合併卡片：同名同位置同單位的多批食物收合成一張（design D18）。
@@ -75,8 +75,8 @@ class _FoodItemGroupCardState extends State<FoodItemGroupCard> {
                     color: colors.containerOf(status),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    FoodItemVisuals.iconOf(group.type),
+                  child: FoodTypeIcon(
+                    type: group.type,
                     size: 20,
                     color: colors.of(status),
                   ),

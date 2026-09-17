@@ -39,6 +39,8 @@ dependencies:
   hive_ce: ^2.20.0
   hive_ce_flutter: ^2.3.4
   mobile_scanner: ^7.4.2
+  google_mlkit_text_recognition: ^0.17.1
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,8 @@ flutter:
     - assets/images/2.0x/
     - assets/images/3.0x/
     - assets/icons/
+    - assets/icons/2.0x/
+    - assets/icons/3.0x/
 
   fonts:
     - family: NotoSansTC

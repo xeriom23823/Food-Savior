@@ -1,0 +1,157 @@
+{
+  "name": "賣場：品名含規格、金額帶符號、有折扣列",
+  "elements": [
+    {
+      "text": "家樂福 內湖店",
+      "left": 40,
+      "top": 40,
+      "right": 320,
+      "bottom": 74
+    },
+    {
+      "text": "發票號碼",
+      "left": 40,
+      "top": 84,
+      "right": 190,
+      "bottom": 118
+    },
+    {
+      "text": "AB12345678",
+      "left": 210,
+      "top": 84,
+      "right": 420,
+      "bottom": 118
+    },
+    {
+      "text": "2026-09-13",
+      "left": 40,
+      "top": 128,
+      "right": 230,
+      "bottom": 162
+    },
+    {
+      "text": "統一AB優酪乳400ML",
+      "left": 40,
+      "top": 200,
+      "right": 420,
+      "bottom": 234
+    },
+    {
+      "text": "$32",
+      "left": 620,
+      "top": 200,
+      "right": 700,
+      "bottom": 234
+    },
+    {
+      "text": "梅花豬肉片",
+      "left": 40,
+      "top": 244,
+      "right": 240,
+      "bottom": 278
+    },
+    {
+      "text": "1",
+      "left": 430,
+      "top": 244,
+      "right": 458,
+      "bottom": 278
+    },
+    {
+      "text": "158",
+      "left": 500,
+      "top": 244,
+      "right": 570,
+      "bottom": 278
+    },
+    {
+      "text": "158",
+      "left": 620,
+      "top": 244,
+      "right": 700,
+      "bottom": 278
+    },
+    {
+      "text": "光泉鮮奶 936ML",
+      "left": 40,
+      "top": 288,
+      "right": 340,
+      "bottom": 322
+    },
+    {
+      "text": "2",
+      "left": 430,
+      "top": 288,
+      "right": 458,
+      "bottom": 322
+    },
+    {
+      "text": "75",
+      "left": 500,
+      "top": 288,
+      "right": 556,
+      "bottom": 322
+    },
+    {
+      "text": "150",
+      "left": 620,
+      "top": 288,
+      "right": 700,
+      "bottom": 322
+    },
+    {
+      "text": "折扣",
+      "left": 40,
+      "top": 332,
+      "right": 140,
+      "bottom": 366
+    },
+    {
+      "text": "-20",
+      "left": 620,
+      "top": 332,
+      "right": 700,
+      "bottom": 366
+    },
+    {
+      "text": "小計",
+      "left": 40,
+      "top": 376,
+      "right": 140,
+      "bottom": 410
+    },
+    {
+      "text": "1,320",
+      "left": 600,
+      "top": 376,
+      "right": 700,
+      "bottom": 410
+    },
+    {
+      "text": "謝謝惠顧",
+      "left": 40,
+      "top": 440,
+      "right": 220,
+      "bottom": 474
+    }
+  ],
+  "expectedDate": "2026-09-13",
+  "expected": [
+    {
+      "rawName": "統一AB優酪乳400ML",
+      "amount": 32
+    },
+    {
+      "rawName": "梅花豬肉片",
+      "quantity": 1,
+      "unitPrice": 158,
+      "amount": 158
+    },
+    {
+      "rawName": "光泉鮮奶 936ML",
+      "quantity": 2,
+      "unitPrice": 75,
+      "amount": 150
+    }
+  ]
+}

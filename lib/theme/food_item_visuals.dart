@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/models/storage_location.dart';
 
@@ -7,18 +6,19 @@ import 'package:food_savior/models/storage_location.dart';
 ///
 /// 顏色一律來自 `FoodStatusColors` 與 `ColorScheme`，這裡只決定「用哪個圖示」。
 abstract final class FoodItemVisuals {
-  static IconData iconOf(FoodItemType type) => switch (type) {
-        FoodItemType.vegetable => FontAwesomeIcons.carrot.data,
-        FoodItemType.fruit => FontAwesomeIcons.appleWhole.data,
-        FoodItemType.meat => FontAwesomeIcons.drumstickBite.data,
-        FoodItemType.eggAndMilk => FontAwesomeIcons.egg.data,
-        FoodItemType.seafood => FontAwesomeIcons.fish.data,
-        FoodItemType.cannedFood => FontAwesomeIcons.jar.data,
-        FoodItemType.cookedFood => FontAwesomeIcons.bowlFood.data,
-        FoodItemType.drink => FontAwesomeIcons.mugSaucer.data,
-        FoodItemType.snack => FontAwesomeIcons.cookieBite.data,
-        FoodItemType.bread => FontAwesomeIcons.breadSlice.data,
-        FoodItemType.others => FontAwesomeIcons.utensils.data,
+  /// E 組食物類型圖示的 asset 對照。顏色由 [FoodTypeIcon] 依 IconTheme 套用。
+  static String assetOf(FoodItemType type) => switch (type) {
+        FoodItemType.vegetable => 'assets/icons/food_type_vegetable.png',
+        FoodItemType.fruit => 'assets/icons/food_type_fruit.png',
+        FoodItemType.meat => 'assets/icons/food_type_meat.png',
+        FoodItemType.eggAndMilk => 'assets/icons/food_type_egg_milk.png',
+        FoodItemType.seafood => 'assets/icons/food_type_seafood.png',
+        FoodItemType.cannedFood => 'assets/icons/food_type_canned_food.png',
+        FoodItemType.cookedFood => 'assets/icons/food_type_cooked_food.png',
+        FoodItemType.drink => 'assets/icons/food_type_drink.png',
+        FoodItemType.snack => 'assets/icons/food_type_snack.png',
+        FoodItemType.bread => 'assets/icons/food_type_bread.png',
+        FoodItemType.others => 'assets/icons/food_type_others.png',
       };
 
   static IconData statusIconOf(FoodItemStatus status) => switch (status) {

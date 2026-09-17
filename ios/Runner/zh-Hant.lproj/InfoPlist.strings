@@ -1,1 +1,2 @@
 "NSCameraUsageDescription" = "掃描電子發票的二維條碼，把採購的食物加入清單。";
+"NSPhotoLibraryUsageDescription" = "從相簿選擇收據照片，辨識上面的食物品項。";

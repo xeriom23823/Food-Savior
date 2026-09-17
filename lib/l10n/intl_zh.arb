@@ -389,5 +389,22 @@
   "expiryQuickOneWeek": "1 週後",
   "expiryQuickTwoWeeks": "2 週後",
   "expiryQuickOneMonth": "1 個月後",
-  "einvoiceEditDraft": "修改這一項"
+  "einvoiceEditDraft": "修改這一項",
+  "importSourceTitle": "要匯入哪一種單據？",
+  "importSourceEinvoice": "掃描電子發票",
+  "importSourceEinvoiceHint": "發票證明聯上有兩個二維條碼",
+  "importSourceReceipt": "拍攝紙本收據",
+  "importSourceReceiptHint": "沒有二維條碼的收據或交易明細，辨識後需要你逐項確認",
+  "receiptScanTitle": "拍攝收據",
+  "receiptTips": "整張入鏡、光線充足、避免反光與皺摺，結果會好很多",
+  "receiptTakePhoto": "拍照",
+  "receiptPickFromGallery": "從相簿選擇",
+  "receiptRecognizing": "辨識中…",
+  "receiptRecognizerNotReady": "文字辨識功能還在準備中，請稍後再試",
+  "receiptPhotoPermissionDenied": "需要相機或相簿的存取權限才能辨識收據",
+  "receiptNoTextFound": "照片裡找不到任何文字，請重拍",
+  "receiptNoItemsFound": "看不出這張收據上有哪些品項，請重拍或改為手動新增",
+  "receiptRetake": "重拍",
+  "receiptDraftsHint": "收據辨識可能認錯字，每一項都請看一眼再加入",
+  "receiptRetry": "重試"
 }

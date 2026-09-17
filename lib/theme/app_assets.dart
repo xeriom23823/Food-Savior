@@ -11,6 +11,8 @@ abstract final class AppAssets {
   static const feedbackRescue = 'assets/images/feedback_rescue.png';
   static const feedbackDailyCap = 'assets/images/feedback_daily_cap.png';
 
+  static const splashIllustration = 'assets/images/splash_illustration.png';
+
   static const feedbackEating = 'assets/animations/eating.json';
   static const feedbackDumping = 'assets/animations/dumping.json';
 }

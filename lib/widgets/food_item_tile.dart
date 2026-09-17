@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/theme/app_tokens.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/theme/food_status_colors.dart';
 import 'package:food_savior/widgets/amount_label.dart';
 import 'package:food_savior/widgets/expiry_countdown.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:food_savior/widgets/status_chip.dart';
 
 /// 單一食物列。清單、過期處理頁、批次展開都用這一個元件。
@@ -51,8 +51,8 @@ class FoodItemTile extends StatelessWidget {
                 color: context.foodStatusColors.containerOf(status),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                FoodItemVisuals.iconOf(item.type),
+              child: FoodTypeIcon(
+                type: item.type,
                 size: dense ? 16 : 20,
                 color: statusColor,
               ),

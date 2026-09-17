@@ -71,7 +71,19 @@ class ScanInvoicePage extends StatelessWidget {
         ),
       ImportDuplicateWarning() => _DuplicateWarningView(state: state),
       ImportFailure(:final reason) => _FailureView(reason: reason),
-      ImportDrafts() => ImportDraftsPage(state: state),
+      ImportDrafts() => ImportDraftsPage(
+          drafts: state.drafts,
+          locations: state.locations,
+          now: state.now ?? DateTime.now(),
+          itemsIncomplete: state.itemsIncomplete,
+          onToggle: (index) =>
+              context.read<ImportBloc>().add(ImportDraftToggled(index: index)),
+          onChanged: (index, draft) => context
+              .read<ImportBloc>()
+              .add(ImportDraftChanged(index: index, draft: draft)),
+          onSubmit: () =>
+              context.read<ImportBloc>().add(const ImportSubmitted()),
+        ),
       // 匯入完成的瞬間就會被 listener 關掉這一頁，不需要畫面。
       ImportDone() => const SizedBox.shrink(),
     };

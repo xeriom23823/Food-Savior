@@ -2203,6 +2203,151 @@ class S {
   String get einvoiceEditDraft {
     return Intl.message('修改這一項', name: 'einvoiceEditDraft', desc: '', args: []);
   }
+
+  /// `要匯入哪一種單據？`
+  String get importSourceTitle {
+    return Intl.message(
+      '要匯入哪一種單據？',
+      name: 'importSourceTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `掃描電子發票`
+  String get importSourceEinvoice {
+    return Intl.message(
+      '掃描電子發票',
+      name: 'importSourceEinvoice',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `發票證明聯上有兩個二維條碼`
+  String get importSourceEinvoiceHint {
+    return Intl.message(
+      '發票證明聯上有兩個二維條碼',
+      name: 'importSourceEinvoiceHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `拍攝紙本收據`
+  String get importSourceReceipt {
+    return Intl.message(
+      '拍攝紙本收據',
+      name: 'importSourceReceipt',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `沒有二維條碼的收據或交易明細，辨識後需要你逐項確認`
+  String get importSourceReceiptHint {
+    return Intl.message(
+      '沒有二維條碼的收據或交易明細，辨識後需要你逐項確認',
+      name: 'importSourceReceiptHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `拍攝收據`
+  String get receiptScanTitle {
+    return Intl.message('拍攝收據', name: 'receiptScanTitle', desc: '', args: []);
+  }
+
+  /// `整張入鏡、光線充足、避免反光與皺摺，結果會好很多`
+  String get receiptTips {
+    return Intl.message(
+      '整張入鏡、光線充足、避免反光與皺摺，結果會好很多',
+      name: 'receiptTips',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `拍照`
+  String get receiptTakePhoto {
+    return Intl.message('拍照', name: 'receiptTakePhoto', desc: '', args: []);
+  }
+
+  /// `從相簿選擇`
+  String get receiptPickFromGallery {
+    return Intl.message(
+      '從相簿選擇',
+      name: 'receiptPickFromGallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `辨識中…`
+  String get receiptRecognizing {
+    return Intl.message('辨識中…', name: 'receiptRecognizing', desc: '', args: []);
+  }
+
+  /// `文字辨識功能還在準備中，請稍後再試`
+  String get receiptRecognizerNotReady {
+    return Intl.message(
+      '文字辨識功能還在準備中，請稍後再試',
+      name: 'receiptRecognizerNotReady',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `需要相機或相簿的存取權限才能辨識收據`
+  String get receiptPhotoPermissionDenied {
+    return Intl.message(
+      '需要相機或相簿的存取權限才能辨識收據',
+      name: 'receiptPhotoPermissionDenied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `照片裡找不到任何文字，請重拍`
+  String get receiptNoTextFound {
+    return Intl.message(
+      '照片裡找不到任何文字，請重拍',
+      name: 'receiptNoTextFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `看不出這張收據上有哪些品項，請重拍或改為手動新增`
+  String get receiptNoItemsFound {
+    return Intl.message(
+      '看不出這張收據上有哪些品項，請重拍或改為手動新增',
+      name: 'receiptNoItemsFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `重拍`
+  String get receiptRetake {
+    return Intl.message('重拍', name: 'receiptRetake', desc: '', args: []);
+  }
+
+  /// `收據辨識可能認錯字，每一項都請看一眼再加入`
+  String get receiptDraftsHint {
+    return Intl.message(
+      '收據辨識可能認錯字，每一項都請看一眼再加入',
+      name: 'receiptDraftsHint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `重試`
+  String get receiptRetry {
+    return Intl.message('重試', name: 'receiptRetry', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

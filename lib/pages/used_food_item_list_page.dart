@@ -5,12 +5,12 @@ import 'package:food_savior/generated/l10n.dart';
 import 'package:food_savior/models/food_item.dart';
 import 'package:food_savior/theme/app_tokens.dart';
 import 'package:food_savior/theme/app_assets.dart';
-import 'package:food_savior/theme/food_item_visuals.dart';
 import 'package:food_savior/theme/food_status_colors.dart';
 import 'package:food_savior/theme/localized_labels.dart';
 import 'package:food_savior/widgets/amount_label.dart';
 import 'package:food_savior/widgets/confirm_sheet.dart';
 import 'package:food_savior/widgets/empty_state.dart';
+import 'package:food_savior/widgets/food_type_icon.dart';
 import 'package:intl/intl.dart';
 
 /// 使用紀錄：依日期瀏覽，可只看食用或只看浪費，並能事後補記浪費原因。
@@ -257,8 +257,8 @@ class _UsedFoodTile extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: colors.containerOf(status),
-          child: Icon(
-            FoodItemVisuals.iconOf(item.type),
+          child: FoodTypeIcon(
+            type: item.type,
             color: colors.of(status),
             size: 20,
           ),

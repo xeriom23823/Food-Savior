@@ -12,6 +12,10 @@ abstract final class AppTheme {
   /// 暖黃強調色，M3 產生器不會給出足夠暖的 tertiary，所以手動覆寫。
   static const Color accent = Color(0xFFE0A100);
 
+  /// 原生與 Flutter bootstrap splash 共用的背景色。
+  static const Color splashBackgroundLight = seed;
+  static const Color splashBackgroundDark = Color(0xFF1F4D31);
+
   static const String fontFamily = 'NotoSansTC';
 
   static ThemeData get light => _build(Brightness.light);

@@ -1,0 +1,105 @@
+{
+  "name": "傳統店家：品名與金額分屬上下兩列",
+  "elements": [
+    {
+      "text": "大安市場 蔬果行",
+      "left": 40,
+      "top": 40,
+      "right": 380,
+      "bottom": 74
+    },
+    {
+      "text": "電話",
+      "left": 40,
+      "top": 84,
+      "right": 120,
+      "bottom": 118
+    },
+    {
+      "text": "02-2700-0000",
+      "left": 150,
+      "top": 84,
+      "right": 400,
+      "bottom": 118
+    },
+    {
+      "text": "115/09/14",
+      "left": 40,
+      "top": 128,
+      "right": 230,
+      "bottom": 162
+    },
+    {
+      "text": "有機高麗菜",
+      "left": 40,
+      "top": 200,
+      "right": 260,
+      "bottom": 234
+    },
+    {
+      "text": "55",
+      "left": 640,
+      "top": 240,
+      "right": 700,
+      "bottom": 274
+    },
+    {
+      "text": "紅蘿蔔 300g",
+      "left": 40,
+      "top": 300,
+      "right": 280,
+      "bottom": 334
+    },
+    {
+      "text": "32",
+      "left": 640,
+      "top": 340,
+      "right": 700,
+      "bottom": 374
+    },
+    {
+      "text": "雞蛋 10入",
+      "left": 40,
+      "top": 400,
+      "right": 260,
+      "bottom": 434
+    },
+    {
+      "text": "89",
+      "left": 640,
+      "top": 440,
+      "right": 700,
+      "bottom": 474
+    },
+    {
+      "text": "合計",
+      "left": 40,
+      "top": 520,
+      "right": 140,
+      "bottom": 554
+    },
+    {
+      "text": "176",
+      "left": 640,
+      "top": 520,
+      "right": 700,
+      "bottom": 554
+    }
+  ],
+  "expectedDate": "2026-09-14",
+  "expected": [
+    {
+      "rawName": "有機高麗菜",
+      "amount": 55
+    },
+    {
+      "rawName": "紅蘿蔔 300g",
+      "amount": 32
+    },
+    {
+      "rawName": "雞蛋 10入",
+      "amount": 89
+    }
+  ],
+  "note": "人工標註的是**理想結果**。金額獨佔下一列時目前配對不起來，所以這張的分數會低於 1.0——基準的用途就是把這個差距量出來，不是把現況寫成期望值。"
+}

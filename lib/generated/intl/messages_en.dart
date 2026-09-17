@@ -350,6 +350,21 @@ class MessageLookup extends MessageLookupByLibrary {
           "How soon it expires",
         ),
         "grouping": MessageLookupByLibrary.simpleMessage("Group by"),
+        "importSourceEinvoice": MessageLookupByLibrary.simpleMessage(
+          "Scan an e-invoice",
+        ),
+        "importSourceEinvoiceHint": MessageLookupByLibrary.simpleMessage(
+          "The receipt has two QR codes on it",
+        ),
+        "importSourceReceipt": MessageLookupByLibrary.simpleMessage(
+          "Photograph a paper receipt",
+        ),
+        "importSourceReceiptHint": MessageLookupByLibrary.simpleMessage(
+          "Receipts without QR codes. You will review every item after recognition.",
+        ),
+        "importSourceTitle": MessageLookupByLibrary.simpleMessage(
+          "What are you importing?",
+        ),
         "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid email"),
         "invalidPassword":
             MessageLookupByLibrary.simpleMessage("Invalid password"),
@@ -466,6 +481,35 @@ class MessageLookup extends MessageLookupByLibrary {
         "quickAdd": MessageLookupByLibrary.simpleMessage("Quick add"),
         "quickAddHint": MessageLookupByLibrary.simpleMessage(
           "Just type a name, fill in details later",
+        ),
+        "receiptDraftsHint": MessageLookupByLibrary.simpleMessage(
+          "Recognition can misread characters — check every item before adding.",
+        ),
+        "receiptNoItemsFound": MessageLookupByLibrary.simpleMessage(
+          "Could not find any items on this receipt. Retake it or add items manually.",
+        ),
+        "receiptNoTextFound": MessageLookupByLibrary.simpleMessage(
+          "No text was found in the photo. Try again.",
+        ),
+        "receiptPhotoPermissionDenied": MessageLookupByLibrary.simpleMessage(
+          "Camera or photo access is needed to recognize receipts",
+        ),
+        "receiptPickFromGallery": MessageLookupByLibrary.simpleMessage(
+          "Choose from gallery",
+        ),
+        "receiptRecognizerNotReady": MessageLookupByLibrary.simpleMessage(
+          "Text recognition is still getting ready. Try again in a moment.",
+        ),
+        "receiptRecognizing":
+            MessageLookupByLibrary.simpleMessage("Recognizing…"),
+        "receiptRetake": MessageLookupByLibrary.simpleMessage("Retake"),
+        "receiptRetry": MessageLookupByLibrary.simpleMessage("Try again"),
+        "receiptScanTitle": MessageLookupByLibrary.simpleMessage(
+          "Photograph receipt",
+        ),
+        "receiptTakePhoto": MessageLookupByLibrary.simpleMessage("Take photo"),
+        "receiptTips": MessageLookupByLibrary.simpleMessage(
+          "Fit the whole receipt in frame, use good light, and avoid glare and creases.",
         ),
         "recordByAmount": MessageLookupByLibrary.simpleMessage("Use a number"),
         "recordByFraction": MessageLookupByLibrary.simpleMessage(

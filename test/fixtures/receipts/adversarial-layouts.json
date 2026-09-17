@@ -1,0 +1,189 @@
+{
+  "name": "刁鑽版面：秤重、容量數字、換行品名、負數（未為其設計）",
+  "elements": [
+    {
+      "text": "7-ELEVEN",
+      "left": 40,
+      "top": 40,
+      "right": 200,
+      "bottom": 74
+    },
+    {
+      "text": "光復門市",
+      "left": 220,
+      "top": 40,
+      "right": 360,
+      "bottom": 74
+    },
+    {
+      "text": "2026/09/12",
+      "left": 40,
+      "top": 84,
+      "right": 230,
+      "bottom": 118
+    },
+    {
+      "text": "蔬菜",
+      "left": 40,
+      "top": 160,
+      "right": 130,
+      "bottom": 194
+    },
+    {
+      "text": "0.35",
+      "left": 400,
+      "top": 160,
+      "right": 470,
+      "bottom": 194
+    },
+    {
+      "text": "120",
+      "left": 520,
+      "top": 160,
+      "right": 580,
+      "bottom": 194
+    },
+    {
+      "text": "42",
+      "left": 630,
+      "top": 160,
+      "right": 700,
+      "bottom": 194
+    },
+    {
+      "text": "可樂",
+      "left": 40,
+      "top": 204,
+      "right": 130,
+      "bottom": 238
+    },
+    {
+      "text": "600",
+      "left": 150,
+      "top": 204,
+      "right": 215,
+      "bottom": 238
+    },
+    {
+      "text": "35",
+      "left": 630,
+      "top": 204,
+      "right": 700,
+      "bottom": 238
+    },
+    {
+      "text": "日式炸豬排便當",
+      "left": 40,
+      "top": 248,
+      "right": 300,
+      "bottom": 282
+    },
+    {
+      "text": "(附味噌湯)",
+      "left": 40,
+      "top": 288,
+      "right": 240,
+      "bottom": 322
+    },
+    {
+      "text": "120",
+      "left": 630,
+      "top": 288,
+      "right": 700,
+      "bottom": 322
+    },
+    {
+      "text": "香蕉",
+      "left": 40,
+      "top": 348,
+      "right": 130,
+      "bottom": 382
+    },
+    {
+      "text": "1.2",
+      "left": 400,
+      "top": 348,
+      "right": 460,
+      "bottom": 382
+    },
+    {
+      "text": "45.5",
+      "left": 520,
+      "top": 348,
+      "right": 600,
+      "bottom": 382
+    },
+    {
+      "text": "55",
+      "left": 630,
+      "top": 348,
+      "right": 700,
+      "bottom": 382
+    },
+    {
+      "text": "退貨 優酪乳",
+      "left": 40,
+      "top": 392,
+      "right": 260,
+      "bottom": 426
+    },
+    {
+      "text": "-1",
+      "left": 400,
+      "top": 392,
+      "right": 450,
+      "bottom": 426
+    },
+    {
+      "text": "32",
+      "left": 520,
+      "top": 392,
+      "right": 580,
+      "bottom": 426
+    },
+    {
+      "text": "-32",
+      "left": 620,
+      "top": 392,
+      "right": 700,
+      "bottom": 426
+    },
+    {
+      "text": "應收",
+      "left": 40,
+      "top": 460,
+      "right": 140,
+      "bottom": 494
+    },
+    {
+      "text": "220",
+      "left": 630,
+      "top": 460,
+      "right": 700,
+      "bottom": 494
+    }
+  ],
+  "expectedDate": "2026-09-12",
+  "expected": [
+    {
+      "rawName": "蔬菜",
+      "quantity": 0.35,
+      "unitPrice": 120,
+      "amount": 42
+    },
+    {
+      "rawName": "可樂 600",
+      "amount": 35
+    },
+    {
+      "rawName": "日式炸豬排便當 (附味噌湯)",
+      "amount": 120
+    },
+    {
+      "rawName": "香蕉",
+      "quantity": 1.2,
+      "amount": 55
+    }
+  ],
+  "note": "退貨列（負數）刻意不列入期望——它不是要加進冰箱的東西，被濾掉或被留下都可接受，所以不計分。"
+}
